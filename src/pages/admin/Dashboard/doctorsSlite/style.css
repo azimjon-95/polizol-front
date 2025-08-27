@@ -1,0 +1,221 @@
+.carousel {
+  width: 100%;
+  height: 195px;
+  min-height: 195px;
+  padding: 1% 10px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.carousel a {
+  text-decoration: none;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background-color: dodgerblue;
+  border-radius: 5px;
+}
+
+.carousel .card {
+  min-width: 150px;
+  height: 170px;
+  min-height: 170px;
+  background-color: dodgerblue;
+  padding: 8px;
+  border-radius: 7px;
+}
+
+.card-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.card_icon {
+  font-size: 25px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.doctorname {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.card-inner>b {
+  color: #cbcbcb;
+  font-size: 15px;
+}
+
+.allInfoTotal {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #fff;
+  border-top: 1px solid #fff;
+  padding-top: 5px;
+  gap: 2px;
+}
+
+.sDay {
+  font-size: 12px;
+  margin: auto;
+}
+
+.CountDay-M>svg {
+  font-size: 15px;
+}
+
+.CountDay-M {
+  font-size: 12px;
+  display: flex;
+  gap: 5px;
+  align-items: center
+}
+
+.CountDay-Box {
+  display: flex;
+  gap: 5px;
+}
+
+/* ------------------------- */
+
+.cardSkl {
+  max-width: 300px;
+  width: 100%;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+}
+
+.cardSkl .headerSkl {
+  display: flex;
+  align-items: center;
+}
+
+.headerSkl .imgSkl {
+  height: 75px;
+  width: 75px;
+  background: #d9d9d9;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.headerSkl .details {
+  margin-left: 20px;
+}
+
+.details span {
+  display: block;
+  background: #d9d9d9;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.details .nameSkl {
+  height: 15px;
+  width: 100px;
+}
+
+.details .about {
+  height: 13px;
+  width: 150px;
+  margin-top: 10px;
+}
+
+.cardSkl .description {
+  margin: 25px 0;
+}
+
+.description .lineSkl {
+  background: #d9d9d9;
+  border-radius: 10px;
+  height: 13px;
+  margin: 10px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.description .line-1 {
+  width: calc(100% - 15%);
+}
+
+.description .line-3 {
+  width: calc(100% - 40%);
+}
+
+.cardSkl .btns {
+  display: flex;
+}
+
+.cardSkl .btns .btnSkl {
+  height: 45px;
+  width: 100%;
+  background: #d9d9d9;
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btns .btn-1 {
+  margin-right: 8px;
+}
+
+.btns .btn-2 {
+  margin-left: 8px;
+}
+
+.headerSkl .imgSkl::before,
+.details span::before,
+.description .lineSkl::before,
+.btns .btnSkl::before {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to right,
+      #d9d9d9 0%,
+      rgba(0, 0, 0, 0.05) 20%,
+      #d9d9d9 40%,
+      #d9d9d9 100%);
+  background-repeat: no-repeat;
+  background-size: 450px 400px;
+  animation: shimmer 1s linear infinite;
+}
+
+.headerSkl .imgSkl::before {
+  background-size: 650px 600px;
+}
+
+.details span::before {
+  animation-delay: 0.2s;
+}
+
+.btns .btn-2::before {
+  animation-delay: 0.22s;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -450px 0;
+  }
+
+  100% {
+    background-position: 450px 0;
+  }
+}

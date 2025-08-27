@@ -1,0 +1,429 @@
+/* Loading Container */
+.xsd-loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* Main Container */
+.xsd-attendance-history-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Header Section */
+.xsd-attendance-header {
+    background: #f8f9fa;
+    padding: 6px 10px;
+    border-bottom: 1px solid #e8e9ea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.atend-boxx .ant-card-body {
+    padding: 0px 0px !important;
+    border-radius: 0 0 8px 8px;
+}
+
+.att-boxin {
+    width: 100%;
+    height: calc(100vh - 145px);
+    padding: 0px 0px !important;
+    overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+}
+
+/* .att-boxin scroll style */
+.att-boxin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.att-boxin .ant-table-cell {
+    padding: 4px 10px !important;
+}
+
+.att-boxin::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #f5f5f500;
+}
+
+.att-boxin::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #c1c1c1;
+}
+
+.xsd-subject-label {
+    font-weight: 600;
+    color: #1890ff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(24, 144, 255, 0.1);
+}
+
+.xsd-language-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.xsd-language-label {
+    font-weight: 500;
+}
+
+.xsd-date-range-selector {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.xsd-date-picker {
+    max-width: 300px;
+}
+
+.xsd-date-filter-buttons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.xsd-additional-info {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.xsd-teacher-info,
+.xsd-academic-year {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Table Wrapper */
+.xsd-attendance-table-wrapper {
+    overflow-x: auto;
+    max-height: calc(100vh - 165px);
+    overflow-y: auto;
+}
+
+/* Table Styles */
+.xsd-attendance-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+    background: #ffffff;
+}
+
+/* Table Header */
+.xsd-table-header-row {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fafafa;
+}
+
+.xsd-table-header-cell {
+    padding: 8px 6px;
+    text-align: center;
+    font-weight: 600;
+    color: #262626;
+    border: 1px solid #d9d9d9;
+    background: #fafafa;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.xsd-student-number-header {
+    width: 40px;
+    min-width: 40px;
+    position: sticky;
+    left: 0;
+    z-index: 11;
+    background: #fafafa;
+}
+
+.xsd-student-name-header {
+    width: 200px;
+    min-width: 200px;
+    position: sticky;
+    left: 40px;
+    z-index: 11;
+    background: #fafafa;
+    text-align: left;
+    padding-left: 12px;
+}
+
+.xsd-date-picker {
+    font-size: 14px;
+    width: 150px;
+    /* Adjust as needed */
+}
+
+.xsd-date-picker:focus {
+    outline: none;
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.xsd-date-header {
+    width: 40px;
+    min-width: 35px;
+    padding: 4px 2px;
+}
+
+.xsd-date-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.xsd-date-day {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1890ff;
+}
+
+.xsd-date-weekday {
+    font-size: 10px;
+    color: #8c8c8c;
+}
+
+.xsd-stats-header {
+    width: 60px;
+    min-width: 60px;
+    font-size: 11px;
+    padding: 4px 2px;
+    background: #f0f2f5;
+}
+
+/* Table Body */
+.xsd-table-body-row {
+    transition: background-color 0.2s ease;
+}
+
+.xsd-table-body-row:hover {
+    background-color: #f5f5f5;
+}
+
+.xsd-table-body-row:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.xsd-table-body-row:nth-child(even):hover {
+    background-color: #f0f0f0;
+}
+
+.xsd-table-body-cell {
+    padding: 6px 4px;
+    text-align: center;
+    border: 1px solid #e8e8e8;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.xsd-student-number-cell {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: inherit;
+    font-weight: 600;
+    color: #595959;
+}
+
+.xsd-student-name-cell {
+    position: sticky;
+    left: 40px;
+    z-index: 5;
+    background: inherit;
+    text-align: left;
+    padding-left: 12px;
+    font-weight: 500;
+    color: #262626;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Attendance Cell Styles */
+.xsd-attendance-cell {
+    padding: 2px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.xsd-attendance-cell:hover {
+    background-color: rgba(24, 144, 255, 0.1) !important;
+    transform: scale(1.05);
+}
+
+.xsd-attendance-empty {
+    background-color: #ffffff;
+}
+
+.xsd-attendance-excellent {
+    background-color: #f6ffed;
+    border-color: #b7eb8f;
+}
+
+.xsd-attendance-good {
+    background-color: #fff7e6;
+    border-color: #ffd591;
+}
+
+.xsd-attendance-average {
+    background-color: #fff1f0;
+    border-color: #ffadd2;
+}
+
+.xsd-attendance-poor {
+    background-color: #fff2f0;
+    border-color: #ffccc7;
+}
+
+/* Attendance Badge */
+.xsd-attendance-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 11px;
+    color: #696969;
+    transition: all 0.2s ease;
+}
+
+
+
+/* Stats Cells */
+.xsd-stats-cell {
+    background-color: #fafafa;
+    font-weight: 500;
+    color: #595959;
+    font-size: 11px;
+}
+
+/* Modal Styles */
+.xsd-attendance-modal .ant-modal-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e8e9ea;
+}
+
+.xsd-attendance-modal .ant-modal-title {
+    color: #262626;
+    font-weight: 600;
+}
+
+.xsd-modal-table .ant-table-thead>tr>th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #262626;
+    border-bottom: 2px solid #e8e9ea;
+}
+
+.xsd-modal-table .ant-table-tbody>tr>td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.xsd-modal-table .ant-table-tbody>tr:hover>td {
+    background-color: #f5f5f5;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .xsd-attendance-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .xsd-header-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .xsd-date-range-selector {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .xsd-additional-info {
+        width: 100%;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .xsd-attendance-table {
+        font-size: 11px;
+    }
+
+    .xsd-table-header-cell,
+    .xsd-table-body-cell {
+        padding: 4px 2px;
+    }
+
+    .xsd-student-name-header {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    .xsd-date-header {
+        width: 40px;
+        min-width: 40px;
+    }
+
+    .xsd-attendance-badge {
+        width: 20px;
+        height: 16px;
+        font-size: 10px;
+    }
+}
+
+/* Scrollbar Styling */
+.xsd-attendance-table-wrapper::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.xsd-attendance-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.xsd-attendance-table-wrapper::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.xsd-attendance-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Animation for table load */
+.xsd-attendance-table {
+    animation: xsd-fadeIn 0.3s ease-in-out;
+}
+
+@keyframes xsd-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

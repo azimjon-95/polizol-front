@@ -1,0 +1,102 @@
+.layout {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background: var(--bpf-primary-gradient);
+}
+
+.layout_left {
+  min-width: 210px;
+  max-width: 210px;
+  height: 100%;
+}
+
+.layout_right {
+  width: 100%;
+  height: 100vh;
+  /* background-color: rgb(231, 231, 243); */
+  overflow: hidden;
+}
+
+.main-content {
+  width: 100%;
+  height: calc(100vh - 50px);
+  padding: 15px;
+  background: #fff;
+}
+
+/* Media query: Maksimal kenglik 500px */
+@media (max-width: 500px) {
+  .layout {
+    flex-direction: column;
+    /* padding-bottom: 60px !important; */
+  }
+
+  :where(.css-dev-only-do-not-override-1drr2mu).ant-tabs-top>.ant-tabs-nav,
+  :where(.css-dev-only-do-not-override-1drr2mu).ant-tabs-bottom>.ant-tabs-nav,
+  :where(.css-dev-only-do-not-override-1drr2mu).ant-tabs-top>div>.ant-tabs-nav,
+  :where(.css-dev-only-do-not-override-1drr2mu).ant-tabs-bottom>div>.ant-tabs-nav {
+    margin: 0 0 4px 0;
+  }
+
+  .layout_right {
+    background: #000;
+  }
+
+  .layout_left {
+    width: 100%;
+    height: 60px;
+    /* Sidebar balandligi */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #0a3d3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .layout_right {
+    width: 100%;
+    height: calc(100vh - 60px);
+    /* Sidebar balandligini hisobga olish */
+    overflow-y: auto;
+    /* Pastga scroll */
+    padding: 0px;
+
+  }
+
+  /* Chrome, Safari va Edge uchun scroll dizayni */
+  .layout_right::-webkit-scrollbar {
+    width: 0px;
+  }
+
+
+
+  .main-content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 5px;
+    background: red;
+
+  }
+}
+
+/* Media query: Minimal kenglik 350px */
+@media (max-width: 350px) {
+  .layout_left {
+    height: 50px;
+    /* Juda kichik ekranda sidebar biroz kichrayadi */
+  }
+
+  .layout_right {
+    height: calc(100vh - 50px);
+  }
+
+  .main-content {
+    padding: 5px;
+  }
+}

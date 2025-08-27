@@ -1,0 +1,513 @@
+/* Bonus Component Styles */
+
+.bon-container {
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: auto;
+
+}
+
+/* Main Card */
+.bon-main-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
+}
+
+.bon-container::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.bon-container::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.bon-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 8px;
+}
+
+.bon-main-card .ant-card-body {
+    padding: 0;
+}
+
+/* Header */
+.bon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin: 0;
+}
+
+.bon-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bon-header-icon {
+    font-size: 28px;
+    color: #ffd700;
+    animation: bounceIn 1s ease-out;
+}
+
+.bon-header-title {
+    margin: 0 !important;
+    color: white !important;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.bon-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.bon-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.bon-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.bon-stat-icon {
+    font-size: 18px;
+    color: #ffd700;
+}
+
+.bon-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bon-stat-label {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 12px;
+    margin: 0;
+}
+
+.bon-stat-value {
+    color: white !important;
+    margin: 0 !important;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bon-stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Table Styles */
+.bon-table {
+    margin: 0;
+}
+
+.bon-table .ant-table {
+    border-radius: 0;
+    background: white;
+}
+
+.bon-table .ant-table-thead>tr>th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    color: #495057;
+    padding: 16px 12px;
+}
+
+.bon-table .ant-table-tbody>tr>td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.bon-table .ant-table-tbody>tr:hover>td {
+    background: #f8f9ff !important;
+    transition: all 0.3s ease;
+}
+
+.bon-table-header {
+    font-weight: 600;
+    color: #495057;
+}
+
+.bon-table-header-number {
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.bon-icon-header {
+    color: #667eea;
+    margin-right: 4px;
+}
+
+.bon-row-number {
+    color: #6c757d;
+    font-weight: 500;
+    font-size: 13px;
+    background: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Employee Cell */
+.bon-employee-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bon-employee-avatar {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.bon-employee-name {
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Amount Tag */
+.bon-amount-tag {
+    background: linear-gradient(135deg, #52c41a, #73d13d) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bon-amount-tag .anticon {
+    font-size: 12px;
+}
+
+/* Period Cell */
+.bon-period-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #495057;
+}
+
+.bon-period-icon {
+    color: #667eea;
+    font-size: 14px;
+}
+
+/* Description */
+.bon-description {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Actions */
+.bon-actions-space {
+    gap: 6px !important;
+}
+
+.bon-edit-btn {
+    background: linear-gradient(135deg, #1890ff, #40a9ff) !important;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.bon-edit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4) !important;
+}
+
+.bon-delete-btn {
+    box-shadow: 0 2px 6px rgba(255, 77, 79, 0.3);
+    transition: all 0.3s ease;
+}
+
+.bon-delete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.4) !important;
+}
+
+/* Confirm Popup */
+.bon-confirm-title {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.bon-confirm-ok {
+    background: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+}
+
+.bon-confirm-cancel {
+    color: #595959 !important;
+    border-color: #d9d9d9 !important;
+}
+
+/* Empty State */
+.bon-empty-card {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.bon-empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.bon-empty-icon {
+    font-size: 64px;
+    color: #bfbfbf;
+    margin-bottom: 8px;
+}
+
+.bon-empty-title {
+    color: #595959 !important;
+    margin: 0 !important;
+}
+
+.bon-empty-text {
+    color: #8c8c8c !important;
+    font-size: 14px;
+}
+
+/* Modal Styles */
+.bon-modal .ant-modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.bon-modal .ant-modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: none;
+    padding: 20px 24px;
+}
+
+.bon-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-weight: 600;
+    margin: 0;
+}
+
+.bon-modal-icon {
+    color: #ffd700;
+    font-size: 18px;
+}
+
+.bon-modal .ant-modal-title {
+    color: white !important;
+}
+
+.bon-modal .ant-modal-close {
+    color: white !important;
+}
+
+.bon-modal .ant-modal-close:hover {
+    color: #ffd700 !important;
+}
+
+.bon-modal .ant-modal-body {
+    padding: 24px;
+}
+
+.bon-modal .ant-modal-footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 16px 24px;
+}
+
+.bon-modal-ok {
+    background: linear-gradient(135deg, #52c41a, #73d13d) !important;
+    border: none !important;
+    font-weight: 500;
+}
+
+.bon-modal-cancel {
+    color: #595959 !important;
+    border-color: #d9d9d9 !important;
+}
+
+/* Form Styles */
+.bon-form {
+    margin-top: 8px;
+}
+
+.bon-form-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.bon-form-icon {
+    color: #667eea;
+    font-size: 14px;
+}
+
+.bon-form-input,
+.bon-form-textarea {
+    border-radius: 6px !important;
+    border: 1.5px solid #d9d9d9 !important;
+    transition: all 0.3s ease;
+}
+
+.bon-form-input:focus,
+.bon-form-input:hover,
+.bon-form-textarea:focus,
+.bon-form-textarea:hover {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1) !important;
+}
+
+.bon-form-input.ant-input-number {
+    width: 100% !important;
+}
+
+.bon-form-input .ant-input-number-input {
+    padding: 8px 12px;
+}
+
+.bon-form-textarea {
+    resize: none;
+}
+
+/* Toast Container */
+.bon-toast-container {
+    font-family: inherit;
+}
+
+.bon-toast-container .Toastify__toast--success {
+    background: linear-gradient(135deg, #52c41a, #73d13d);
+}
+
+.bon-toast-container .Toastify__toast--error {
+    background: linear-gradient(135deg, #ff4d4f, #ff7875);
+}
+
+/* Animations */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bon-main-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .bon-container {
+        padding: 12px;
+    }
+
+    .bon-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .bon-header-right {
+        width: 100%;
+    }
+
+    .bon-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .bon-stat-item {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .bon-header-title {
+        font-size: 20px !important;
+    }
+
+    .bon-table .ant-table-tbody>tr>td {
+        padding: 8px 6px;
+    }
+
+    .bon-actions-space {
+        flex-direction: column;
+        gap: 4px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .bon-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .bon-stat-divider {
+        display: none;
+    }
+
+    .bon-stat-item {
+        width: 100%;
+    }
+}

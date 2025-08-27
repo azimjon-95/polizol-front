@@ -1,0 +1,526 @@
+/* General Styles */
+.dashboard-container {
+    width: 100%;
+    min-width: 350px;
+    background: linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a);
+    height: calc(100vh - 48px);
+    padding: 15px;
+    color: #ffffff;
+    overflow-x: auto;
+    font-family: 'Arial', sans-serif;
+}
+
+.dashboard-container::-webkit-scrollbar {
+    width: 7px;
+}
+
+.dashboard-container::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+.dashboard-container::-webkit-scrollbar-thumb {
+    background-color: #64748b;
+    border-radius: 4px;
+}
+
+.icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
+    /* 4 columns for larger screens */
+    grid-template-rows: repeat(2, auto);
+    /* 2 rows */
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        /* Prevents wrapping to form a single row */
+        overflow-x: auto;
+        /* Enables horizontal scrolling */
+        grid-template-columns: none;
+        /* Remove grid columns */
+        grid-template-rows: none;
+        /* Remove grid rows */
+        padding-bottom: 1rem;
+        /* Space for scrollbar */
+    }
+
+    .stats-grid::-webkit-scrollbar {
+        height: 7px;
+        /* Scrollbar height for horizontal scroll */
+    }
+
+    .stats-grid::-webkit-scrollbar-track {
+        background: #1e293b;
+        /* Matches dashboard background */
+        border-radius: 4px;
+    }
+
+    .stats-grid::-webkit-scrollbar-thumb {
+        background-color: #64748b;
+        /* Scrollbar thumb color */
+        border-radius: 4px;
+    }
+
+    .stat-card {
+        flex: 0 0 auto;
+        /* Prevents cards from shrinking or growing */
+        width: 250px;
+        /* Fixed width for each card in carousel */
+        margin-right: 1rem;
+        /* Space between cards in carousel */
+    }
+}
+
+.stat-card {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.balance-card {
+    background: linear-gradient(to right, #16a34a, #15803d);
+}
+
+.lend-card {
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+}
+
+.borrow-card {
+    background: linear-gradient(to right, #7c3aed, #6d28d9);
+}
+
+.warehouse-card {
+    background: linear-gradient(to right, #eab308, #d97706);
+}
+
+.finished-card {
+    background: linear-gradient(to right, #16a34a, #15803d);
+}
+
+.income-card {
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+}
+
+.expense-card {
+    background: linear-gradient(to right, #7c3aed, #6d28d9);
+}
+
+.profit-card {
+    background: linear-gradient(to right, #eab308, #d97706);
+}
+
+.stat-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label_card {
+    font-size: 0.875rem;
+    color: #ffffff !important;
+    font-weight: medium;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff !important;
+}
+
+.stat-change {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: #ffffff !important;
+}
+
+.stat-icon {
+    width: 3rem;
+    height: 3rem;
+    color: #e5e7eb !important;
+}
+
+.positive {
+    color: #00ff5e;
+}
+
+.negative {
+    color: #ef4444;
+}
+
+/* Card */
+.card {
+    background-color: #1e293b;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #facc15;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Salespeople Grid */
+.salespeople-grid {
+    width: 100%;
+    height: 195px;
+    min-height: 195px;
+    padding: 1% 10px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.salespeople-grid::-webkit-scrollbar {
+    height: 4px;
+}
+
+.salespeople-grid::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.salesperson-card {
+    background-color: #334155;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    height: 140px;
+    min-width: 350px;
+}
+
+.salesperson-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.salesperson-info {
+    display: flex;
+    align-items: center;
+}
+
+.rank-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    padding: 4px;
+    font-weight: bold;
+    color: #000000;
+    background-color: #facc15;
+}
+
+.salesperson-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.percentage {
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.progress-section {
+    margin-bottom: 0.75rem;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.progress-labels>span {
+    display: flex;
+    flex-direction: column;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #475569;
+    border-radius: 9999px;
+    height: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background-color: #3b82f6;
+    transition: width 0.3s;
+}
+
+.progress-fill.complete {
+    background-color: #22c55e;
+}
+
+.salesperson-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Payment Legend */
+.payment-legend {
+    margin-top: 1rem;
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.color-indicator {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    margin-right: 0.75rem;
+}
+
+.payment-name {
+    color: #94a3b8;
+}
+
+.payment-amount {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Skeleton Styles */
+.skeleton {
+    background: #334155;
+    /* Matches salesperson-card background for consistency */
+    border-radius: 4px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.skeleton-card {
+    background: linear-gradient(to right, #334155, #475569);
+    /* Mimics stat-card gradient */
+}
+
+.skeleton-label {
+    width: 100px;
+    height: 14px;
+    margin-bottom: 8px;
+}
+
+.skeleton-value {
+    width: 150px;
+    height: 24px;
+}
+
+.skeleton-icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+.skeleton-title {
+    width: 200px;
+    height: 20px;
+}
+
+.skeleton-chart {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+}
+
+.skeleton-rank-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.skeleton-name {
+    width: 100px;
+    height: 16px;
+}
+
+.skeleton-percentage {
+    width: 50px;
+    height: 14px;
+}
+
+.skeleton-progress {
+    width: 100%;
+    height: 8px;
+    border-radius: 9999px;
+}
+
+.skeleton-stat {
+    width: 80px;
+    height: 12px;
+}
+
+.skeleton-color-indicator {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+}
+
+.skeleton-payment-name {
+    width: 60px;
+    height: 12px;
+}
+
+.skeleton-payment-amount {
+    width: 100px;
+    height: 12px;
+}
+
+/* Ensure responsiveness for skeleton stat cards */
+@media (max-width: 900px) {
+    .skeleton-card {
+        flex: 0 0 auto;
+        width: 250px;
+        margin-right: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .skeleton-value {
+        width: 120px;
+        height: 20px;
+    }
+
+    .skeleton-title {
+        width: 150px;
+        height: 18px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stat-value {
+        font-size: 1.25rem;
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-container {
+        padding: 10px 0%;
+    }
+
+    .card-title {
+        font-size: .9rem;
+        font-weight: bold;
+        color: #facc15;
+        margin-bottom: .5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .stat-card {
+        border-radius: 0.75rem;
+        padding: .8rem .5rem !important;
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s;
+        margin-right: 0px;
+    }
+
+    .recharts-wrapper {
+        max-height: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .recharts-surface {
+        /* margin-right: 20px; */
+        display: flex;
+        max-height: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .recharts-layer {
+        font-size: 12px;
+    }
+
+    .card {
+        background-color: #1e293b;
+        border-radius: 0.75rem;
+        padding: .5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card .stat-icon {
+        display: none;
+    }
+
+    .stats-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        grid-template-columns: none;
+        grid-template-rows: none;
+        padding-bottom: 0rem;
+        margin-bottom: 5px;
+    }
+
+    .charts-grid,
+    .salespeople-grid {
+        grid-template-columns: 1fr;
+    }
+}

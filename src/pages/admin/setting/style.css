@@ -1,0 +1,680 @@
+/* Qora Qog'oz Zavodi - Konfiguratsiya Panel Stillari */
+
+.qora-qogoz-zavod-konteyner {
+    height: calc(100vh - 50px);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #ffffff;
+    padding: 20px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.zavod-karta-container {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.zavod-karta-container>div {
+    flex: 1;
+}
+
+.qora-qogoz-zavod-konteyner::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+}
+
+.qora-qogoz-zavod-konteyner::-webkit-scrollbar-track {
+    background: #16213e;
+    /* Background color of the scrollbar track */
+    border-radius: 4px;
+    /* Rounded corners for the track */
+}
+
+.qora-qogoz-zavod-konteyner::-webkit-scrollbar-thumb {
+    background: #4a5e8c;
+    /* Color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Rounded corners for the thumb */
+    transition: background 0.2s ease;
+    /* Smooth transition for hover effect */
+}
+
+.qora-qogoz-zavod-konteyner::-webkit-scrollbar-thumb:hover {
+    background: #6b7aa8;
+    /* Lighter color when hovering over the thumb */
+}
+
+.zavod-sarlavha-blok {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.zavod-logo-qism {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.zavod-ikonka {
+    width: 48px;
+    height: 48px;
+    color: #00d4aa;
+    filter: drop-shadow(0 0 10px rgba(0, 212, 170, 0.3));
+}
+
+.zavod-sarlavha-matn {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(45deg, #00d4aa, #64ffda);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.zavod-tab-tugmalar {
+    display: flex;
+    gap: 10px;
+}
+
+.zavod-tab-tugma {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zavod-tab-tugma:hover {
+    background: rgba(0, 212, 170, 0.2);
+    border-color: rgba(0, 212, 170, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 212, 170, 0.2);
+}
+
+.zavod-aktiv-tab {
+    background: linear-gradient(45deg, #00d4aa, #64ffda) !important;
+    color: #1a1a2e !important;
+    border-color: transparent !important;
+    box-shadow: 0 5px 20px rgba(0, 212, 170, 0.4);
+}
+
+.zavod-tab-ikonka {
+    width: 18px;
+    height: 18px;
+}
+
+/* Registratsiya Panel */
+.zavod-registr-panel {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.zavod-forma-konteyner {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.zavod-forma-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+.zavod-karta-blok {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.zavod-karta-blok:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 212, 170, 0.3);
+}
+
+.zavod-toliq-kenglik {
+    grid-column: 1 / -1;
+}
+
+.zavod-karta-sarlavha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(0, 212, 170, 0.2);
+}
+
+.zavod-karta-ikonka {
+    width: 24px;
+    height: 24px;
+    color: #00d4aa;
+}
+
+.zavod-karta-sarlavha h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.zavod-input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.zavod-input-guruh {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+}
+
+.zavod-yorliq {
+    font-size: 14px;
+    font-weight: 500;
+    color: #b8c5d6;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.zavod-inline-ikonka {
+    width: 16px;
+    height: 16px;
+    color: #ff6b6b;
+}
+
+.zavod-input-maydoni {
+    padding: 14px 16px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zavod-input-maydoni:focus {
+    outline: none;
+    border-color: #00d4aa;
+    background: rgba(0, 212, 170, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
+    transform: translateY(-2px);
+}
+
+.zavod-input-maydoni::placeholder {
+    color: rgba(184, 197, 214, 0.6);
+}
+
+.zavod-textarea-maydoni {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    width: 100%;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zavod-textarea-maydoni:focus {
+    outline: none;
+    border-color: #00d4aa;
+    background: rgba(0, 212, 170, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
+}
+
+.zavod-textarea-maydoni::placeholder {
+    color: rgba(184, 197, 214, 0.6);
+}
+
+/* Narx input stillari */
+.zavod-narx-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.zavod-valyuta-belgi {
+    position: absolute;
+    right: 16px;
+    color: #00d4aa;
+    font-weight: 600;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.zavod-narx-input .zavod-input-maydoni {
+    padding-right: 60px;
+}
+
+/* Hafta kunlari grid */
+.zavod-hafta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.zavod-kun-guruh {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.zavod-kun-yorliq {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64ffda;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.zavod-vaqt-grid {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.zavod-vaqt-input {
+    flex: 1;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.zavod-vaqt-input:focus {
+    outline: none;
+    border-color: #00d4aa;
+    box-shadow: 0 0 10px rgba(0, 212, 170, 0.2);
+}
+
+.zavod-vaqt-ajratgich {
+    color: #64ffda;
+    font-weight: 600;
+}
+
+/* Mahsulotlar grid */
+.zavod-mahsulot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.zavod-mahsulot-guruh {
+    background: rgba(0, 212, 170, 0.05);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 170, 0.2);
+}
+
+.zavod-mahsulot-nomi {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #00d4aa;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zavod-mahsulot-nomi::before {
+    content: "📦";
+    font-size: 18px;
+}
+
+/* Tugmalar */
+.zavod-tugma-konteyner {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.zavod-saqlash-tugma {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: linear-gradient(45deg, #00d4aa, #64ffda);
+    border: none;
+    border-radius: 12px;
+    color: #1a1a2e;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 212, 170, 0.3);
+}
+
+/* Saqlash tugmasi davomi */
+.zavod-saqlash-tugma:hover {
+    background: linear-gradient(45deg, #64ffda, #00d4aa);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+}
+
+.zavod-saqlash-tugma:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 15px rgba(0, 212, 170, 0.2);
+}
+
+.zavod-tugma-ikonka {
+    width: 20px;
+    height: 20px;
+}
+
+/* Bekor qilish tugmasi */
+.zavod-bekor-tugma {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zavod-bekor-tugma:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
+}
+
+.zavod-bekor-tugma:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Ro'yxat paneli */
+.zavod-royxat-panel {
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.zavod-royxat-sarlavha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zavod-royxat-sarlavha h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.zavod-royxat-soni {
+    font-size: 14px;
+    color: #64ffda;
+    font-weight: 500;
+    background: rgba(0, 212, 170, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+/* Bo'sh holat stillari */
+.zavod-bosh-holat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 20px;
+}
+
+.zavod-bosh-ikonka {
+    width: 64px;
+    height: 64px;
+    color: #00d4aa;
+    margin-bottom: 20px;
+    opacity: 0.6;
+}
+
+.zavod-bosh-holat p {
+    margin: 0;
+    font-size: 18px;
+    color: #b8c5d6;
+}
+
+/* Jadval stillari */
+.zavod-jadval-konteyner {
+    overflow-x: auto;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.zavod-jadval {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.zavod-jadval th {
+    background: rgba(0, 212, 170, 0.1);
+    color: #64ffda;
+    font-weight: 600;
+    padding: 16px;
+    text-align: left;
+    border-bottom: 2px solid rgba(0, 212, 170, 0.2);
+}
+
+.zavod-jadval td {
+    padding: 16px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zavod-jadval tr:hover {
+    background: rgba(0, 212, 170, 0.05);
+}
+
+.zavod-nomi-ustun {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zavod-jadval-ikonka {
+    width: 18px;
+    height: 18px;
+    color: #00d4aa;
+}
+
+.zavod-narx-ustun {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.zavod-foiz-ustun {
+    color: #64ffda;
+    font-weight: 500;
+}
+
+/* Amallar tugmalari */
+.zavod-amal-ustun {
+    display: flex;
+    gap: 10px;
+}
+
+.zavod-tahrir-tugma {
+    padding: 8px;
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.zavod-tahrir-tugma:hover {
+    background: rgba(0, 212, 170, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 170, 0.2);
+}
+
+.zavod-ochir-tugma {
+    padding: 8px;
+    background: rgba(255, 75, 75, 0.1);
+    border: 1px solid rgba(255, 75, 75, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.zavod-ochir-tugma:hover {
+    background: rgba(255, 75, 75, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 75, 75, 0.2);
+}
+
+.zavod-amal-ikonka {
+    width: 16px;
+    height: 16px;
+    color: #ffffff;
+}
+
+/* Animatsiyalar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsiv dizayn */
+@media (max-width: 768px) {
+    .zavod-sarlavha-blok {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .zavod-tab-tugmalar {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .zavod-tab-tugma {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .zavod-forma-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .zavod-hafta-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .zavod-mahsulot-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .zavod-jadval th,
+    .zavod-jadval td {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .zavod-tugma-konteyner {
+        flex-direction: column;
+    }
+
+    .zavod-saqlash-tugma,
+    .zavod-bekor-tugma {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .zavod-sarlavha-matn {
+        font-size: 22px;
+    }
+
+    .zavod-ikonka {
+        width: 36px;
+        height: 36px;
+    }
+
+    .zavod-karta-blok {
+        padding: 15px;
+    }
+
+    .zavod-input-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .zavod-karta-sarlavha h3 {
+        font-size: 18px;
+    }
+
+    .zavod-royxat-sarlavha h3 {
+        font-size: 18px;
+    }
+
+    .zavod-jadval {
+        font-size: 12px;
+    }
+}

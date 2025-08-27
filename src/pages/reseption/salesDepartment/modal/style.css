@@ -1,0 +1,436 @@
+/* DeliveryProduct.css */
+.invoice-delivery-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* padding: 1rem; */
+    width: 100%;
+    max-height: 70vh;
+    min-width: 350px;
+    overflow-y: auto;
+}
+
+.invoice-delivery-form input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.invoice-delivery-form input[type="number"]:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 4px rgba(24, 144, 255, 0.2);
+}
+
+.invoice-delivery-form input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.invoice-delivery-form__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.invoice-delivery-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+}
+
+.invoice-delivery-item:hover {
+    background-color: #f1f1f1;
+}
+
+.invoice-delivery-item__label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.invoice-delivery-item__checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.invoice-delivery-item__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.invoice-delivery-item__detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.invoice-delivery-item__input {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.invoice-delivery-item__input:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 4px rgba(24, 144, 255, 0.2);
+}
+
+.invoice-delivery-item__input::placeholder {
+    color: #999;
+}
+
+.invoice-delivery-form__empty {
+    font-size: 0.95rem;
+    color: #888;
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+.invoice-delivery-form-radio{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.invoice-delivery-form-radio label{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.invoice-btn.invoice-btn-success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.invoice-btn.invoice-btn-success:hover {
+    background-color: #218838;
+}
+
+.invoice-btn.invoice-btn-success:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* ================================= */
+.invoice-delivery-box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+/* =================================*/
+.modaldiliver {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+
+
+.liu-deliveredItemsbox {
+    margin-left: 18px;
+}
+
+.liu-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: .2rem;
+    padding-bottom: .1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.liu-header-icon {
+    width: 25px;
+    height: 25px;
+    color: #3b82f6;
+}
+
+.liu-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.liu-items-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.liu-item-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem .5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.liu-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
+}
+
+.liu-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+    gap: 1rem;
+}
+
+.liu-product-info {
+    flex: 1;
+}
+
+.liu-product-name {
+    font-size: .9rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.liu-product-id {
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-family: monospace;
+}
+
+.liu-quantity-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1d4ed8;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+
+.liu-info-row {
+    margin-bottom: .6rem;
+}
+
+.liu-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.liu-icon {
+    width: 18px;
+    height: 18px;
+    color: #64748b;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.liu-icon-primary {
+    color: #059669;
+}
+
+.liu-icon-secondary {
+    color: #dc2626;
+}
+
+.liu-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.liu-value {
+    display: block;
+    font-size: 0.9rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.liu-amounts-section {
+    padding-top: .5rem;
+    border-top: 1px solid #f1f5f9;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.liu-amount-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.liu-amount-primary {
+    display: block;
+    font-size: 1rem;
+    color: #059669;
+    font-weight: 700;
+}
+
+.liu-amount-secondary {
+    display: block;
+    font-size: 0.9rem;
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.liu-card-footer {
+    margin-top: .2rem;
+    padding-top: .7rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.liu-order-number {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #6b7280;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .liu-deliveredItemsbox {
+        padding: 1rem;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .liu-items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modaldiliver {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .liu-title {
+        font-size: 1.25rem;
+    }
+
+    .liu-product-name {
+        font-size: 1rem;
+    }
+
+    .liu-card-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .liu-quantity-badge {
+        align-self: flex-end;
+        width: fit-content;
+    }
+
+    .liu-amounts-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .liu-item-card {
+        padding: 1rem;
+    }
+
+    .liu-header {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+/* ================================= */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .invoice-delivery-form {
+        padding: 0.5rem;
+    }
+
+    .invoice-delivery-item {
+        padding: 0.5rem;
+    }
+
+    .invoice-delivery-item__input {
+        max-width: 100%;
+    }
+
+    .invoice-delivery-item__details {
+        font-size: 0.85rem;
+    }
+
+    .invoice-btn.invoice-btn-success {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .invoice-delivery-form__title {
+        font-size: 1rem;
+    }
+
+    .invoice-delivery-item__label {
+        font-size: 0.9rem;
+    }
+
+    .invoice-delivery-item__details {
+        font-size: 0.8rem;
+    }
+}

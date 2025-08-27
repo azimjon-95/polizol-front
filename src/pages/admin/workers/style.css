@@ -1,0 +1,658 @@
+/* Ruberoid Factory HR System Styles */
+.ruberoid-factory-hr-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    min-height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ruberoid-factory-hr-loading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.hr-dashboard-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 6px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* style.css */
+
+/* Styling for the date-of-birth-cell in the employees table */
+.date-of-birth-cell {
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+    padding: 4px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* Styling for the Cake icon */
+.date-of-birth-cell .date-of-birth-icon {
+    width: 18px;
+    height: 18px;
+    color: #6c757d;
+    flex-shrink: 0;
+}
+
+/* Hover effect for better interactivity */
+.date-of-birth-cell:hover {
+    background-color: #f8f9fa;
+}
+
+/* Highlight for today's birthday */
+.date-of-birth-cell.birthday-today {
+    background-color: #d4edda;
+    /* Light green background */
+    color: #28a745;
+    /* Green text color */
+    font-weight: 500;
+}
+
+/* Green color for the Cake icon on birthday */
+.date-of-birth-cell.birthday-today .date-of-birth-icon {
+    color: #28a745;
+    /* Green color for the Cake icon */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .date-of-birth-cell {
+        font-size: 12px;
+        padding: 8px 6px;
+        gap: 6px;
+    }
+
+    .date-of-birth-cell .date-of-birth-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.header-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.factory-brand-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.factory-logo-icon {
+    width: 55px;
+    height: 55px;
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.1);
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.brand-text-container h1.factory-main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.brand-text-container .factory-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+    font-weight: 500;
+}
+
+.header-stats-panel {
+    display: flex;
+    gap: 10px;
+}
+
+.stat-item-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(79, 70, 229, 0.05);
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+.stat-item-card svg {
+    fill: #302d63b4;
+}
+
+.stat-icon {
+    width: 24px;
+    height: 24px;
+    color: #4f46e5;
+}
+
+.stat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.hr-main-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 0 0px;
+    overflow-y: auto;
+    height: calc(100vh - 150px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hr-main-content::-webkit-scrollbar {
+    width: 9px;
+    /* Width of the scrollbar */
+}
+
+.hr-main-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    /* Track background, semi-transparent */
+    border-radius: 16px;
+    /* Rounded track to match container */
+}
+
+.hr-main-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    /* Thumb color, subtle to blend with glassmorphism */
+    border-radius: 16px;
+    /* Rounded thumb */
+    border: 2px solid transparent;
+    /* Optional: adds spacing around thumb */
+    background-clip: content-box;
+    /* Ensures border doesn't affect thumb color */
+}
+
+
+.controls-panel-section {
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.search-filter-group {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    max-width: 600px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.search-input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+}
+
+.search-input-field {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.search-input-field:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.department-filter-wrapper {
+    position: relative;
+    min-width: 200px;
+    width: 100% !important;
+    border: 2px solid #e5e7eb;
+    border-radius: 7px;
+    padding-right: 5px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.department-filter-wrapper:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.filter-dropdown-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.department-filter-select {
+    width: 100%;
+    padding: 8px 12px 8px 40px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+
+.add-employee-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-employee-btn:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.add-employee-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.employees-table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.employees-data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-header-section th {
+    padding: 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.employee-table-row {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.2s ease;
+}
+
+.employee-table-row:hover {
+    background: #f8f9ff;
+}
+
+.employee-table-row td {
+    padding: 7px 16px;
+    font-size: 14px;
+    color: #1f2937;
+    text-wrap: nowrap;
+}
+
+.employee-name-cell {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.office-worker-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 6px;
+}
+
+.badge-icon {
+    width: 16px;
+    height: 16px;
+    color: #4f46e5;
+}
+
+.experience-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 6px;
+    font-size: 13px;
+    color: #15803d;
+}
+
+.experience-icon {
+    width: 16px;
+    height: 16px;
+    color: #15803d;
+}
+
+.passport-series-cell {
+    font-family: 'Courier New', Courier, monospace;
+    color: #4b5563;
+}
+
+.payment-type-indicator {
+    padding: 4px 10px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1e40af;
+}
+
+
+
+
+.login-credentials-cell {
+    font-size: 13px;
+}
+
+.credentials-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.login-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.credentials-icon {
+    width: 16px;
+    height: 16px;
+    color: #6b7280;
+}
+
+.role-badge {
+    padding: 4px 8px;
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 6px;
+    font-size: 12px;
+    color: #b45309;
+}
+
+.no-credentials-text {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.actions-cell {
+    width: 120px;
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-action-btn,
+.delete-action-btn {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-action-btn {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+}
+
+.edit-action-btn:hover {
+    background: rgba(79, 70, 229, 0.2);
+}
+
+.delete-action-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.delete-action-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.action-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.phone-icon,
+.address-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Excel Export Button Styles */
+.export-excel-btn {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+    white-space: nowrap;
+}
+
+.export-excel-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.export-excel-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.export-excel-btn .btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .controls-panel-section {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .export-excel-btn {
+        padding: 2px 5px;
+        gap: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ruberoid-factory-hr-container {
+        padding: 0px;
+    }
+
+    .department-filter-wrapper {
+        position: relative;
+        min-width: 300px;
+        margin-top: 0px;
+        overflow: hidden;
+    }
+
+    .export-excel-btn>svg {
+        display: none;
+    }
+
+    .factory-brand-section {
+        display: none;
+    }
+
+    .export-excel-btn {
+        padding: 0px 5px;
+        gap: 0px;
+        height: 35px;
+        line-height: 14px;
+    }
+
+    .hr-dashboard-header {
+        padding: 5px 10px;
+    }
+
+    .hr-main-content {
+        padding: 0px;
+    }
+
+    .factory-main-title {
+        font-size: 24px;
+    }
+
+    .stat-item-card {
+        display: none;
+    }
+
+    .stat-number {
+        font-size: 18px;
+    }
+
+    .employee-form-modal {
+        width: 90%;
+        padding: 16px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+    }
+}
+
+.confirm-toast {
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.confirm-toast p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.confirm-toast-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirm-btn,
+.cancel-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.confirm-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+
+.confirm-btn:hover {
+    background-color: #c82333;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}

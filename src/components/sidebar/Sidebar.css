@@ -1,0 +1,347 @@
+aside {
+  width: 100%;
+  height: 100%;
+  padding: 0 5px 15px 15px;
+  background-color: #242e3c;
+  /* background: linear-gradient(90deg, #242e3c, #001430); */
+  position: relative;
+}
+
+/* Sidebar logosi */
+.sidebar_logo {
+  height: 60px;
+  width: 210px;
+  font-size: 30px;
+  /* text-align: center; */
+  user-select: none;
+  position: relative;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.sidebar_logo i {
+  font-size: 12px;
+  color: #fff;
+  user-select: none;
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  bottom: 0;
+}
+
+/* Logo asosiy */
+.sidebar_logo {
+  height: 55px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.sidebar_logo i {
+  font-size: 10.5px;
+  color: #fff;
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  bottom: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.LogoPol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+}
+
+.LogoPol span {
+  display: inline-block;
+  font-size: 20px;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: flyIn 0.6s ease forwards, pulse 1.5s ease-in-out infinite;
+}
+
+.LogoPol span:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.LogoPol span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.LogoPol span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.LogoPol span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.LogoPol span:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+.LogoPol span:nth-child(7) {
+  animation-delay: 0.6s;
+}
+
+.LogoPol span:nth-child(8) {
+  animation-delay: 0.7s;
+}
+
+.LogoPol span:nth-child(9) {
+  animation-delay: 0.8s;
+}
+
+.LogoPol span:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+.LogoPol span:nth-child(11) {
+  animation-delay: 1s;
+}
+
+.gap {
+  width: 8px;
+}
+
+/* Kirish animatsiyasi */
+@keyframes flyIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulsatsiya effekti */
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.sidebar_menu_item.active {
+  background-color: #f0f8ff;
+  color: #1f2937;
+  font-weight: 500;
+
+}
+
+.sidebar_menu_button.active {
+  background-color: #e0f0ff;
+  /* Orqa fon rangi */
+  color: #1f2937;
+  /* Text rangi */
+  font-weight: bold;
+}
+
+.sidebar_submenu_item.active {
+  background-color: #f0f8ff !important;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Sidebar linklari */
+.sidebar_links {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #fff;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.sidebar_links::-webkit-scrollbar {
+  width: 3px;
+}
+
+.sidebar_links::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.sidebar_links::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar_links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  color: #fff;
+}
+
+
+/* Logout tugmasi */
+.sidebar_logout_container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.sidebar_logout_container button {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: var(--bg-color);
+  color: var(--main-color);
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.sidebar_logout_container button svg {
+  font-size: 19px;
+}
+
+.sidebar_menu_button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 2px 10px 10px;
+  border-radius: 5px;
+  width: 100%;
+  color: #fff;
+  height: 100%;
+}
+
+.sidebar_menu_button span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-wrap: nowrap;
+}
+
+.sidebar_submenu {
+  /* margin-left: 20px; */
+  text-wrap: nowrap;
+  margin: 2px 0 0 20px;
+}
+
+
+
+/* 📌 Media query: Maksimal kenglik 768px (planshetlar) */
+
+/* 📌 Media query: Maksimal kenglik 500px (mobil) */
+@media (max-width: 500px) {
+  aside {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #0A3D3A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .itemMOBlabel {
+    display: none;
+  }
+
+  .sidebar_logo {
+    display: none;
+    /* Mobil ekranda logo yo‘qoladi */
+  }
+
+  .sidebar_links {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    max-height: 60px;
+    width: 100%;
+  }
+
+
+  .sidebar_links a {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    font-size: 14px;
+    padding: 0px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .sidebar_menu_item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar_menu_item svg {
+    font-size: 20px;
+  }
+
+  .sidebar_links a:hover {
+    background-color: var(--bg-color);
+    color: var(--main-color) !important;
+    /* padding: 0 3px 3px 3px; */
+  }
+
+  .sidebar_menu_item span {
+    font-size: 12px;
+  }
+
+  .sidebar_links a.active {
+    background-color: var(--bg-color);
+    color: var(--main-color);
+    padding: 0 3px 3px 3px;
+  }
+
+  .sidebar_logout_container {
+    display: none;
+    /* Logout tugmasi mobil ekranda yashiriladi */
+  }
+}
+
+/* 📌 Media query: Minimal kenglik 350px (juda kichik ekranlar) */
+@media (max-width: 350px) {
+  aside {
+    height: 50px;
+  }
+
+  .sidebar_links {
+    max-height: 50px;
+  }
+
+  .sidebar_links a {
+    font-size: 12px;
+  }
+}

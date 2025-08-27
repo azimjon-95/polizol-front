@@ -1,0 +1,302 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-modal {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-in-out;
+}
+
+.custom-modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #6366f1;
+    color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.custom-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.custom-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.custom-modal-close:hover {
+    color: #e5e7eb;
+}
+
+.custom-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #e5e7eb;
+}
+
+.custom-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-modal-body::-webkit-scrollbar-track {
+    background: #e5e7eb;
+    border-radius: 4px;
+}
+
+.custom-modal-body::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 4px;
+}
+
+.invoice-edit-form {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9fd 100%);
+    border-radius: 0 0 12px 12px;
+}
+
+.invoice-edit-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.invoice-edit-section:hover {
+    transform: translateY(-2px);
+}
+
+.invoice-edit-section h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.invoice-edit-section h4::before {
+    content: '\f05a';
+    /* Font Awesome info-circle icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+}
+
+.invoice-form-input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+}
+
+.invoice-form-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    background: white;
+}
+
+.invoice-form-input::placeholder {
+    color: #9ca3af;
+}
+
+.invoice-form-select {
+    width: 100% !important;
+    margin-bottom: 0.75rem;
+}
+
+.invoice-form-select .ant-select-selector {
+    padding: 0.75rem !important;
+    border-radius: 6px !important;
+    border: 1px solid #d1d5db !important;
+    background: #f9fafb !important;
+}
+
+.invoice-form-select .ant-select-selector:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+}
+
+.invoice-items-edit {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.invoice-item-edit {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 6px;
+    border-left: 4px solid #6366f1;
+    position: relative;
+}
+
+.invoice-item-edit-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.invoice-item-total {
+    font-weight: 600;
+    color: #16a34a;
+    padding: 0.5rem;
+    background: #dcfce7;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.invoice-item-total::before {
+    content: '\f0d6';
+    /* Font Awesome money-bill icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 0.5rem;
+    color: #16a34a;
+}
+
+.invoice-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.invoice-btn-success {
+    background: #16a34a;
+    color: white;
+    border: none;
+}
+
+.invoice-btn-success:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+.invoice-btn-success:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.invoice-btn-success:not(:disabled)::before {
+    content: '\f0c7';
+    /* Font Awesome save icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.invoice-btn-danger {
+    background: #dc2626;
+    color: white;
+    border: none;
+}
+
+.invoice-btn-danger:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+}
+
+.invoice-btn-danger::before {
+    content: '\f2ed';
+    /* Font Awesome trash icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.invoice-btn-secondary {
+    background: #6b7280;
+    color: white;
+    border: none;
+}
+
+.invoice-btn-secondary:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
+
+.invoice-btn-secondary::before {
+    content: '\f00d';
+    /* Font Awesome times/close icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.invoice-edit-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+textarea.invoice-form-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

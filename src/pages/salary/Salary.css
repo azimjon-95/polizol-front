@@ -1,0 +1,11 @@
+.salary-card table {
+  border-collapse: collapse;
+  width: 100%;
+  th,
+  td {
+    padding: 2px 8px;
+    /* text-align: center; */
+    border: 1px solid #ddd;
+    text-transform: capitalize;
+  }
+}

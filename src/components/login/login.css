@@ -1,0 +1,877 @@
+/* ================================
+   BLACK PAPER FACTORY CRM STYLES
+   ================================ */
+
+/* Global Variables */
+:root {
+    --bpf-primary-gradient: linear-gradient(135deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+    --bpf-secondary-gradient: linear-gradient(135deg, #374151 0%, #4b5563 50%, #374151 100%);
+    --bpf-accent-blue: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
+    --bpf-glass-backdrop: rgba(31, 41, 55, 0.8);
+    --bpf-border-primary: rgba(75, 85, 99, 0.5);
+    --bpf-shadow-primary: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    --bpf-shadow-secondary: 0 10px 25px -3px rgba(0, 0, 0, 0.3);
+    --bpf-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --bpf-transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.Toastify__toast {
+    font-family: 'YourFont', sans-serif;
+    background-color: #1a202c;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.text-redtext-sm {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Main Container Styles */
+.bpf-authentication-wrapper {
+    min-height: 100vh;
+    background: var(--bpf-primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.bpf-animated-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Animated Background Elements */
+.bpf-floating-paper-roll-primary {
+    position: absolute;
+    top: 5rem;
+    left: 2.5rem;
+    width: 8rem;
+    height: 8rem;
+    background: var(--bpf-secondary-gradient);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: bpf-rotation-continuous 20s linear infinite;
+}
+
+.bpf-floating-paper-roll-secondary {
+    position: absolute;
+    bottom: 5rem;
+    right: 2.5rem;
+    width: 6rem;
+    height: 6rem;
+    background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: bpf-pulsation-gentle 3s ease-in-out infinite;
+}
+
+.bpf-floating-paper-roll-tertiary {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: bpf-levitation-bounce 2s ease-in-out infinite;
+}
+
+/* Factory Silhouette Background */
+.bpf-industrial-silhouette-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8rem;
+    background: linear-gradient(to top, rgba(55, 65, 81, 0.2) 0%, transparent 100%);
+    opacity: 0.2;
+}
+
+.bpf-factory-architectural-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bpf-manufacturing-building-primary {
+    width: 5rem;
+    height: 4rem;
+    background-color: #4b5563;
+    margin-right: 0.5rem;
+    clip-path: polygon(0 100%, 0 20%, 100% 20%, 100% 100%);
+}
+
+.bpf-industrial-chimney-primary {
+    width: 1rem;
+    height: 6rem;
+    background-color: #6b7280;
+    margin-right: 0.25rem;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+.bpf-manufacturing-building-secondary {
+    width: 6rem;
+    height: 5rem;
+    background-color: #4b5563;
+    margin-right: 0.5rem;
+    clip-path: polygon(0 100%, 0 20%, 100% 20%, 100% 100%);
+}
+
+.bpf-industrial-chimney-secondary {
+    width: 1rem;
+    height: 7rem;
+    background-color: #6b7280;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+/* Main Login Container */
+.bpf-authentication-container-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 28rem;
+}
+
+/* Header Section */
+.bpf-brand-identity-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.bpf-corporate-logo-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    background: var(--bpf-secondary-gradient);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    box-shadow: var(--bpf-shadow-secondary);
+    animation: bpf-pulsation-slow 3s ease-in-out infinite;
+}
+
+.bpf-company-title-primary {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bpf-system-description-subtitle {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+/* Login Panel */
+.bpf-authentication-panel-container {
+    background: var(--bpf-glass-backdrop);
+    backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    box-shadow: var(--bpf-shadow-primary);
+    border: 1px solid var(--bpf-border-primary);
+    padding: 2rem;
+    transition: var(--bpf-transition-smooth);
+}
+
+.bpf-authentication-panel-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.6);
+}
+
+.bpf-form-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Form Group Styles */
+.bpf-input-field-grouping-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.bpf-field-label-typography {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+.bpf-interactive-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.bpf-input-icon-positioning-wrapper {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    z-index: 2;
+}
+
+.bpf-primary-text-input-field {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background-color: rgba(55, 65, 81, 0.5);
+    border: 1px solid #4b5563;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    transition: var(--bpf-transition-smooth);
+}
+
+.bpf-primary-text-input-field::placeholder {
+    color: #9ca3af;
+}
+
+.bpf-primary-text-input-field:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: rgba(55, 65, 81, 0.7);
+}
+
+.bpf-password-input-field {
+    width: 100%;
+    padding: 0.75rem 3rem 0.75rem 2.5rem;
+    background-color: rgba(55, 65, 81, 0.5);
+    border: 1px solid #4b5563;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    transition: var(--bpf-transition-smooth);
+}
+
+.bpf-password-input-field::placeholder {
+    color: #9ca3af;
+}
+
+.bpf-password-input-field:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: rgba(55, 65, 81, 0.7);
+}
+
+.bpf-password-visibility-toggle-button {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: var(--bpf-transition-smooth);
+    z-index: 2;
+}
+
+.bpf-password-visibility-toggle-button:hover {
+    color: white;
+}
+
+/* Login Button */
+.bpf-primary-authentication-button {
+    width: 100%;
+    background: var(--bpf-accent-blue);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--bpf-shadow-secondary);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--bpf-transition-bounce);
+}
+
+.bpf-primary-authentication-button:hover {
+    background: linear-gradient(90deg, #1d4ed8 0%, #1e40af 100%);
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px -12px rgba(37, 99, 235, 0.4);
+}
+
+.bpf-button-icon-animation-wrapper {
+    transition: var(--bpf-transition-smooth);
+}
+
+.bpf-primary-authentication-button:hover .bpf-button-icon-animation-wrapper {
+    transform: translateX(4px);
+}
+
+/* Additional Links */
+.bpf-secondary-navigation-links {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.bpf-forgot-password-link {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-decoration: none;
+    transition: var(--bpf-transition-smooth);
+}
+
+.bpf-forgot-password-link:hover {
+    color: white;
+}
+
+/* Security Badge */
+.bpf-security-certification-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    color: #9ca3af;
+    gap: 0.5rem;
+}
+
+.bpf-security-badge-text {
+    font-size: 0.875rem;
+}
+
+/* ================================
+   LOADING PAGE STYLES
+   ================================ */
+
+.bpf-loading-interface-wrapper {
+    min-height: 100vh;
+    background: var(--bpf-primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.bpf-loading-background-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.bpf-floating-particle-element {
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #6b7280;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.bpf-loading-content-center {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+}
+
+/* Paper Roll Animation */
+.bpf-paper-roll-animation-container {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.bpf-rotating-paper-roll-wrapper {
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto;
+    position: relative;
+}
+
+.bpf-paper-roll-outer-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bpf-secondary-gradient);
+    border-radius: 50%;
+    animation: bpf-rotation-continuous 3s linear infinite;
+    box-shadow: var(--bpf-shadow-secondary);
+}
+
+.bpf-paper-roll-inner-layer {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border-radius: 50%;
+}
+
+.bpf-paper-roll-center-core {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+    border-radius: 50%;
+}
+
+.bpf-paper-roll-inner-core {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    background-color: #9ca3af;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bpf-unwinding-paper-strip {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: 4rem;
+    height: 0.25rem;
+    background: linear-gradient(90deg, #6b7280 0%, transparent 100%);
+    animation: bpf-paper-unwinding 2s ease-in-out infinite;
+    transform-origin: left center;
+}
+
+/* Loading Text */
+.bpf-loading-status-text-container {
+    margin-bottom: 1.5rem;
+}
+
+.bpf-loading-primary-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    animation: bpf-pulsation-gentle 2s ease-in-out infinite;
+}
+
+.bpf-loading-secondary-description {
+    color: #9ca3af;
+    margin-bottom: 1.5rem;
+}
+
+/* Progress Bar */
+.bpf-progress-indicator-container {
+    width: 16rem;
+    margin: 0 auto 2rem auto;
+}
+
+.bpf-progress-bar-track {
+    width: 100%;
+    height: 0.5rem;
+    background-color: #374151;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.bpf-progress-bar-fill {
+    height: 100%;
+    background: var(--bpf-accent-blue);
+    border-radius: 9999px;
+    animation: bpf-progress-animation 3s ease-in-out infinite;
+}
+
+.bpf-progress-status-text {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Loading Dots */
+.bpf-loading-dots-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.bpf-loading-dot-element {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    animation: bpf-levitation-bounce 1.4s ease-in-out infinite both;
+}
+
+.bpf-loading-dot-element:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.bpf-loading-dot-element:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+/* ================================
+   KEYFRAME ANIMATIONS
+   ================================ */
+
+@keyframes bpf-rotation-continuous {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bpf-pulsation-gentle {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bpf-pulsation-slow {
+
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes bpf-levitation-bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes bpf-paper-unwinding {
+    0% {
+        width: 0;
+        opacity: 1;
+    }
+
+    50% {
+        width: 4rem;
+        opacity: 0.8;
+    }
+
+    100% {
+        width: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes bpf-progress-animation {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes bpf-particle-float-1 {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+}
+
+@keyframes bpf-particle-float-2 {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-30px) rotate(270deg);
+    }
+}
+
+@keyframes bpf-particle-float-3 {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-25px) rotate(90deg);
+    }
+}
+
+@keyframes bpf-particle-float-4 {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-35px) rotate(360deg);
+    }
+}
+
+/* Animation Classes */
+.bpf-animate-float-1 {
+    animation: bpf-particle-float-1 4s ease-in-out infinite;
+}
+
+.bpf-animate-float-2 {
+    animation: bpf-particle-float-2 5s ease-in-out infinite;
+}
+
+.bpf-animate-float-3 {
+    animation: bpf-particle-float-3 3s ease-in-out infinite;
+}
+
+.bpf-animate-float-4 {
+    animation: bpf-particle-float-4 6s ease-in-out infinite;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 640px) {
+    .bpf-authentication-container-wrapper {
+        max-width: 20rem;
+    }
+
+    .bpf-authentication-panel-container {
+        padding: 1.5rem;
+    }
+
+    .bpf-company-title-primary {
+        font-size: 1.5rem;
+    }
+
+    .bpf-rotating-paper-roll-wrapper {
+        width: 6rem;
+        height: 6rem;
+    }
+
+    .bpf-progress-indicator-container {
+        width: 12rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bpf-authentication-wrapper {
+        padding: 0.5rem;
+    }
+
+    .bpf-floating-paper-roll-primary,
+    .bpf-floating-paper-roll-secondary,
+    .bpf-floating-paper-roll-tertiary {
+        display: none;
+    }
+}
+
+/* ================================
+   ACCESSIBILITY IMPROVEMENTS
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+.bpf-primary-text-input-field:focus,
+.bpf-password-input-field:focus,
+.bpf-primary-authentication-button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --bpf-primary-gradient: linear-gradient(135deg, #000000 0%, #1f2937 100%);
+        --bpf-glass-backdrop: rgba(0, 0, 0, 0.9);
+    }
+}
+
+
+.bpf-remember-me-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.bpf-remember-me-checkbox {
+    margin-right: 8px;
+}
+
+.bpf-remember-me-label {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+
+/* ================================== */
+.rgh-pin-input-container {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.rgh-pin-label {
+    display: block;
+    color: #bfdbfe;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.rgh-pin-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.rgh-pin-input-wrapper:hover {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rgh-pin-input-icon {
+    padding-left: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.rgh-pin-input-field {
+    width: 100%;
+    padding: 0.75rem 0.5rem 0.75rem 2.5rem;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.rgh-pin-input-field:focus {
+    box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.rgh-pin-visibility-toggle {
+    position: absolute;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: opacity 0.2s ease;
+}
+
+.rgh-pin-visibility-toggle:hover {
+    opacity: 0.8;
+}
+
+.rgh-auth-mode-toggle-container {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rgh-auth-mode-button {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.rgh-auth-mode-button-active {
+    background: #2563eb;
+    color: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rgh-auth-mode-button-inactive {
+    background: rgba(255, 255, 255, 0.1);
+    color: #bfdbfe;
+}
+
+.rgh-auth-mode-button:first-child {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.rgh-auth-mode-button:last-child {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.rgh-auth-mode-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,853 @@
+/* Income List Modal Styles - Optimized for Table Layout */
+.nns-warehouse-modal {
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px;
+    background: #ffffff;
+    position: relative;
+    overflow: auto;
+    min-height: calc(100vh - 50px);
+}
+
+.nns-warehouse-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nns-warehouse-modal::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.nns-warehouse-modal::-webkit-scrollbar-thumb {
+    background: #6c757d;
+    border-radius: 10px;
+    border: 2px solid #f8f9fa;
+}
+
+h3:where(.css-dev-only-do-not-override-mc1tut).ant-typography,
+div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3,
+div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea,
+:where(.css-dev-only-do-not-override-mc1tut).ant-typography h3 {
+    margin-bottom: 0 !important;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.3333333333333333;
+}
+
+.nns-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.nns-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nns-title-icon {
+    font-size: 16px;
+    color: #495057;
+}
+
+.nns-filter-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.nns-month-input {
+    width: 100px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    font-size: 12px;
+    padding: 6px;
+}
+
+.nns-input-icon {
+    color: #495057;
+    font-size: 12px;
+}
+
+.nns-firm-filter,
+.nns-debt-filter {
+    font-size: 12px;
+}
+
+.nns-filter-icon {
+    font-size: 12px;
+    color: #495057;
+    margin-right: 4px;
+}
+
+.nns-header-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.nns-stat-card {
+    border: none;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.nns-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nns-stat-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+}
+
+.nns-stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #ffffff;
+    background: #495057;
+}
+
+.nns-income-table .ant-table-tbody>tr>td {
+    padding: 4px 12px !important;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #1a1a1a;
+}
+
+.nns-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.nns-stat-number-bal,
+.nns-stat-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.nns-stat-label {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.nns-income-container {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    height: calc(100vh - 190px);
+    overflow-y: auto;
+}
+
+/* Chrome, Edge, Safari */
+.nns-income-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.nns-income-container::-webkit-scrollbar-track {
+    background: #f1f1f100;
+    border-radius: 8px;
+}
+
+.nns-income-container::-webkit-scrollbar-thumb {
+    background-color: #495057;
+    border-radius: 8px;
+    border: 2px solid #f1f1f1;
+}
+
+.nns-income-table {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+}
+
+.nns-income-table .ant-table-thead>tr>th {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 10px 12px;
+    font-size: 12px;
+}
+
+.nns-income-table .ant-table-tbody>tr>td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #1a1a1a;
+}
+
+.nns-income-table .ant-table-tbody>tr:hover>td {
+    background: #f1f3f5;
+}
+
+.nns-firm-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nns-firm-icon {
+    font-size: 16px;
+    color: #495057;
+}
+
+.nns-firm-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.nns-firm-name {
+    font-size: 12px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.nns-firm-phone {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.nns-phone-icon {
+    font-size: 10px;
+    color: #495057;
+}
+
+.nns-date-tag,
+.nns-amount-tag,
+.nns-payment-tag,
+.nns-debt-tag {
+    background: #f8f9fa;
+    color: #1a1a1a;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 10px;
+    padding: 4px 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nns-tag-icon {
+    font-size: 10px;
+    color: #495057;
+}
+
+.nns-paid-amount {
+    color: #28a745;
+}
+
+.nns-debt-amount {
+    color: #dc3545;
+}
+
+.nns-no-debt {
+    color: #28a745;
+}
+
+.nns-debt-payments-button {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+.nns-debt-payments-button:hover {
+    background: #f1f3f5;
+    border-color: #adb5bd;
+}
+
+.nns-income-details {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.nns-financial-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+:where(.css-dev-only-do-not-override-mc1tut).ant-card .ant-card-body {
+    padding: 5px 24px;
+    border-radius: 0 0 8px 8px;
+}
+
+.nns-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    /* height: 200px; */
+    border-bottom: 1px solid #e9ecef;
+}
+
+.nns-summary-item:last-child {
+    border-bottom: none;
+}
+
+.nns-summary-label {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.nns-summary-value {
+    font-size: 10px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.nns-total-amount {
+    color: #fa8c16;
+}
+
+.nns-section-divider {
+    margin: 12px 0;
+    border-color: #e9ecef;
+}
+
+.nns-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.nns-section-icon {
+    font-size: 14px;
+    color: #495057;
+}
+
+.nns-materials-table,
+.nns-workers-table {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+}
+
+.nns-materials-table .ant-table-thead>tr>th,
+.nns-workers-table .ant-table-thead>tr>th {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 10px 12px;
+    font-size: 12px;
+}
+
+.nns-materials-table .ant-table-tbody>tr>td,
+.nns-workers-table .ant-table-tbody>tr>td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #1a1a1a;
+}
+
+.nns-materials-table .ant-table-tbody>tr:hover>td,
+.nns-workers-table .ant-table-tbody>tr:hover>td {
+    background: #f1f3f5;
+}
+
+.nns-table-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.nns-table-header .nns-icon {
+    font-size: 12px;
+    color: #495057;
+}
+
+.nns-material-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nns-material-icon {
+    font-size: 12px;
+    color: #495057;
+}
+
+.nns-category-tag,
+.nns-quantity-tag,
+.nns-price-tag,
+.nns-total-tag,
+.nns-transport-tag,
+.nns-worker-tag,
+.nns-payment-tag {
+    background: #f8f9fa;
+    color: #1a1a1a;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 10px;
+    padding: 4px 8px;
+    font-weight: 500;
+}
+
+.nns-price-sum {
+    color: #fa8c16;
+}
+
+.nns-price-usd {
+    color: #1890ff;
+}
+
+.nns-worker-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nns-worker-position {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.nns-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    gap: 12px;
+}
+
+.nns-loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e9ecef;
+    border-top: 3px solid #495057;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.nns-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.nns-empty-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    color: #6c757d;
+}
+
+.nns-empty-title {
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nns-empty-text {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.nns-debt-payments-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #1a1a1a;
+}
+
+.nns-debt-payments-modal-content {
+    padding: 12px;
+}
+
+.nns-debt-payments-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.nns-payment-date {
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.nns-debt-payments-table {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.nns-debt-payments-table .ant-table-thead>tr>th {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 10px 12px;
+    font-size: 12px;
+}
+
+.nns-debt-payments-table .ant-table-tbody>tr>td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #1a1a1a;
+}
+
+.nns-debt-payments-table .ant-table-tbody>tr:hover>td {
+    background: #f1f3f5;
+}
+
+.nns-income-table .ant-table-row-expand-icon {
+    font-size: 12px;
+    color: #495057;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nns-warehouse-modal {
+        padding: 0 5px 5px 5px !important;
+    }
+
+
+    .ant-table-cell {
+        text-wrap: nowrap !important;
+    }
+
+    .nns-modal-header {
+        flex-direction: column;
+        gap: 4px;
+        padding: 0px 0 0 0;
+        border-radius: 6px;
+    }
+
+    .nns-header-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .nns-stat-card {
+        border-radius: 6px;
+    }
+
+    .nns-income-table {
+        font-size: 10px;
+    }
+
+    .nns-income-table .ant-table-thead>tr>th,
+    .nns-income-table .ant-table-tbody>tr>td {
+        padding: 8px;
+    }
+
+    .nns-financial-summary {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .nns-materials-table,
+    .nns-workers-table {
+        font-size: 10px;
+    }
+
+    .nns-materials-table .ant-table-thead>tr>th,
+    .nns-materials-table .ant-table-tbody>tr>td,
+    .nns-workers-table .ant-table-thead>tr>th,
+    .nns-workers-table .ant-table-tbody>tr>td {
+        padding: 8px;
+    }
+
+    .nns-section-title {
+        font-size: 12px;
+    }
+
+    .nns-section-icon {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nns-header-cards {
+        grid-template-columns: 2fr 2fr 2fr !important;
+        gap: 4px;
+    }
+
+    .nns-income-container {
+        background: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        height: calc(100vh - 225px);
+        overflow-y: auto;
+    }
+
+    .nns-stat-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 6px !important;
+    }
+
+    .nns-header-cards .ant-card-body {
+        padding: 5px 1px !important;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .nns-stat-icon {
+        display: none;
+    }
+
+    .nns-filter-group {
+        display: flex;
+        gap: 4px;
+    }
+
+    .nns-month-input,
+    .nns-firm-filter,
+    .nns-debt-filter {
+        width: 100%;
+    }
+
+    .nns-income-table,
+    .nns-materials-table,
+    .nns-workers-table {
+        overflow-x: auto;
+    }
+
+    .nns-financial-summary {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .nns-modal-title {
+        font-size: 16px;
+    }
+
+    .nns-title-icon {
+        font-size: 14px;
+    }
+
+    .nns-stat-number-bal,
+    .nns-stat-number {
+        font-size: 11px;
+    }
+
+    .nns-stat-label {
+        font-size: 9px;
+    }
+
+    .nns-firm-name {
+        font-size: 10px;
+    }
+
+    .nns-firm-phone {
+        font-size: 9px;
+    }
+
+    .nns-date-tag,
+    .nns-amount-tag,
+    .nns-payment-tag,
+    .nns-debt-tag,
+    .nns-category-tag,
+    .nns-quantity-tag,
+    .nns-price-tag,
+    .nns-total-tag,
+    .nns-transport-tag,
+    .nns-worker-tag {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+
+    .nns-debt-payments-button {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+}
+
+/* Hover Effects */
+.nns-income-table .ant-table-tbody>tr:hover>td,
+.nns-materials-table .ant-table-tbody>tr:hover>td,
+.nns-workers-table .ant-table-tbody>tr:hover>td,
+.nns-debt-payments-table .ant-table-tbody>tr:hover>td {
+    background: #f1f3f5;
+}
+
+.nns-debt-payments-button:hover {
+    background: #f1f3f5;
+    border-color: #adb5bd;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nns-stat-card {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.nns-stat-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.nns-stat-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nns-stat-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.nns-stat-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.nns-stat-card:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.nns-stat-card:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+.nns-income-table {
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.7s;
+}
+
+
+
+/* ===================== */
+.mjl-invoice-delivery-box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.mjl-card-price-input {
+    width: 90px;
+    padding: 6px 8px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.mjl-card-summary-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    width: 100%;
+    position: relative;
+    color: #64748b;
+}
+
+.mjl-card-summary-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    width: 100%;
+    position: relative;
+    color: #64748b;
+}
+
+.mjl-isTransportDropdownOpen {
+    position: absolute;
+    width: 51%;
+    top: 66px;
+    right: 0;
+    padding: 2px;
+    z-index: 999;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-top: none;
+    gap: 3px;
+    border-radius: 0 0 10px 10px;
+}
+
+.mjl-isTransportDropdownOpen button {
+    border: none;
+    padding: 7px 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    transition: all 0.2s ease;
+}
+
+.mjl-isTransportDropdownOpen button:hover {
+    background: #667eea;
+    color: white;
+}

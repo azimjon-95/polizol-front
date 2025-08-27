@@ -1,0 +1,490 @@
+.hyu-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.hyu-main-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 10px;
+    height: 70px;
+}
+
+.hyu-form-section,
+.hyu-table-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hyu-form-title,
+.hyu-table-title {
+    color: #2d3748;
+    font-size: 19px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+}
+
+.hyu-form-title::after,
+.hyu-table-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+.hyu-form-elem .hyu-form-group {
+    margin-bottom: 10px;
+}
+
+.hyu-f-result {
+    width: 100%;
+    display: flex;
+}
+
+.hyu-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.hyu-select,
+.hyu-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.hyu-select:focus,
+.hyu-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.hyu-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.hyu-submit-btn {
+    width: 100%;
+    padding: 14px;
+    height: 30px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hyu-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.hyu-submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.hyu-table-wrapper {
+    max-height: calc(100vh - 105px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.hyu-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 13px;
+}
+
+.hyu-table thead {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.hyu-table th,
+.hyu-table td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.hyu-table th {
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hyu-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.hyu-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: scale(1.01);
+}
+
+.hyu-product-name {
+    font-weight: 500;
+    color: #2d3748;
+    max-width: 150px;
+    font-size: 12px;
+    word-wrap: break-word;
+}
+
+.hyu-category-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hyu-category-badge.polizol {
+    background: rgba(72, 187, 120, 0.1);
+    color: #38a169;
+    border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+.hyu-category-badge.ruberoid {
+    background: rgba(237, 137, 54, 0.1);
+    color: #dd6b20;
+    border: 1px solid rgba(237, 137, 54, 0.3);
+}
+
+.hyu-category-badge.folygoizol {
+    background: rgba(54, 139, 237, 0.1);
+    color: #0004ff;
+    border: 1px solid rgba(54, 191, 237, 0.3);
+}
+
+.hyu-price {
+    font-weight: 600;
+    color: #2b6cb0;
+}
+
+.hyu-date {
+    color: #718096;
+    font-size: 12px;
+}
+
+.hyu-delete-btn {
+    padding: 6px 12px;
+    background: linear-gradient(45deg, #f56565, #e53e3e);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.hyu-edit-btn {
+    padding: 6px 12px;
+    background: linear-gradient(45deg, #657df5, #002fff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-right: 2px;
+}
+
+.hyu-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.hyu-cancel-btn {
+    padding: 6px 12px;
+    background: linear-gradient(45deg, #f56565, #e53e3e);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-wrap: nowrap;
+}
+
+.hyu-edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 101, 101, 0.3);
+}
+
+.hyu-delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 101, 101, 0.3);
+}
+
+.hyu-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.hyu-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.hyu-notification.success {
+    background: linear-gradient(45deg, #48bb78, #38a169);
+}
+
+.hyu-notification.error {
+    background: linear-gradient(45deg, #f56565, #e53e3e);
+}
+
+.hyu-notification.show {
+    transform: translateX(0);
+}
+
+/* ====================================== */
+.hyu-expense-list {
+    display: flex;
+    width: 100% !important;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hyu-expense-item {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    width: 100% !important;
+    padding: 7px 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px 0;
+    gap: 20px;
+}
+
+.hyu-expense-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hyu-expense-label {
+    font-weight: 500;
+    color: #000000;
+    font-size: 13px;
+    text-wrap: nowrap;
+}
+
+.hyu-expense-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.hyu-additional {
+    margin-bottom: 20px;
+}
+
+.hyu-form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.hyu-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.hyu-form> :nth-child(4) {
+    grid-column: span 3;
+}
+
+.hyu-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.hyu-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 5px;
+    text-wrap: nowrap;
+}
+
+.hyu-input {
+    padding: 11px;
+    border: 2px solid #e7eced;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.hyu-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.hyu-form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.hyu-submit-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    height: 40px;
+    margin-top: 17px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.hyu-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.hyu-submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.hyu-cancel-btn {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.hyu-cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.hyu-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hyu-notification.show {
+    opacity: 1;
+}
+
+.hyu-notification.success {
+    background-color: #28a745;
+    height: 50px;
+}
+
+.hyu-notification.error {
+    background-color: #dc3545;
+    height: 50px;
+}
+
+/* ====================================== */
+
+@media (max-width: 1200px) {
+    .hyu-main-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hyu-table {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hyu-container {
+        padding: 10px;
+    }
+
+    .hyu-form-section,
+    .hyu-table-section {
+        padding: 20px;
+    }
+
+    .hyu-table th,
+    .hyu-table td {
+        padding: 8px 4px;
+    }
+}
+
+/* Scrollbar styles */
+.hyu-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.hyu-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.hyu-table-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 4px;
+}
+
+.hyu-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #5a6fd8, #6b46a0);
+}

@@ -1,0 +1,779 @@
+/* Salary Management Styles */
+.factory-salary-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    padding: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.factory-salary-header {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 5px 12px rgba(59, 130, 246, 0.3);
+}
+
+.factory-summary-cardsBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: none;
+    width: 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+}
+
+.factory-salary-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.factory-salary-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.factory-month-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.factory-select-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.factory-select-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.7rem;
+}
+
+.factory-month-select,
+.factory-year-select {
+    padding: 4px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: white;
+    color: #374151;
+    min-width: 80px;
+    transition: all 0.2s ease;
+}
+
+.factory-month-select:focus,
+.factory-year-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.factory-summary-cards {
+    display: grid;
+    grid-template-columns: 24px repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.factory-summary-card {
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-left: 2px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.factory-summary-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.factory-summary-card.total-salary {
+    border-left-color: #10b981;
+}
+
+.factory-summary-card.total-paid {
+    border-left-color: #3b82f6;
+}
+
+.factory-summary-card.total-penalties {
+    border-left-color: #ef4444;
+}
+
+.factory-summary-card.total-remaining {
+    border-left-color: #f59e0b;
+}
+
+.factory-card-label {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.factory-card-amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.factory-card-amount.green {
+    color: #10b981;
+}
+
+.factory-card-amount.blue {
+    color: #3b82f6;
+}
+
+.factory-card-amount.red {
+    color: #ef4444;
+}
+
+.factory-card-amount.orange {
+    color: #f59e0b;
+}
+
+.factory-employees-table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.factory-table-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 4px 5px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.factory-table-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.factory-employees-tableConat {
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100vh - 170px);
+}
+
+.factory-employees-tableConat::-webkit-scrollbar {
+    width: 3px;
+}
+
+.factory-employees-tableConat::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.factory-employees-tableConat::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.factory-employees-tableConat::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.factory-employees-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.factory-table-head th {
+    padding: 8px 6px;
+    text-align: left;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.factory-table-body tr:hover {
+    background: #f8fafc;
+}
+
+.factory-table-body td {
+    padding: 5px 6px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    font-size: 0.7rem;
+}
+
+.factory-employee-name {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.7rem;
+}
+
+.factory-employee-position {
+    color: #6b7280;
+    font-size: 0.7rem;
+    margin-top: 1px;
+}
+
+.factory-department-badge {
+    padding: 2px 6px;
+    background: #e0f2fe;
+    color: #0891b2;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-size: 0.6rem;
+    font-weight: 500;
+}
+
+.factory-amount-display {
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.factory-amount-positive {
+    color: #10b981;
+}
+
+.factory-amount-negative {
+    color: #ef4444;
+}
+
+.factory-amount-zero {
+    color: #6b7280;
+}
+
+.factory-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.factory-status-paid {
+    background-color: #e6f4ea;
+    color: #2e7d32;
+}
+
+.factory-status-partial {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.factory-status-overpaid {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+/* Yangi statuslar uchun stillar */
+.factory-status-debt {
+    background-color: #fff0f6;
+    color: #c2185b;
+}
+
+.factory-status-penalty {
+    background-color: #fef7e0;
+    color: #fbc02d;
+}
+
+.factory-status-no-salary {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+.factory-status-transferred {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.factory-penalty-indicator {
+    padding: 2px 4px;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    gap: 2px;
+}
+
+.factory-advance-indicator {
+    padding: 2px 4px;
+    background: #e0f2fe;
+    color: #0891b2;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    gap: 2px;
+}
+
+.factory-action-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.factory-btn {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 3px;
+    transition: all 0.15s ease;
+}
+
+.factory-btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.factory-btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-0.5px);
+}
+
+.factory-btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.factory-btn-success:hover {
+    background: #059669;
+    transform: translateY(-0.5px);
+}
+
+.factory-btn-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.factory-btn-warning:hover {
+    background: #d97706;
+    transform: translateY(-0.5px);
+}
+
+.factory-btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.factory-btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-0.5px);
+}
+
+.factory-btn-outline {
+    background: transparent;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+}
+
+.factory-btn-outline:hover {
+    background: #f9fafb;
+    color: #374151;
+}
+
+.factory-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 10px;
+}
+
+.factory-modal {
+    background: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.factory-modal-header {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.factory-modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.factory-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+    transition: color 0.15s ease;
+}
+
+.factory-modal-close:hover {
+    color: #374151;
+}
+
+.factory-modal-body {
+    padding: 12px;
+}
+
+.factory-form-group {
+    margin-bottom: 10px;
+}
+
+.factory-form-group-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.factory-form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+}
+
+.factory-form-input,
+.factory-form-select,
+.factory-form-textarea {
+    width: 100%;
+    padding: 10px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: white;
+    color: #374151;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.factory-form-input:focus,
+.factory-form-select:focus,
+.factory-form-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.factory-form-textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.factory-payment-method-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.factory-payment-method-option {
+    padding: 6px;
+    /* border: 1px solid #e5e7eb; */
+    border-radius: 4px;
+    width: 100%;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 5px;
+}
+
+.factory-payment-method-label {
+    padding: 6px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-weight: 500;
+    width: 100%;
+    color: #6b7280;
+}
+
+.factory-payment-method-input {
+    display: none;
+}
+
+.factory-payment-method-input:checked+.factory-payment-method-label {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    color: #1e40af;
+
+}
+
+.factory-modal-footer {
+    padding: 10px 12px;
+    border-top: 1px solid #e5e7eb;
+    gap: 6px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.factory-form-input[type="text"] {
+    text-align: right;
+    font-family: monospace;
+    /* Optional: improves number alignment */
+}
+
+.factory-loading-spinner {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #f3f4f6;
+    border-top-color: #3b82f6;
+}
+
+.factory-alert {
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    gap: 6px;
+}
+
+.factory-alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.factory-alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.factory-alert-warning {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+.factory-alert-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.factory-empty-state {
+    padding: 30px 10px;
+    color: #6b7280;
+}
+
+.factory-empty-state-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.factory-empty-state-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.factory-empty-state-description {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+}
+
+.factory-search-box {
+    margin-bottom: 10px;
+}
+
+.factory-search-input {
+    padding: 6px 8px 6px 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.factory-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.factory-search-icon {
+    left: 8px;
+    font-size: 0.9rem;
+}
+
+.factory-pagination {
+    padding: 12px;
+    gap: 4px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.factory-pagination-btn {
+    padding: 4px 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    font-size: 0.7rem;
+}
+
+.factory-tooltip:hover::after {
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    margin-bottom: 3px;
+}
+
+.factory-tooltip:hover::before {
+    border: 3px solid transparent;
+    border-top-color: #1f2937;
+}
+
+@media (max-width: 768px) {
+    .factory-salary-container {
+        padding: 8px;
+    }
+
+    .factory-salary-header {
+        padding: 12px 10px;
+    }
+
+    .factory-salary-title {
+        font-size: 1.5rem;
+    }
+
+    .factory-month-selector {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .factory-summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .factory-employees-table {
+        min-width: 600px;
+    }
+
+    .factory-modal {
+        margin: 5px;
+    }
+
+    .factory-action-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
+
+/* =================================== */
+/* Modal Overlay */
+.ghy-factory-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    z-index: 1000;
+}
+
+/* Modal Container */
+.ghy-factory-modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Modal Close Button */
+.factory-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #6b7280;
+    /* Tailwind's text-gray-500 */
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.factory-modal-close:hover {
+    color: #1f2937;
+    /* Tailwind's text-gray-900 */
+}
+
+/* Modal Footer */
+.factory-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 6px 24px;
+    border-top: 1px solid #e5e7eb;
+    /* Tailwind's border-gray-200 */
+    background-color: #f9fafb;
+    /* Tailwind's bg-gray-50 */
+}
+
+
+
+/* Outline Button (for "Yopish") */
+.factory-btn-outline {
+    background-color: transparent;
+    border: 1px solid #d1d5db;
+    /* Tailwind's border-gray-300 */
+    color: #374151;
+    /* Tailwind's text-gray-700 */
+}
+
+.factory-btn-outline:hover {
+    background-color: #f3f4f6;
+    /* Tailwind's bg-gray-100 */
+    border-color: #9ca3af;
+    /* Tailwind's border-gray-400 */
+}
+
+/* =================================== */

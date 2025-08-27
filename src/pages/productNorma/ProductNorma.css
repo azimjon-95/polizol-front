@@ -1,0 +1,439 @@
+.product_norma {
+  position: relative;
+  padding: 10px;
+}
+
+.addModalnorma {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 550px;
+  height: 100%;
+  background-color: #ffffffbb;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.hdr-materials-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Message komponenti uchun uslublar */
+.hdr-message {
+  transition: all 0.3s ease-in-out;
+}
+
+.hdr-message-success {
+  background-color: #52c41a;
+}
+
+.hdr-message-error {
+  background-color: #ff4d4f;
+}
+
+.product_norma {
+  svg {
+    font-size: 19px;
+  }
+
+  .norma_actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .delete_btn {
+      color: red;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Main Container */
+.hdr-main-container {
+  height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+.hdr-form-wrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Form Styling */
+.hdr-form {
+  position: relative;
+}
+
+.hdr-section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: .1rem;
+  padding-left: 1rem;
+  border-left: 4px solid #667eea;
+}
+
+.hdr-category-section>button {
+  height: 48px;
+  padding: 0;
+  border-radius: 12px 0 0 12px;
+  color: #ff0000;
+  position: absolute;
+  left: -49px;
+  top: 26px;
+  cursor: pointer;
+  width: 50px;
+  z-index: 999 !important;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+  border: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  border-right: none;
+  /* box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); */
+}
+
+.hdr-category-section>button>svg {
+  font-size: 30px;
+}
+
+/* Category Section */
+.hdr-category-section {
+  margin-bottom: .5rem;
+  padding: 1rem 1rem 0rem 1rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+  border-radius: 0 0 16px 16px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.hdr-category-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.hdr-category-btn {
+  height: 48px;
+  padding: 0 2rem;
+  border-radius: 12px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.hdr-category-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.hdr-active-btn {
+  background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4) !important;
+}
+
+/* Product Info Section */
+.hdr-product-info-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7e2 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(245, 101, 101, 0.1);
+}
+
+/* Materials Section */
+.hdr-materials-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+  border-radius: 16px 16px 0 0;
+  border: 1px solid rgba(72, 187, 120, 0.1);
+  height: calc(100vh - 232px);
+  overflow-y: scroll;
+}
+
+.hdr-materials-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.hdr-materials-section::-webkit-scrollbar-track {
+  background: #f0f0f000;
+  border-radius: 8px;
+}
+
+.hdr-materials-section::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.hdr-materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.hdr-material-item {
+  display: flex;
+  /* align-items: flex-start; */
+  gap: .5rem;
+  padding: .5rem;
+  width: 100%;
+  background: #000;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.hdr-material-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.hdr-material-select {
+  flex: 2;
+  margin-bottom: 0 !important;
+}
+
+.hdr-quantity-input {
+  margin-bottom: 0 !important;
+}
+
+.hdr-remove-btn {
+  color: #ff4d4f;
+  margin-top: 5px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.hdr-remove-btn:hover {
+  color: #ff7875;
+  background: rgba(255, 77, 79, 0.1);
+}
+
+/* Description Section */
+.hdr-description-section {
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(251, 146, 60, 0.1);
+}
+
+/* Form Items */
+.hdr-form-item .ant-form-item-label>label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.hdr-input {
+  height: 44px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.hdr-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.hdr-select .ant-select-selector {
+  height: 44px !important;
+  border-radius: 8px !important;
+  border: 2px solid #e2e8f0 !important;
+  transition: all 0.3s ease;
+}
+
+.hdr-select.ant-select-focused .ant-select-selector {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+.hdr-material-dropdown {
+  width: 100% !important;
+  height: 44px !important;
+  outline: none;
+  border-radius: 8px !important;
+  border: 2px solid #e2e8f0 !important;
+  transition: all 0.3s ease;
+}
+
+.hdr-quantity-field {
+  max-width: 150px;
+}
+
+.hdr-textarea {
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.hdr-textarea:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Add Material Button */
+.hdr-add-material-wrapper {
+  margin-top: 1.5rem;
+}
+
+.hdr-add-material-btn {
+  height: 50px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px dashed #667eea;
+  color: #667eea;
+  transition: all 0.3s ease;
+}
+
+.hdr-add-material-btn:hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-color: #4facfe;
+  color: #4facfe;
+  transform: translateY(-1px);
+}
+
+/* Submit Section */
+.hdr-submit-section {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+
+.hdr-submit-btn {
+  height: 56px;
+  padding: 0 3rem;
+  margin-top: 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.hdr-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.hdr-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hdr-main-container {
+    padding: 1rem;
+  }
+
+  .hdr-form-wrapper {
+    padding: 1.5rem;
+  }
+
+  .hdr-title {
+    font-size: 2rem;
+  }
+
+  .hdr-material-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hdr-material-select,
+  .hdr-quantity-input {
+    flex: none;
+    width: 100%;
+  }
+
+  .hdr-remove-btn {
+    margin-top: 0;
+    align-self: flex-end;
+  }
+
+  .hdr-category-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hdr-category-btn {
+    width: 200px;
+  }
+}
+
+/* Animation Effects */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hdr-cost-section {
+  padding: 20px;
+}
+
+.hdr-form-wrapper {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.hdr-material-item {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Custom Ant Design Overrides */
+.ant-form-item-has-error .hdr-input,
+.ant-form-item-has-error .hdr-select .ant-select-selector {
+  border-color: #ff4d4f !important;
+}
+
+.ant-form-item-has-error .hdr-input:focus,
+.ant-form-item-has-error .hdr-select.ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1) !important;
+}
+
+.ant-btn-loading {
+  pointer-events: none;
+}
+
+.ant-select-dropdown {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}

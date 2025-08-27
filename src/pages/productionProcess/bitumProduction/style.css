@@ -1,0 +1,1487 @@
+.production-system-container {
+    padding: 0px 20px 15px 20px;
+}
+
+/* Main container for bitumen production system */
+.bitum-system-container {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    overflow-y: auto;
+    height: calc(100vh - 110px);
+    background-color: #f5f7fa;
+}
+
+/* Header section */
+.bitum-system-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bitum-loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #667eea;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.bitum-header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bitum-header-content h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Inventory display grid */
+.bitum-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.bitum-inventory-card {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bitum-inventory-card h4 {
+    margin: 0 0 2px 0;
+    color: #333;
+}
+
+.bitum-inventory-card p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.bitum-inventory-card .bn3-inventory {
+    color: #2563eb;
+}
+
+.bitum-inventory-card .bn5-inventory {
+    color: #dc2626;
+}
+
+.bitum-inventory-card .mel-inventory {
+    color: #059669;
+}
+
+.bitum-inventory-card .ready-product-inventory {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Production sections grid */
+.bitum-production-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.bitum-production-panel {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bitum-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.bitum-panel-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.bitum-input {
+    width: 100%;
+    display: flex;
+    align-items: end;
+    gap: 5px;
+}
+
+.bitum-input>button {
+    padding: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 108px;
+    font-weight: bold;
+}
+
+.bitum-input>button:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.bitum-input-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.bitum-input-grid .bitum-input-group {
+    flex: 1 1 calc(33.333% - 10px);
+    /* Three elements per row, accounting for gap */
+    min-width: 0;
+    /* Prevent overflow */
+}
+
+.price-info {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.bitum-input-flex {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.bitum-input-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bitum-input-group label {
+    display: block;
+    /* margin-bottom: 5px; */
+    font-weight: bold;
+    color: #555;
+}
+
+.bitum-input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e5e7eb;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.bitum-action-button {
+    width: 100%;
+    min-width: 130px;
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    text-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.bitum-input-groupBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.bitum-bn3-action {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bitum-bn5-action {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+/* History sections */
+.bitum-history-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.bitum-history-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bitum-history-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.bitum-table-container {
+    overflow-x: auto;
+}
+
+.bitum-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.bitum-history-table thead tr {
+    background-color: #f8fafc;
+}
+
+.bitum-history-table th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.bitum-history-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bitum-history-table td {
+    padding: 12px;
+}
+
+.bitum-history-table .bn5-result {
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.bitum-history-table .record-timestamp {
+    font-size: 12px;
+    color: #666;
+}
+
+.bitum-history-table .export-bags-count {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.bitum-history-table .local-bags-count {
+    font-weight: bold;
+    color: #059669;
+}
+
+.bitum-delete-button {
+    padding: 5px 10px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.bitum-empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.bitum-empty-state svg {
+    opacity: 0.3;
+    margin-bottom: 10px;
+}
+
+/* Dialogs */
+.bitum-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.bitum-dialog-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    min-width: 400px;
+    max-width: 600px;
+}
+
+.bitum-dialog-box h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.bitum-dialog-box p {
+    margin: 0 0 15px 0;
+    color: #666;
+}
+
+.bitum-dialog-box p strong {
+    color: #333;
+}
+
+.bitum-dialog-input {
+    margin-bottom: 20px;
+}
+
+.bitum-dialog-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.bitum-dialog-input input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e5e7eb;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.bitum-dialog-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.bitum-cancel-button {
+    padding: 10px 20px;
+    background: #e5e7eb;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.bitum-confirm-button {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.bitum-bn3-confirm {
+    background: #667eea;
+}
+
+.bitum-bn5-confirm {
+    background: #059669;
+}
+
+.bitum-packaging-details {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 5px;
+}
+
+.bitum-packaging-details p {
+    margin: 5px 0;
+    color: #333;
+}
+
+/*=========================================*/
+
+/* Main container for inputs and button */
+.input-container {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    margin-top: 15px !important;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Common input field styling */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: border-color 0.3s ease;
+}
+
+.bitum-confirm-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Focused state for input fields */
+.input-field:focus {
+    border-color: #059669;
+    /* Green border on focus */
+    outline: none;
+    /* Remove the outline */
+}
+
+.input-values-container {
+    margin-top: 20px;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+}
+
+.input-value-card {
+    background: #f0fdf4;
+    border: 2px solid #bbf7d0;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.del-inp-value {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 19px;
+    border: none;
+    background: transparent;
+}
+
+.input-value-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.package-type {
+    background-color: #34d399;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.package-info {
+    font-size: 16px;
+    color: #065f46;
+}
+
+.no-package-text {
+    color: #9ca3af;
+    font-style: italic;
+    font-size: 14px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/*=========================================*/
+
+/* Button styling */
+.action-button {
+    height: 44px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #059669;
+    /* Primary green color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the button */
+.action-button:hover {
+    background-color: #047a4e;
+    /* Darker green on hover */
+}
+
+/* Active state for button */
+.action-button:active {
+    background-color: #03633c;
+    /* Even darker green on click */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 500px) {
+    .input-container {
+        padding: 15px;
+    }
+
+    .input-field,
+    .action-button {
+        font-size: 14px;
+    }
+}
+
+/*=========================================*/
+
+
+.bitum-packaging-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.bitum-packaging-buttons button {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bitum-packaging-buttons button.active {
+    background-color: #059669;
+    color: white;
+    border-color: #059669;
+}
+
+.bitum-select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* +++++++++++++++++++++++++++++++++++++++++++++ */
+/* ============================================== */
+/* Premium Inventory Table Styles */
+/* Premium inventar jadval uslublari */
+.inventory-summary-cards-grid {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    /* flex-wrap: wrap;s */
+}
+
+.tabs-container {
+    padding: 20px;
+}
+
+.month-filter-container {
+    display: flex;
+    align-items: center;
+    /* margin-bottom: 20px; */
+}
+
+.month-filter-label {
+    font-size: 14px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.month-filter-input {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #333;
+}
+
+.inventory-summary-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.187);
+    backdrop-filter: blur(5px);
+    font-size: 14px;
+}
+
+.inventory-summary-icon {
+    margin-right: 8px;
+    color: #4a90e2;
+}
+
+.inventory-summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-summary-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.inventory-summary-value {
+    font-weight: bold;
+    color: #333;
+}
+
+.inventory-table-container-premium {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 190px);
+    overflow-y: auto;
+}
+
+/* Scrollbar styling for WebKit browsers (Chrome, Safari, Edge) */
+.inventory-table-container-premium::-webkit-scrollbar {
+    width: 4px;
+    /* Slim scrollbar */
+}
+
+.inventory-table-container-premium::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent track */
+    border-radius: 4px;
+}
+
+.inventory-table-container-premium::-webkit-scrollbar-thumb {
+    background: #7b00ff;
+    /* Blue thumb for premium look */
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Subtle border */
+}
+
+.inventory-table-container-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.inventory-header-section-modern {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    z-index: 1;
+    position: relative;
+}
+
+.inventory-title-gradient {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.inventory-title-icon-main {
+    width: 3rem;
+    height: 3rem;
+    color: #ffffff;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.inventory-stats-panel-floating {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.inventory-stat-card-primary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.inventory-stat-number-large {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.inventory-stat-label-elegant {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+
+.inventory-table-advanced-design {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.inventory-thead-gradient-modern {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    position: relative;
+}
+
+.inventory-header-row-premium th {
+    padding: 1rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.inventory-header-row-premium th:first-child {
+    border-top-left-radius: 15px;
+}
+
+.inventory-header-row-premium th:last-child {
+    border-top-right-radius: 15px;
+}
+
+.inventory-th-expand-control {
+    width: 60px;
+    text-align: center;
+}
+
+.inventory-th-production-name,
+.inventory-th-date-info,
+.inventory-th-bn5-amount,
+.inventory-th-mel-amount,
+.inventory-th-electricity,
+.inventory-th-gas-amount,
+.inventory-th-selling-price,
+.inventory-th-extra-costs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.inventory-th-icon-factory,
+.inventory-th-icon-calendar,
+.inventory-th-icon-weight,
+.inventory-th-icon-package,
+.inventory-th-icon-electric,
+.inventory-th-icon-flame,
+.inventory-th-icon-dollar,
+.inventory-th-icon-plus {
+    width: 1.2rem;
+    height: 1.2rem;
+    opacity: 0.9;
+}
+
+.inventory-tbody-modern-style {
+    background: #ffffff;
+}
+
+.inventory-main-row-interactive {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.inventory-main-row-interactive:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.inventory-main-row-interactive:last-child {
+    border-bottom: none;
+}
+
+.inventory-main-row-interactive td {
+    padding: .30rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.226);
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.inventory-td-expand-button {
+    text-align: center;
+}
+
+.inventory-expand-btn-circular {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.inventory-expand-btn-circular:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+.inventory-chevron-icon-down,
+.inventory-chevron-icon-right {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.inventory-production-wrapper-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.inventory-prod-icon-dual,
+.inventory-prod-icon-single {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    border-radius: 8px;
+}
+
+.inventory-prod-icon-dual {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+}
+
+.inventory-prod-icon-single {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+}
+
+.inventory-production-text-dual {
+    font-weight: 600;
+    color: #10b981;
+}
+
+.inventory-production-text-single {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.inventory-date-display-elegant {
+    font-weight: 500;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.inventory-amount-text-bn5,
+.inventory-amount-text-mel {
+    font-weight: 600;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-amount-text-bn5 {
+    color: #dc2626;
+}
+
+.inventory-amount-text-mel {
+    color: #7c2d12;
+}
+
+.inventory-cost-text-electric {
+    color: #eab308;
+    font-weight: 600;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-cost-text-gas {
+    color: #ea580c;
+    font-weight: 600;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-price-text-premium {
+    color: #059669;
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-extra-text-secondary {
+    color: #7c3aed;
+    font-weight: 600;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-expanded-row-detailed {
+    background: linear-gradient(135deg, #fefbff 0%, #f8fafc 100%);
+    border-top: 3px solid #6366f1;
+}
+
+.inventory-expanded-content-container {
+    padding: 0 !important;
+}
+
+.inventory-details-panel-advanced {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    margin: 1rem;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.inventory-additional-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.inventory-info-card-kraft,
+.inventory-info-card-qop,
+.inventory-info-card-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.inventory-info-card-kraft {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #f59e0b;
+}
+
+.inventory-info-card-qop {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #3b82f6;
+}
+
+.inventory-info-card-price {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-color: #10b981;
+}
+
+.inventory-info-card-kraft:hover,
+.inventory-info-card-qop:hover,
+.inventory-info-card-price:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-info-icon-kraft,
+.inventory-info-icon-qop,
+.inventory-info-icon-price {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.inventory-info-icon-kraft {
+    color: #f59e0b;
+}
+
+.inventory-info-icon-qop {
+    color: #3b82f6;
+}
+
+.inventory-info-icon-price {
+    color: #10b981;
+}
+
+.inventory-info-content-kraft,
+.inventory-info-content-qop,
+.inventory-info-content-price {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.inventory-info-label-kraft,
+.inventory-info-label-qop,
+.inventory-info-label-price {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.inventory-info-value-kraft,
+.inventory-info-value-qop,
+.inventory-info-value-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-items-section-detailed {
+    margin-top: 2rem;
+}
+
+.inventory-items-title-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+}
+
+.inventory-items-icon-title {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #6366f1;
+}
+
+.inventory-items-grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.inventory-item-card-premium {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.inventory-item-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.inventory-item-card-premium:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-color: #6366f1;
+}
+
+.inventory-item-card-premium:hover::before {
+    opacity: 1;
+}
+
+.inventory-item-header-stylish {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.inventory-item-icon-qop,
+.inventory-item-icon-small,
+.inventory-item-icon-large,
+.inventory-item-icon-default {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.inventory-item-icon-small {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.inventory-item-icon-large {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.inventory-item-label-emphasized {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-transform: capitalize;
+}
+
+.inventory-item-details-structured {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.inventory-item-detail-row-amount,
+.inventory-item-detail-row-quantity,
+.inventory-item-detail-row-rope {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-left: 4px solid;
+    transition: all 0.2s ease;
+}
+
+.inventory-item-detail-row-amount {
+    border-left-color: #dc2626;
+}
+
+.inventory-item-detail-row-quantity {
+    border-left-color: #3b82f6;
+}
+
+.inventory-item-detail-row-rope {
+    border-left-color: #7c3aed;
+}
+
+.inventory-item-detail-row-amount:hover,
+.inventory-item-detail-row-quantity:hover,
+.inventory-item-detail-row-rope:hover {
+    background: rgba(241, 245, 249, 0.9);
+    transform: translateX(5px);
+}
+
+.inventory-item-detail-icon-weight,
+.inventory-item-detail-icon-package,
+.inventory-item-detail-icon-rope {
+    width: 1.25rem;
+    height: 1.25rem;
+    opacity: 0.8;
+}
+
+.inventory-item-detail-icon-weight {
+    color: #dc2626;
+}
+
+.inventory-item-detail-icon-package {
+    color: #3b82f6;
+}
+
+.inventory-item-detail-icon-rope {
+    color: #7c3aed;
+}
+
+.inventory-item-detail-text-amount,
+.inventory-item-detail-text-quantity,
+.inventory-item-detail-text-rope {
+    font-weight: 600;
+    color: #374151;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.inventory-notes-section-elegant {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 100%);
+    border-radius: 12px;
+    border: 1px solid #e879f9;
+}
+
+.inventory-notes-icon-file {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #a855f7;
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+}
+
+.inventory-notes-content-wrapper {
+    flex: 1;
+}
+
+.inventory-notes-label-header {
+    font-weight: 600;
+    color: #7c3aed;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.inventory-notes-text-content {
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Moslashuvchan dizayn */
+@media (max-width: 1200px) {
+    .inventory-table-container-premium {
+        padding: 1.5rem;
+    }
+
+    .inventory-title-gradient {
+        font-size: 2rem;
+    }
+
+    .inventory-title-icon-main {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .inventory-table-container-premium {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .inventory-header-section-modern {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .inventory-title-gradient {
+        font-size: 1.8rem;
+    }
+
+    .inventory-table-wrapper-glassmorphism {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+
+    .inventory-table-advanced-design {
+        font-size: 0.8rem;
+    }
+
+    .inventory-header-row-premium th {
+        padding: .5rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .inventory-main-row-interactive td {
+        padding: .5rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .inventory-additional-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .inventory-items-grid-responsive {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .inventory-details-panel-advanced {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .inventory-table-wrapper-glassmorphism {
+        overflow-x: auto;
+        overflow-y: auto;
+        height: calc(100vh - 145px);
+    }
+}
+
+@media (max-width: 480px) {
+    .inventory-table-container-premium {
+        padding: 0rem !important;
+        margin: 0rem !important;
+        border-radius: 15px;
+    }
+
+    .inventory-info-card-kraft,
+    .inventory-info-card-qop,
+    .inventory-info-card-price {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: .3rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .inventory-info-content-kraft,
+    .inventory-info-content-qop,
+    .inventory-info-content-price {
+        display: flex;
+        flex-direction: column;
+        gap: 0rem;
+    }
+
+    :where(.css-dev-only-do-not-override-mc1tut).ant-tabs .ant-tabs-tab {
+        position: relative;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 0 !important;
+        font-size: 14px;
+        background: transparent;
+        border: 0;
+        outline: none;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.88);
+    }
+
+    .inventory-production-wrapper-modern {
+        text-wrap: nowrap;
+    }
+
+    .inventory-production-text-dual {
+        text-wrap: nowrap !important;
+    }
+
+    .inventory-production-text-single {
+        text-wrap: nowrap !important;
+    }
+
+    .inventory-date-display-elegant {
+        text-wrap: nowrap !important;
+    }
+
+    .inventory-title-gradient {
+        font-size: 1.5rem;
+    }
+
+    .inventory-title-icon-main {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .inventory-table-wrapper-glassmorphism {
+        padding: 0rem;
+    }
+
+    .inventory-header-row-premium th {
+        padding: 0.75rem 0.25rem;
+        font-size: 0.7rem;
+    }
+
+    .inventory-main-row-interactive td {
+        padding: 0.75rem 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .inventory-expand-btn-circular {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .inventory-chevron-icon-down,
+    .inventory-chevron-icon-right {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+/* Animatsiya kalit kadrlari */
+@keyframes inventory-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes inventory-pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    }
+}
+
+.inventory-main-row-interactive {
+    animation: inventory-fade-in-up 0.3s ease-out;
+}
+
+.inventory-expand-btn-circular:focus {
+    animation: inventory-pulse-glow 1s infinite;
+    outline: none;
+}
+
+.inventory-main-row-interactive {
+    border-bottom: 1px solid #1f2937;
+    color: #f9fafb;
+}
+
+/* Qorong'i rejim qo'llab-quvvatlash */
+@media (prefers-color-scheme: dark) {
+
+
+    .inventory-details-panel-advanced {
+        /* background: rgba(31, 41, 55, 0.8); */
+        border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .inventory-item-card-premium {
+        background: rgba(31, 41, 55, 0.142);
+        color: #f9fafb;
+    }
+}
