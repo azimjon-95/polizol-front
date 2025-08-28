@@ -29,7 +29,7 @@ const CompanyInfoPage = ({ onShowFeedback }) => {
                         <Phone className="info-icon" />
                         <div>
                             <h3>Telefon raqamlar</h3>
-                            <p>+998 33 184 10 00</p>
+                            <p></p>
                             <p>+998 94 184 10 00</p>
                             <div className="social-links">
                                 <a href="https://t.me/PopPolizol" target="_blank" rel="noopener noreferrer">

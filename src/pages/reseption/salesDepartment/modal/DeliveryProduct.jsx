@@ -47,6 +47,8 @@ const DeliveryProduct = ({
     modalState.activeSaleId
   );
 
+
+
   const contentRef = useRef();
   const [printData, setPrintData] = useState(null);
   const [isTransportDropdownOpen, setIsTransportDropdownOpen] = useState(false);
@@ -497,11 +499,10 @@ const DeliveryProduct = ({
               <strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ
             </p>
             <p>
-              <strong>Manzil:</strong> Namangan viloyati, Pop tumani, Gilkor
-              MFY, Istiqbol
+              <strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18
             </p>
             <p>
-              <strong>Mijoz:</strong> {modalState?.customerName || "Noma'lum"}
+              <strong>Mijoz:</strong> {saleCar?.innerData?.customerId?.name || "Noma'lum"}
             </p>
             <p>
               <strong>Avtotransport:</strong>{" "}
@@ -543,7 +544,7 @@ const DeliveryProduct = ({
           <p className="card-doc-contact">
             Biz bilan ishlaganingizdan minnatdormiz! Taklif va shikoyatlar uchun
             QR kodni skanerlang yoki quyidagi raqamlarga qo‘ng‘iroq qiling: +998
-            94 184 10 00, +998 33 184 10 00
+            94 184 10 00,
           </p>
           <div className="card-doc-sign">
             <div>

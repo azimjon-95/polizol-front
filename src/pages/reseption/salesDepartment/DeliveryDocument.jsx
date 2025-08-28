@@ -16,7 +16,7 @@ const DeliveryDocument = ({ sale, contentRef, deliveryItems }) => {
             <p className="card-doc-date">{new Date(sale?.createdAt || Date.now()).toLocaleDateString('uz-UZ')} yil</p>
             <div className="card-doc-info">
                 <p><strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ</p>
-                <p><strong>Manzil:</strong> Namangan viloyati, Pop tumani, Gilkor MFY, Istiqbol</p>
+                <p><strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18</p>
                 <p><strong>Mijoz:</strong> {sale?.customerId?.name || 'Noma\'lum'}</p>
                 <p><strong>Avtotransport:</strong> {sale?.transport || 'Belgilanmagan'}</p>
             </div>
@@ -53,7 +53,7 @@ const DeliveryDocument = ({ sale, contentRef, deliveryItems }) => {
             </table>
             <p className="card-doc-contact">
                 Biz bilan ishlaganingizdan minnatdormiz! Taklif va shikoyatlar uchun QR kodni skanerlang yoki quyidagi
-                raqamlarga qo'ng'iroq qiling: +998 94 184 10 00, +998 33 184 10 00
+                raqamlarga qo'ng'iroq qiling: +998 94 184 10 00,
             </p>
             <div className="card-doc-sign">
                 <div><strong>Berdi:</strong> _____________________</div>
