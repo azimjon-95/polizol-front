@@ -42,7 +42,7 @@ export const routes = [
   {
     path: "/expense",
     element: <ExpenseManager />,
-    role: ["direktor", "buxgalteriya", "menejir"],
+    role: ["direktor", "buxgalteriya", "menejir", "sotuvchi menejir"],
     private: true,
   },
   {

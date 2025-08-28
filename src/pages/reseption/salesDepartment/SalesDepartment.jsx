@@ -341,6 +341,18 @@ const SacodSalesModule = () => {
               <User className="sacod-icon-sm" />
               <span className="navsaler_bottom">Sotuvchilar</span>
             </button>
+            {
+              role === "sotuvchi menejir" &&
+              <button
+                className={`sacod-nav-btn ${activeTab === "salespeople" ? "sacod-nav-btn-active" : ""
+                  }`}
+                onClick={() => navigate('/expense')}
+              >
+                <User className="sacod-icon-sm" />
+                <span className="navsaler_bottom">Xarajatlar</span>
+              </button>
+            }
+
           </div>
           {role === "saler_meneger" ||
             role === "sotuvchi" ||
