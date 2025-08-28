@@ -12,6 +12,8 @@ import folygoizolImg from '../../../assets/folgizol.jpg';
 import polizolImg from '../../../assets/polizol.jpg';
 import praymerImg from '../../../assets/praymer.png';
 import stakanImg from '../../../assets/stakanBN.png';
+import { FaMoneyBillWave } from "react-icons/fa";
+
 import ruberoidImg from '../../../assets/ruberoid.jpg';
 
 import { toast, ToastContainer } from "react-toastify";
@@ -348,7 +350,7 @@ const SacodSalesModule = () => {
                   }`}
                 onClick={() => navigate('/expense')}
               >
-                <User className="sacod-icon-sm" />
+                <FaMoneyBillWave className="sacod-icon-sm" />
                 <span className="navsaler_bottom">Xarajatlar</span>
               </button>
             }
