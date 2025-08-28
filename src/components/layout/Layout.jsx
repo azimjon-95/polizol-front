@@ -7,7 +7,7 @@ import Header from "../header/Header";
 const NON_SIDEBAR_ROLES = [
   "sotuvchi",
   "sotuvchi eksport",
-  "sotuvchi Menejir",
+  "sotuvchi menejir",
   "polizol ish boshqaruvchi",
   "okisleniya ish boshqaruvchi",
   "rubiroid ish boshqaruvchi",
