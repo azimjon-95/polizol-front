@@ -4,7 +4,6 @@ import {
   FileText,
   User,
   ShoppingCart,
-  Factory,
   Info,
 } from "lucide-react";
 import { SiSoundcharts } from "react-icons/si";
@@ -13,6 +12,7 @@ import folygoizolImg from '../../../assets/folgizol.jpg';
 import polizolImg from '../../../assets/polizol.jpg';
 import praymerImg from '../../../assets/praymer.png';
 import stakanImg from '../../../assets/stakanBN.png';
+import bn5 from '../../../assets/bn5.png';
 import { FaMoneyBillWave } from "react-icons/fa";
 
 import ruberoidImg from '../../../assets/ruberoid.jpg';
@@ -23,7 +23,6 @@ import SalespersonManagement from "./salesPerson/SalespersonManagement";
 import CartTab from "./CartTab";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, message } from "antd";
-import { RiUser3Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useGetFinishedProductsQuery } from "../../../context/productionApi";
 import { useGetFilteredSalesQuery } from "../../../context/cartSaleApi";
@@ -273,21 +272,23 @@ const SacodSalesModule = () => {
   // Map obyekt
   const productImages = {
     betum: { src: betumImg, className: "icon-betum" },
-    stakan: { src: stakanImg, className: "icon-stakan" },
+    Stakan: { src: stakanImg, className: "icon-stakan" },
     folygoizol: { src: folygoizolImg, className: "icon-folygoizol" },
     polizol: { src: polizolImg, className: "icon-polizol" },
     ruberoid: { src: ruberoidImg, className: "icon-ruberoid" },
-    praymer: { src: praymerImg, className: "icon-praymer" },
-    qop: { src: betumImg, className: "icon-qop" },
+    Praymer: { src: praymerImg, className: "icon-praymer" },
+    Qop: { src: betumImg, className: "icon-qop" },
+    "BN-5": { src: bn5, className: "icon-bn5" },
   };
 
   // Funksiya
   const getProductIcon = (type) => {
-    const item = productImages[type?.toLowerCase()];
+    console.log(type);
+    const item = productImages[type];
     if (!item) return null;
     return <img src={item.src} alt={type} className={`sacod-icon-sm ${item.className}`} />;
   }
-
+  console.log(finishedProducts);
   const showReturnInfo = (returnInfo) => {
     setSelectedReturnInfo(returnInfo);
     setIsReturnInfoModalOpen(true);
