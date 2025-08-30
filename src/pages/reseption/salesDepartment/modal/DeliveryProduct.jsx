@@ -1,20 +1,7 @@
-import React, {
-  useCallback,
-  useRef,
-  useState,
-  useMemo,
-  useEffect,
-} from "react";
+import React, { useCallback, useRef, useState, useMemo, useEffect } from "react";
 import { useDeliverProductMutation } from "../../../../context/cartSaleApi";
 import { Truck as DeliveryIcon } from "lucide-react";
-import {
-  Package,
-  Calendar,
-  Truck,
-  DollarSign,
-  Hash,
-  Printer,
-} from "lucide-react";
+import { Package, Calendar, Truck, DollarSign, Hash, Printer } from "lucide-react";
 import { toast } from "react-toastify";
 import { QRCodeCanvas } from "qrcode.react";
 import { Button } from "antd";
@@ -33,6 +20,7 @@ const DeliveryProduct = ({
   closeModal,
   modalState,
 }) => {
+
   const [deliverProduct, { isLoading }] = useDeliverProductMutation();
   const role = localStorage.getItem("role");
   const inputRef = useRef(null);
@@ -46,8 +34,6 @@ const DeliveryProduct = ({
   const { data: saleCar = { innerData: [] } } = useGetSaleCartByIdQuery(
     modalState.activeSaleId
   );
-
-
 
   const contentRef = useRef();
   const [printData, setPrintData] = useState(null);
@@ -203,6 +189,29 @@ const DeliveryProduct = ({
     });
   }, []);
 
+  const handlePrintAllDeliveredItems = useCallback(() => {
+    const allItems = saleCar?.innerData?.deliveredItems?.map((item) => ({
+      productId: item._id,
+      quantity: item.deliveredQuantity,
+      productName: item.productName,
+      size: item.size,
+      pricePerUnit: item.totalAmount / item.deliveredQuantity,
+      discountedPrice: item.discountedPrice,
+      deliveryDate: item.deliveryDate,
+      transport: item.transport,
+      transportCost: item.transportCost || 0,
+      saleId: item._id,
+    })) || [];
+    setPrintData({
+      saleId: modalState.activeSaleId,
+      items: allItems,
+      createdAt: new Date(),
+      transport: "",
+      transportCost: 0,
+      isAllItems: true,
+    });
+  }, [saleCar?.innerData?.deliveredItems, modalState.activeSaleId]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("uz-UZ", {
@@ -275,8 +284,14 @@ const DeliveryProduct = ({
             </div>
             <h4>Tanlangan mahsulotlar:</h4>
             {deliveryItems.map((item, index) => {
-              const remaining =
-                (item.quantity || 0) - (item.deliveredQuantity || 0);
+              // Calculate total delivered quantity for this product
+              const totalDeliveredQuantity = (saleCar?.innerData?.deliveredItems || [])
+                .filter((delivered) => delivered.productId === item.productId)
+                .reduce((sum, delivered) => sum + (delivered.deliveredQuantity || 0), 0);
+
+              // Calculate remaining quantity
+              const remaining = (item.quantity || 0) - totalDeliveredQuantity;
+
               return (
                 <div key={item._id || index} className="invoice-delivery-item">
                   <label>
@@ -305,7 +320,7 @@ const DeliveryProduct = ({
                     {item.size || "dona"}
                   </div>
                   <div>
-                    Yuborilgan: {(item.deliveredQuantity || 0).toLocaleString()}{" "}
+                    Yuborilgan: {totalDeliveredQuantity.toLocaleString()}{" "}
                     {item.size || "dona"}
                   </div>
                   <div>
@@ -336,7 +351,6 @@ const DeliveryProduct = ({
                 </div>
               );
             })}
-            {/* ["polizol", "Okisleniya", "ruberoid"]*/}
             <div className="invoice-delivery-form-radio">
               <span>Ishchi guruh:</span>
               <label>
@@ -388,6 +402,13 @@ const DeliveryProduct = ({
               <div className="liu-header">
                 <Package className="liu-header-icon" />
                 <h2 className="liu-title">Yetkazib berilgan mahsulotlar</h2>
+                <Button
+                  className="invoice-btn invoice-btn-primary"
+                  onClick={handlePrintAllDeliveredItems}
+                  title="Barcha Yuk Xatlarini chop etish"
+                >
+                  <Printer size={16} /> Barchasi
+                </Button>
               </div>
 
               <div className="liu-items-grid">
@@ -405,7 +426,6 @@ const DeliveryProduct = ({
                               {item.productName}
                             </h3>
                             <span className="liu-product-id">
-                              {" "}
                               Yuk Xati № {item?._id?.slice(-4)}
                             </span>
                           </div>
@@ -488,78 +508,171 @@ const DeliveryProduct = ({
 
       {printData && (
         <div ref={contentRef} className="card-doc-wrapper">
-          <h2 className="card-doc-title">
-            Yuk Xati №{printData.saleId?.slice(-4)}
-          </h2>
-          <p className="card-doc-date">
-            {new Date(printData.createdAt).toLocaleDateString("uz-UZ")} yil
-          </p>
-          <div className="card-doc-info">
-            <p>
-              <strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ
-            </p>
-            <p>
-              <strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18
-            </p>
-            <p>
-              <strong>Mijoz:</strong> {saleCar?.innerData?.customerId?.name || "Noma'lum"}
-            </p>
-            <p>
-              <strong>Avtotransport:</strong>{" "}
-              {printData.transport || "Belgilanmagan"}
-            </p>
-          </div>
-          <table className="card-doc-table">
-            <thead>
-              <tr>
-                <th>№</th>
-                <th>Mahsulot nomi</th>
-                <th>Miqdori</th>
-                <th>O‘lchov</th>
-                <th>Narxi</th>
-                <th>Qiymat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {printData.items.map((item, index) => {
-                const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
-                const total = calculateItemTotal(item);
-                return (
-                  <tr key={item.productId + "-" + index}>
-                    <td>{index + 1}</td>
-                    <td>{item.productName || "Noma'lum"}</td>
-                    <td>{item.quantity || 0}</td>
-                    <td>{item.size || "dona"}</td>
-                    <td>{NumberFormat(price)}</td>
-                    <td>{NumberFormat(total)}</td>
+          {printData.isAllItems ? (
+            <div>
+              <h2 className="card-doc-title">
+                Barcha Yuk Xatlari (Sotuv №{printData.saleId?.slice(-4)})
+              </h2>
+              <p className="card-doc-date">
+                {(() => {
+                  const date = new Date();
+                  const day = String(date.getDate()).padStart(2, "0");
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const year = date.getFullYear();
+                  return `${day}.${month}.${year} yil`;
+                })()}
+
+              </p>
+              <div className="card-doc-info">
+                <p>
+                  <strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ
+                </p>
+                <p>
+                  <strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18
+                </p>
+                <p>
+                  <strong>Mijoz:</strong> {saleCar?.innerData?.customerId?.name || "Noma'lum"}
+                </p>
+                <p>
+                  <strong>Avtotransport:</strong>{" "}
+                  {saleCar?.innerData?.deliveredItems[0]?.transport || "Belgilanmagan"}
+                </p>
+              </div>
+              <table className="card-doc-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Mahsulot nomi</th>
+                    <th>Miqdori</th>
+                    <th>O‘lchov</th>
+                    <th>Narxi</th>
+                    <th>Qiymat</th>
                   </tr>
-                );
-              })}
-              <tr className="card-doc-total">
-                <td colSpan="5">Jami:</td>
-                <td>{NumberFormat(totalAmount)}</td>
-              </tr>
-            </tbody>
-          </table>
-          <p className="card-doc-contact">
-            Biz bilan ishlaganingizdan minnatdormiz! Taklif va shikoyatlar uchun
-            QR kodni skanerlang yoki quyidagi raqamlarga qo‘ng‘iroq qiling: +998
-            94 184 10 00,
-          </p>
-          <div className="card-doc-sign">
+                </thead>
+                <tbody>
+                  {printData.items.map((item, index) => {
+                    const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
+                    const total = calculateItemTotal(item);
+                    return (
+                      <tr key={item.productId + "-" + index}>
+                        <td>{index + 1}</td>
+                        <td>{item.productName || "Noma'lum"}</td>
+                        <td>{item.quantity || 0}</td>
+                        <td>{item.size || "dona"}</td>
+                        <td>{NumberFormat(price)}</td>
+                        <td>{NumberFormat(total)}</td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="card-doc-total">
+                    <td colSpan="5">Jami:</td>
+                    <td>{NumberFormat(totalAmount)}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="card-doc-contact">
+                Biz bilan ishlaganingizdan minnatdormiz! Taklif va shikoyatlar uchun
+                QR kodni skanerlang yoki quyidagi raqamlarga <br /> qo‘ng‘iroq qiling:  +998
+                94 184 10 00,
+              </p>
+              <div className="card-doc-sign">
+                <div>
+                  <strong>Berdi:</strong> _____________________
+                </div>
+                <div className="card-doc-qr"><br />
+                  <QRCodeCanvas
+                    value={window.location.origin + "/feedback"}
+                    size={90}
+                  />
+                </div>
+                <div>
+                  <strong>Oldim:</strong> _____________________
+                </div>
+              </div>
+            </div>
+          ) : (
             <div>
-              <strong>Berdi:</strong> _____________________
+              <h2 className="card-doc-title">
+                Yuk Xati №{printData.saleId?.slice(-4)}
+              </h2>
+              <p className="card-doc-date">
+                {(() => {
+                  const date = new Date(printData.createdAt);
+                  const day = String(date.getDate()).padStart(2, "0");
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const year = date.getFullYear();
+                  return `${day}.${month}.${year} yil`;
+                })()}
+
+              </p>
+              <div className="card-doc-info">
+                <p>
+                  <strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ
+                </p>
+                <p>
+                  <strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18
+                </p>
+                <p>
+                  <strong>Mijoz:</strong> {saleCar?.innerData?.customerId?.name || "Noma'lum"}
+                </p>
+                <p>
+                  <strong>Avtotransport:</strong>{" "}
+                  {printData.transport || "Belgilanmagan"}
+                </p>
+              </div>
+              <table className="card-doc-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Mahsulot nomi</th>
+                    <th>Miqdori</th>
+                    <th>O‘lchov</th>
+                    <th>Narxi</th>
+                    <th>Qiymat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {printData.items.map((item, index) => {
+                    const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
+                    const total = calculateItemTotal(item);
+                    return (
+                      <tr key={item.productId + "-" + index}>
+                        <td>{index + 1}</td>
+                        <td>{item.productName || "Noma'lum"}</td>
+                        <td>{item.quantity || 0}</td>
+                        <td>{item.size || "dona"}</td>
+                        <td>{NumberFormat(price)}</td>
+                        <td>{NumberFormat(total)}</td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="card-doc-total">
+                    <td colSpan="5">Jami:</td>
+                    <td>{NumberFormat(totalAmount)}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="card-doc-contact">
+                Biz bilan ishlaganingizdan minnatdormiz! Taklif va shikoyatlar uchun
+                QR kodni skanerlang yoki quyidagi raqamlarga <br /> qo‘ng‘iroq qiling: +998
+                94 184 10 00,
+              </p>
+              <div className="card-doc-sign">
+                <div>
+                  <strong>Berdi:</strong> _____________________
+                </div>
+                <div className="card-doc-qr"> <br />
+                  <QRCodeCanvas
+                    value={window.location.origin + "/feedback"}
+                    size={90}
+                  />
+                </div>
+                <div>
+                  <strong>Oldim:</strong> _____________________
+                </div>
+              </div>
             </div>
-            <div className="card-doc-qr">
-              <QRCodeCanvas
-                value={window.location.origin + "/feedback"}
-                size={100}
-              />
-            </div>
-            <div>
-              <strong>Oldim:</strong> _____________________
-            </div>
-          </div>
+          )}
         </div>
       )}
     </>

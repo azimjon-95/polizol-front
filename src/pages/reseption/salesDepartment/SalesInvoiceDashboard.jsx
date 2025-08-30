@@ -194,6 +194,7 @@ const SalesInvoiceDashboard = () => {
             toast.error("Sotuv topilmadi!");
             return;
         }
+
         setDeliveryItems(sale.items.map(item => ({
             ...item,
             deliveryQuantity: 0,
@@ -287,7 +288,9 @@ const SalesInvoiceDashboard = () => {
     }, [returnItems]);
 
     const getTotalSales = useCallback(() => filteredSalesData.reduce((total, sale) => total + (sale.payment?.totalAmount || 0), 0), [filteredSalesData]);
-    const getTotalDebt = useCallback(() => filteredSalesData.reduce((total, sale) => total + (sale.payment?.debt || 0), 0), [filteredSalesData]);
+    const getTotalDebt = () =>
+        filteredSalesData.reduce((total, sale) => total + sale.payment?.debt || 0, 0);
+
 
     const handleInputChange = (e) => {
         const value = e.target.value;

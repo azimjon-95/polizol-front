@@ -20,7 +20,7 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
-    background: rgba(255, 152, 0, 0.1);
+    background: rgba(255, 153, 0, 0.676);
     padding: 5px;
     border-radius: 4px;
 }
@@ -89,6 +89,29 @@
     border: 1px solid #e8e8e8;
     border-radius: 8px;
     transition: background-color 0.3s ease;
+    position: relative !important;
+}
+
+.product-card-container>button {
+    /* width: 100%; */
+    padding: 5px 16px;
+    border: none;
+    background-color: #35353553;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    border-radius: 9px 0px 9px 0px;
+    color: #fff;
+    backdrop-filter: blur(4px);
+    /* top: 4px !important;
+    left: 7px !important; */
+    z-index: 10;
+}
+
+.product-card-container>button:hover {
+    background-color: #ffeb11;
+    backdrop-filter: blur(4px);
+    color: #353535;
 }
 
 .history-title-container {
@@ -191,10 +214,10 @@
 
 /* Production Tab */
 .production-card {
-    background: white;
+    /* background: white; */
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: 0 0rem;
 }
 
 .production-title {
@@ -238,7 +261,7 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: #374151;
-    margin-bottom: .5rem;
+    margin-bottom: .2rem !important;
 }
 
 .form-select {
@@ -250,7 +273,7 @@
 
 .form-select:focus {
     outline: none;
-    ring: 2px solid #3b82f6;
+    /* ring: 2px solid #3b82f6; */
     border-color: transparent;
 }
 
@@ -282,39 +305,63 @@
 }
 
 .quantity-input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #d1d5db;
+    width: 150px;
+    padding: 0.45rem 1rem;
+    border: none;
     border-left: none;
     border-right: none;
     text-align: center;
+    outline: none;
 }
 
-.quantity-input:focus {
-    outline: none;
-    border: 2px solid #3b82f6;
-    border-color: transparent;
-}
 
 .materials-required-card {
-    margin-top: 1.5rem;
+    /* margin-top: 1.5rem; */
     width: 100%;
-    padding: 1rem;
-    background: #eff6ff;
+
     border-radius: 0.5rem;
+    height: calc(100vh - 235px);
+    overflow-y: scroll;
 }
+
+/* Scrollbar styling for WebKit browsers (Chrome, Safari, Edge) */
+.materials-required-card::-webkit-scrollbar {
+    width: 6px;
+    /* Slim scrollbar width */
+}
+
+.materials-required-card::-webkit-scrollbar-track {
+    background: #e0e7ff;
+    /* Slightly darker than card background for contrast */
+    border-radius: 0.5rem;
+    /* Matches card’s border-radius */
+}
+
+.materials-required-card::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    /* Blue thumb to complement the card’s theme */
+    border-radius: 0.5rem;
+    /* Rounded thumb */
+}
+
+.materials-required-card::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+    /* Darker blue on hover for interactivity */
+}
+
+/* //.materials-required-card scroll style */
 
 .materials-required-title {
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 0.75rem;
 }
 
 .material-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.2rem 0;
+    padding: 0.1rem 0;
+    border-bottom: 1px solid #0066ff23;
 }
 
 .material-item span {
@@ -323,7 +370,7 @@
 
 .material-item span input {
     width: 100%;
-    padding: 0.55rem 1rem;
+    padding: 0.35rem 1rem;
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;
 }
@@ -372,9 +419,9 @@
 }
 
 .produce-button {
-    margin-top: 1.5rem;
+    margin-top: .5rem;
     width: 100%;
-    padding: 1rem;
+    padding: .6rem 1rem;
     background: linear-gradient(to right, #22c55e, #3b82f6);
     color: white;
     font-weight: 600;
@@ -386,7 +433,6 @@
 
 .produce-button:hover {
     background: linear-gradient(to right, #16a34a, #2563eb);
-    transform: scale(1.01);
 }
 
 .produce-button:disabled {
@@ -1371,7 +1417,8 @@
 .finished-products-wrapper {
     margin-top: 5px;
     overflow-y: auto;
-    height: calc(100vh - 235px);
+    height: calc(100vh - 110px);
+    overflow-x: hidden;
 }
 
 .finished-products-wrapper::-webkit-scrollbar {
@@ -1768,7 +1815,7 @@
 .category-buttons {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     width: 100%;
 }
 
@@ -1804,13 +1851,24 @@
 .norma-menu {
     border: 1px solid #d9d9d9;
     border-radius: 4px;
-    max-height: 300px;
+    /* max-height: 300px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
     overflow-y: auto;
+    width: 100%;
+    height: calc(100vh - 260px);
 }
 
 .norma-item {
-    padding: 10px 15px;
+    padding: 0px 0px 0px 15px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-wrap: nowrap;
+    gap: 15px;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -1830,7 +1888,7 @@
 .energy-consumption-section {
     display: flex;
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .energy-input-group {
@@ -1839,10 +1897,6 @@
     width: 100%;
 }
 
-.form-label {
-    font-weight: 500;
-    margin-bottom: 8px;
-}
 
 .material-consumed-input {
     padding: 8px;

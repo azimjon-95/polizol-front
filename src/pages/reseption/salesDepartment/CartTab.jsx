@@ -158,28 +158,33 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
         setNdsRate(Math.max(Number(value) || 0, 0));
     }, []);
 
+    // Unified function to update cart quantity
     const updateCartQuantity = useCallback(
         (productId, newQuantity) => {
-            const quantity = Math.max(Number(newQuantity) || 0, 0);
-            if (quantity <= 0) {
-                setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
-                onRemoveFromCart?.(productId);
-            } else {
-                setCart((prevCart) =>
-                    prevCart.map((item) =>
-                        item._id === productId ? { ...item, quantity } : item
-                    )
-                );
-                onUpdateCart?.(productId, quantity);
-            }
+            const quantity = Math.max(Number(newQuantity) || 0, 0); // Allow 0 as a valid quantity
+            setCart((prevCart) =>
+                prevCart.map((item) =>
+                    item._id === productId ? { ...item, quantity } : item
+                )
+            );
+            onUpdateCart?.(productId, quantity);
         },
-        [setCart, onUpdateCart, onRemoveFromCart]
+        [setCart, onUpdateCart]
+    );
+
+    // Explicit function to remove an item from the cart
+    const removeFromCart = useCallback(
+        (productId) => {
+            setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
+            onRemoveFromCart?.(productId);
+        },
+        [setCart, onRemoveFromCart]
     );
 
     const handleQuantityInput = useCallback(
         (productId, value) => {
-            const cleanedValue = value.replace(/[^0-9]/g, '');
-            updateCartQuantity(productId, cleanedValue);
+            const cleanedValue = value.replace(/[^0-9]/g, ''); // Only allow numbers
+            updateCartQuantity(productId, cleanedValue || 0); // Pass 0 if input is empty
         },
         [updateCartQuantity]
     );
@@ -469,7 +474,7 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
                                             </div>
                                             <div className="card-cart-item-total">{formatNumber(calculateItemTotal(item))} so'm</div>
                                             <button
-                                                onClick={() => updateCartQuantity(item._id, 0)}
+                                                onClick={() => removeFromCart(item._id)}
                                                 className="card-remove-btn"
                                                 title="Mahsulotni o'chirish"
                                                 aria-label={`Remove ${item.productName} from cart`}
@@ -677,6 +682,4 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
 };
 
 export default CartTab;
-
-
 

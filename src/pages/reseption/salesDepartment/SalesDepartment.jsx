@@ -4,14 +4,15 @@ import {
   FileText,
   User,
   ShoppingCart,
-  Factory,
   Info,
 } from "lucide-react";
+import { SiSoundcharts } from "react-icons/si";
 import betumImg from '../../../assets/betum.png';
 import folygoizolImg from '../../../assets/folgizol.jpg';
 import polizolImg from '../../../assets/polizol.jpg';
 import praymerImg from '../../../assets/praymer.png';
 import stakanImg from '../../../assets/stakanBN.png';
+import bn5 from '../../../assets/bn5.png';
 import { FaMoneyBillWave } from "react-icons/fa";
 
 import ruberoidImg from '../../../assets/ruberoid.jpg';
@@ -22,7 +23,6 @@ import SalespersonManagement from "./salesPerson/SalespersonManagement";
 import CartTab from "./CartTab";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, message } from "antd";
-import { RiUser3Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useGetFinishedProductsQuery } from "../../../context/productionApi";
 import { useGetFilteredSalesQuery } from "../../../context/cartSaleApi";
@@ -97,40 +97,44 @@ const SacodSalesModule = () => {
   };
 
   const addToCart = (product, quantity = 1) => {
-    if (!product || !finishedProducts) {
-      toast.error("Mahsulot topilmadi yoki ma'lumotlar yuklanmadi!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
 
+
+    // Update cart state
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
         (item) => item._id === product._id
       );
+      let updatedCart;
+
       if (existingItemIndex !== -1) {
-        return prevCart.map((item, index) =>
+        // Update quantity for existing item
+        updatedCart = prevCart.map((item, index) =>
           index === existingItemIndex
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
+      } else {
+        // Add new item to cart
+        updatedCart = [
+          ...prevCart,
+          {
+            ...product,
+            quantity,
+            discountedPrice: product.pricePerUnit || product.pricePerKg || 0,
+          },
+        ];
       }
-      return [
-        ...prevCart,
-        {
-          ...product,
-          quantity,
-          discountedPrice: product.pricePerUnit || product.pricePerKg || 0,
-        },
-      ];
+
+      return updatedCart;
     });
 
+    // Show toast notification after cart update
     toast.success(
       <div className="flex-items-center">Mahsulot savatga qo'shildi!</div>,
       {
         position: "top-right",
         autoClose: 3000,
+        toastId: `add-to-cart-${product._id}-${Date.now()}`, // Unique toast ID
       }
     );
   };
@@ -268,21 +272,23 @@ const SacodSalesModule = () => {
   // Map obyekt
   const productImages = {
     betum: { src: betumImg, className: "icon-betum" },
-    stakan: { src: stakanImg, className: "icon-stakan" },
+    Stakan: { src: stakanImg, className: "icon-stakan" },
     folygoizol: { src: folygoizolImg, className: "icon-folygoizol" },
     polizol: { src: polizolImg, className: "icon-polizol" },
     ruberoid: { src: ruberoidImg, className: "icon-ruberoid" },
-    praymer: { src: praymerImg, className: "icon-praymer" },
-    qop: { src: betumImg, className: "icon-qop" },
+    Praymer: { src: praymerImg, className: "icon-praymer" },
+    Qop: { src: betumImg, className: "icon-qop" },
+    "BN-5": { src: bn5, className: "icon-bn5" },
   };
 
   // Funksiya
   const getProductIcon = (type) => {
-    const item = productImages[type?.toLowerCase()];
+    console.log(type);
+    const item = productImages[type];
     if (!item) return null;
     return <img src={item.src} alt={type} className={`sacod-icon-sm ${item.className}`} />;
   }
-
+  console.log(finishedProducts);
   const showReturnInfo = (returnInfo) => {
     setSelectedReturnInfo(returnInfo);
     setIsReturnInfoModalOpen(true);
@@ -333,14 +339,13 @@ const SacodSalesModule = () => {
             >
               <FileText className="sacod-icon-sm" />
               <span className="navsaler_bottom">Shartnomalar</span>
-              <p style={{ fontSize: "17px" }}>({filteredSalesLength})</p>
             </button>
             <button
               className={`sacod-nav-btn ${activeTab === "salespeople" ? "sacod-nav-btn-active" : ""
                 }`}
               onClick={() => setActiveTab("salespeople")}
             >
-              <User className="sacod-icon-sm" />
+              <SiSoundcharts className="sacod-icon-sm" />
               <span className="navsaler_bottom">Sotuvchilar</span>
             </button>
             {
@@ -356,15 +361,15 @@ const SacodSalesModule = () => {
             }
 
           </div>
-          {role === "saler_meneger" ||
+          {role === "sotuvchi menejir" ||
             role === "sotuvchi" ||
-            role !== "sotuvchi eksport" ? (
+            role === "sotuvchi eksport" ? (
             <button
               className="profile-btn about-log"
               ref={searchPanelRef}
               onClick={showLogoutModal}
             >
-              <RiUser3Line />
+              <User />
             </button>
           ) : (
             <></>
@@ -437,9 +442,10 @@ const SacodSalesModule = () => {
                 )}
                 <div className="sacod-return-details-btn_box">
                   <button
-                    onClick={() =>
-                      addToCart(product, product.type === "coal_paper" ? 1 : 1)
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent event bubbling
+                      addToCart(product, product.type === "coal_paper" ? 1 : 1);
+                    }}
                     className="sacod-add-to-cart-btn"
                   >
                     <ShoppingCart className="sacod-icon-xs" />
@@ -826,3 +832,5 @@ const SacodSalesModule = () => {
 };
 
 export default SacodSalesModule;
+
+

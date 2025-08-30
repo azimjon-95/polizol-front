@@ -67,7 +67,7 @@ const Login = () => {
       const endpoint = authMode === true ? "/admin/login" : "/admin/pin";
 
       const res = await axios.post(endpoint, data);
-      console.log(res);
+
       const { message: successMessage, innerData } = res.data;
       const doctorName = `${innerData?.employee?.firstName || ""} ${innerData?.employee?.lastName || ""
         }`.trim();
@@ -80,8 +80,6 @@ const Login = () => {
 
       toast.success(successMessage || "Muvaffaqiyatli tizimga kirdingiz!");
       clearForm();
-      console.log(role);
-      console.log(rolePaths[role]);
       navigate(rolePaths[role] || "/login");
     } catch (error) {
       const errorMessage =
