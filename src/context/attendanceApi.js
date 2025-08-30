@@ -30,7 +30,7 @@ export const attendanceApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Attendance"],
+      invalidatesTags: ["Attendance", "Salary"],
       transformResponse: (response) => response.innerData,
     }),
 
@@ -41,7 +41,7 @@ export const attendanceApi = api.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["Attendance"],
+      invalidatesTags: ["Attendance", "Salary"],
       transformResponse: (response) => response.innerData,
     }),
 
@@ -52,7 +52,7 @@ export const attendanceApi = api.injectEndpoints({
         method: "DELETE",
         body: data,
       }),
-      invalidatesTags: ["Attendance"],
+      invalidatesTags: ["Attendance", "Salary"],
       transformResponse: (response) => response.innerData,
     }),
   }),
