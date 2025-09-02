@@ -13,6 +13,61 @@
     /* Light red background */
 }
 
+.invoice-btn-VscHistory {
+    background: goldenrod;
+    color: #333;
+    padding: .4rem .5rem !important;
+    border: none;
+    overflow: hidden;
+    margin-left: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.invoice-btn-VscPrint {
+    background: green;
+    color: #ffffff;
+    padding: .35rem .5rem !important;
+    border: none;
+    overflow: hidden;
+    margin-left: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .2s ease;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.invoice-btn-VscHistory:hover {
+    background: goldenrod;
+    color: #fff;
+}
+
+.invoice-btn-VscPrint:hover {
+    background: #00bc00;
+    color: #fff;
+}
+
+.invoice-btn-VscHistory:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.hip-td-box {
+    display: flex;
+    align-items: center;
+}
+
+.invoice-btn-primary+.ant-btn {
+    height: 27px;
+}
+
 .sacod-return-item {
     border: none;
     padding: 8px 12px;
@@ -2832,5 +2887,115 @@ textarea.sacod-form-input {
         width: 1.25rem;
         height: 1.25rem;
         margin-right: 0px !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* Modal umumiy fon */
+.invoice-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal content */
+.invoice-modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Modal header */
+.invoice-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.invoice-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Close button */
+.invoice-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.invoice-modal-close:hover {
+    color: #000;
+}
+
+/* Modal body */
+.invoice-modal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+/* Modal footer */
+.invoice-modal-footer {
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Animatsiyalar */
+@keyframes fadeIn {
+    from {
+        background: rgba(0, 0, 0, 0);
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0.55);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }

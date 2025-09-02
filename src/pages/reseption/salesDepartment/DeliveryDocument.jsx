@@ -16,7 +16,7 @@ const DeliveryDocument = ({ sale, contentRef, deliveryItems }) => {
             <p className="card-doc-date">{new Date(sale?.createdAt || Date.now()).toLocaleDateString('uz-UZ')} yil</p>
             <div className="card-doc-info">
                 <p><strong>Yuboruvchi:</strong> "SELEN BUNYODKOR" MCHJ</p>
-                <p><strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqbol N18</p>
+                <p><strong>Manzil:</strong> Namangan viloyati, Pop tumani, Istiqilol N18</p>
                 <p><strong>Mijoz:</strong> {sale?.customerId?.name || 'Noma\'lum'}</p>
                 <p><strong>Avtotransport:</strong> {sale?.transport || 'Belgilanmagan'}</p>
             </div>

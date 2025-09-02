@@ -41,21 +41,18 @@ export const cartSaleApi = api.injectEndpoints({
             invalidatesTags: ['Sale', 'CustomerSales'],
         }),
 
-        // Process debt payment
         payDebt: builder.mutation({
-            query: ({ id, body }) => ({
-                url: `/sales/${id}/pay-debt`,
-                method: 'POST',
-                body,
+            query: (data) => ({
+                url: `/sales/pay-debt`,   // backend route
+                method: "POST",
+                body: data,               // bu yerda data JSON sifatida yuboriladi
             }),
-            invalidatesTags: ['Sale', 'CustomerSales'],
+            invalidatesTags: ["Sale", "CustomerSales"],
         }),
 
-        // Get filtered sales (by month for all customers)
         getFilteredSales: builder.query({
-            query: (selectedMonth) => ({
+            query: () => ({
                 url: '/filtered',
-                params: { month: selectedMonth },
             }),
             providesTags: ['Sale'],
         }),

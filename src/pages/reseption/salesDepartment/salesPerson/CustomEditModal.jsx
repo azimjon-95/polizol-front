@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Trash2, Edit } from 'react-feather';
 import { Select, Input } from 'antd';
 import { useUpdateCartSaleMutation } from '../../../../context/cartSaleApi';
+import { useGetAllMaterialsQuery } from '../../../../context/materialApi';
+import { useGetCompanysQuery } from '../../../../context/cartSaleApi';
 import { toast } from 'react-toastify';
 import debounce from 'lodash/debounce';
 import './customModal.css';
@@ -35,6 +37,27 @@ const CustomModal = React.memo(({
     NumberFormat,
 }) => {
     const [updateCartSale] = useUpdateCartSaleMutation();
+    const { data: materials = [] } = useGetAllMaterialsQuery();
+    const { data: customers = [] } = useGetCompanysQuery();
+    const [totalAmount, setTotalAmount] = useState(editSaleData.payment?.totalAmount || 0);
+
+    // Calculate total amount whenever items change
+    useEffect(() => {
+        const newTotal = editSaleData.items?.reduce(
+            (sum, item) => sum + (item.discountedPrice || 0) * (item.quantity || 0),
+            0
+        ) || 0;
+        setTotalAmount(newTotal);
+        setEditSaleData((prev) => ({
+            ...prev,
+            payment: {
+                ...prev.payment,
+                totalAmount: newTotal,
+                debt: Math.max(0, newTotal - (prev.payment?.paidAmount || 0)),
+                status: newTotal <= (prev.payment?.paidAmount || 0) ? 'paid' : 'partial',
+            },
+        }));
+    }, [editSaleData.items, setEditSaleData]);
 
     // Debounced state update
     const debouncedSetEditSaleData = useCallback(
@@ -44,16 +67,16 @@ const CustomModal = React.memo(({
         [setEditSaleData]
     );
 
-    // Handler for customer field updates
-    const handleCustomerChange = useCallback(
-        (field, value) => {
-            debouncedSetEditSaleData((prev) => ({
-                ...prev,
-                customer: { ...prev.customer, [field]: value },
-            }));
-        },
-        [debouncedSetEditSaleData]
-    );
+    // Handler for customer selection
+    const handleCustomerChange = (value) => {
+        const selectedCustomer = customers?.innerData?.find(c => c._id === value);
+        setEditSaleData(prev => ({
+            ...prev,
+            customerId: value,
+            customer: selectedCustomer || null,
+        }));
+    };
+
 
     // Handler for sale field updates
     const handleSaleChange = useCallback(
@@ -70,42 +93,54 @@ const CustomModal = React.memo(({
             if (field !== 'paymentType' && isNaN(rawValue)) return;
 
             debouncedSetEditSaleData((prev) => {
-                const totalAmount = prev.payment?.totalAmount || 0;
                 const paidAmount = field === 'paidAmount' ? rawValue : prev.payment?.paidAmount || 0;
-                const newDebt = totalAmount - paidAmount;
                 return {
                     ...prev,
                     payment: {
                         ...prev.payment,
                         [field]: rawValue,
-                        debt: field === 'totalAmount' || field === 'paidAmount' ? Math.max(0, newDebt) : prev.payment.debt,
-                        status: field === 'paidAmount' && newDebt <= 0 ? 'paid' : prev.payment.status,
+                        debt: Math.max(0, totalAmount - paidAmount),
+                        status: field === 'paidAmount' && totalAmount <= paidAmount ? 'paid' : prev.payment.status,
                     },
                 };
             });
         },
-        [debouncedSetEditSaleData, parseNumber]
+        [debouncedSetEditSaleData, parseNumber, totalAmount]
     );
 
     // Handler for item field updates
     const handleItemChange = useCallback(
         (index, field, value) => {
             const newItems = [...(editSaleData.items || [])];
-            const rawValue = field === 'discountedPrice' ? parseNumber(value) : parseFloat(value) || value;
-            if ((field === 'discountedPrice' || field === 'quantity' || field === 'ndsRate') && isNaN(rawValue)) return;
+            let rawValue = value;
 
-            newItems[index] = {
-                ...newItems[index],
-                [field]: rawValue,
-                ndsAmount:
-                    field === 'ndsRate' || field === 'discountedPrice' || field === 'quantity'
-                        ? (newItems[index].discountedPrice || 0) * (newItems[index].quantity || 0) * (field === 'ndsRate' ? rawValue : newItems[index].ndsRate || 0) / 100
-                        : newItems[index].ndsAmount,
-            };
+            if (field === 'productId') {
+                const selectedMaterial = materials?.innerData?.find(m => m._id === value);
+                if (selectedMaterial) {
+                    newItems[index] = {
+                        ...newItems[index],
+                        productId: value,
+                        productName: selectedMaterial.name,
+                        category: selectedMaterial.category || 'Others',
+                        discountedPrice: selectedMaterial.price || 0,
+                        size: selectedMaterial.unit || 'dona',
+                        ndsRate: newItems[index].ndsRate || 0,
+                        ndsAmount: ((selectedMaterial.price || 0) * (newItems[index].quantity || 0) * (newItems[index].ndsRate || 0)) / 100,
+                    };
+                }
+            } else if (field === 'quantity') {
+                rawValue = parseFloat(value) || 0;
+                if (isNaN(rawValue)) return;
+                newItems[index] = {
+                    ...newItems[index],
+                    [field]: rawValue,
+                    ndsAmount: (newItems[index].discountedPrice || 0) * rawValue * (newItems[index].ndsRate || 0) / 100,
+                };
+            }
 
             debouncedSetEditSaleData((prev) => ({ ...prev, items: newItems }));
         },
-        [editSaleData.items, debouncedSetEditSaleData, parseNumber]
+        [editSaleData.items, debouncedSetEditSaleData, materials]
     );
 
     // Handler for removing an item
@@ -119,8 +154,8 @@ const CustomModal = React.memo(({
 
     // Handler for updating sale
     const processUpdateSale = useCallback(async () => {
-        if (!editSaleData.customerId?.name && !editSaleData.customerId?.company) {
-            toast.error('Mijoz ismi yoki kompaniya nomi kiritilishi shart!');
+        if (!editSaleData.customerId) {
+            toast.error('Mijoz tanlanmagan!');
             return;
         }
 
@@ -134,7 +169,6 @@ const CustomModal = React.memo(({
             console.error(error);
         }
     }, [editSaleData, modalState.activeSaleId, updateCartSale, refetch, onClose]);
-
 
     if (!isOpen) return null;
 
@@ -156,61 +190,32 @@ const CustomModal = React.memo(({
                         {/* Customer Information */}
                         <div className="invoice-edit-section">
                             <h4>Mijoz ma'lumotlari:</h4>
-                            <CustomInput
-                                label="Mijoz ismi"
-                                value={editSaleData.customerId?.name || ''}
-                                onChange={(e) => handleCustomerChange('name', e.target.value)}
-                                placeholder="Mijoz ismi"
-                            />
-                            <CustomInput
-                                label="Kompaniya"
-                                value={editSaleData.customerId?.company || ''}
-                                onChange={(e) => handleCustomerChange('company', e.target.value)}
-                                placeholder="Mijoz kompaniyasi"
-                            />
-                            <CustomInput
-                                label="Telefon raqami"
-                                value={editSaleData.customerId?.phone || ''}
-                                onChange={(e) => handleCustomerChange('phone', e.target.value)}
-                                placeholder="Telefon raqami"
-                                type="tel"
-                            />
-                            <CustomInput
-                                label="Manzil"
-                                value={editSaleData.customerId?.address || ''}
-                                onChange={(e) => handleCustomerChange('address', e.target.value)}
-                                placeholder="Manzil"
-                            />
+                            <div className="invoice-edit-section">
+                                <label className="custom-modal-label">Mijoz</label>
+                                <Select
+                                    value={editSaleData.customerId || undefined}
+                                    onChange={handleCustomerChange}
+                                    placeholder="Mijozni tanlang"
+                                    style={{ width: '100%' }}
+                                >
+                                    {customers?.innerData?.map(customer => (
+                                        <Option key={customer._id} value={customer._id}>
+                                            {customer.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+
+                            </div>
                         </div>
 
                         {/* Sale Information */}
                         <div className="invoice-edit-section">
                             <h4>Sotuv ma'lumotlari:</h4>
                             <CustomInput
-                                label="Transport"
-                                value={editSaleData.transport || ''}
-                                onChange={(e) => handleSaleChange('transport', e.target.value)}
-                                placeholder="Transport"
-                            />
-                            <CustomInput
                                 label="Sotuvchi"
                                 value={editSaleData.salesperson || ''}
                                 onChange={(e) => handleSaleChange('salesperson', e.target.value)}
                                 placeholder="Sotuvchi"
-                            />
-                            <CustomInput
-                                label="Sana"
-                                value={editSaleData.createdAt ? new Date(editSaleData.createdAt).toISOString().split('T')[0] : ''}
-                                onChange={(e) => handleSaleChange('createdAt', e.target.value)}
-                                placeholder="Sana"
-                                type="date"
-                            />
-                            <CustomInput
-                                label="Vaqt"
-                                value={editSaleData.time || ''}
-                                onChange={(e) => handleSaleChange('time', e.target.value)}
-                                placeholder="Vaqt"
-                                type="time"
                             />
                         </div>
 
@@ -219,8 +224,8 @@ const CustomModal = React.memo(({
                             <h4>To'lov ma'lumotlari:</h4>
                             <CustomInput
                                 label="Jami summa"
-                                value={formatNumber(editSaleData.payment?.totalAmount || 0)}
-                                onChange={(e) => handlePaymentChange('totalAmount', e.target.value)}
+                                value={formatNumber(totalAmount)}
+                                disabled
                                 placeholder="Jami summa"
                             />
                             <CustomInput
@@ -228,6 +233,12 @@ const CustomModal = React.memo(({
                                 value={formatNumber(editSaleData.payment?.paidAmount || 0)}
                                 onChange={(e) => handlePaymentChange('paidAmount', e.target.value)}
                                 placeholder="To'langan summa"
+                            />
+                            <CustomInput
+                                label="Qarz"
+                                value={formatNumber(editSaleData.payment?.debt || 0)}
+                                disabled
+                                placeholder="Qarz"
                             />
                             <div className="invoice-edit-section">
                                 <label className="custom-modal-label">To'lov turi</label>
@@ -250,20 +261,24 @@ const CustomModal = React.memo(({
                                 {editSaleData.items?.map((item, index) => (
                                     <div key={index} className="invoice-item-edit">
                                         <div className="invoice-item-edit-row">
-                                            <CustomInput
-                                                label="Mahsulot nomi"
-                                                value={item.productName || ''}
-                                                onChange={(e) => handleItemChange(index, 'productName', e.target.value)}
-                                                placeholder="Mahsulot nomi"
-                                            />
-                                            <CustomInput
-                                                label="Kategoriya"
-                                                value={item.category || ''}
-                                                onChange={(e) => handleItemChange(index, 'category', e.target.value)}
-                                                placeholder="Kategoriya"
-                                            />
-                                        </div>
-                                        <div className="invoice-item-edit-row">
+                                            <div className="invoice-edit-section">
+                                                <label className="custom-modal-label">Mahsulot</label>
+                                                <Select
+                                                    className="invoice-form-select"
+                                                    value={item.productId || undefined}
+                                                    onChange={(value) => handleItemChange(index, 'productId', value)}
+                                                    placeholder="Mahsulotni tanlang"
+                                                    style={{ width: '100%' }}
+                                                >
+                                                    {materials?.innerData?.map(material => (
+                                                        <Option key={material._id} value={material._id}>
+                                                            {material.name} ({material.unit})
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+
+
+                                            </div>
                                             <CustomInput
                                                 label="Miqdor"
                                                 value={item.quantity || ''}
@@ -271,26 +286,13 @@ const CustomModal = React.memo(({
                                                 placeholder="Miqdor"
                                                 type="number"
                                             />
-                                            <CustomInput
-                                                label="Narx"
-                                                value={formatNumber(item.discountedPrice || 0)}
-                                                onChange={(e) => handleItemChange(index, 'discountedPrice', e.target.value)}
-                                                placeholder="Narx"
-                                            />
-                                            <CustomInput
-                                                label="QQS %"
-                                                value={item.ndsRate || ''}
-                                                onChange={(e) => handleItemChange(index, 'ndsRate', e.target.value)}
-                                                placeholder="QQS %"
-                                                type="number"
-                                            />
                                         </div>
                                         <div className="invoice-item-edit-row">
                                             <CustomInput
-                                                label="O'lchov birligi"
-                                                value={item.size || ''}
-                                                onChange={(e) => handleItemChange(index, 'size', e.target.value)}
-                                                placeholder="O'lchov birligi"
+                                                label="Narx"
+                                                value={formatNumber(item.discountedPrice || 0)}
+                                                disabled
+                                                placeholder="Narx"
                                             />
                                             <button
                                                 className="invoice-btn invoice-btn-danger"
@@ -309,26 +311,15 @@ const CustomModal = React.memo(({
                             </div>
                         </div>
 
-                        {/* Notes Section */}
-                        <div className="invoice-edit-section">
-                            <h4>Qo'shimcha ma'lumotlar:</h4>
-                            <Input.TextArea
-                                className="invoice-form-input"
-                                placeholder="Izoh yoki qo'shimcha ma'lumotlar"
-                                value={editSaleData.notes || ''}
-                                onChange={(e) => handleSaleChange('notes', e.target.value)}
-                                rows={3}
-                            />
-                        </div>
 
                         <div className="invoice-edit-buttons">
+
                             <button
-                                className="invoice-btn invoice-btn-success"
+                                className="invoice-btn-success"
                                 onClick={processUpdateSale}
-                                disabled={!editSaleData.customerId?.name && !editSaleData.customerId?.company}
+                                disabled={!editSaleData.customerId}
                                 aria-label="Save changes"
                             >
-                                <Edit size={16} />
                                 Saqlash
                             </button>
                             <button
@@ -347,3 +338,7 @@ const CustomModal = React.memo(({
 });
 
 export default CustomModal;
+
+
+
+

@@ -2,12 +2,27 @@
 .invoice-delivery-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    /* padding: 1rem; */
+    gap: .1rem;
     width: 100%;
     max-height: 70vh;
     min-width: 350px;
     overflow-y: auto;
+}
+
+/* Chrome, Edge, Safari uchun */
+.invoice-delivery-form::-webkit-scrollbar {
+    width: 4px;
+}
+
+.invoice-delivery-form::-webkit-scrollbar-track {
+    background: #f1f1f100;
+    border-radius: 10px;
+}
+
+.invoice-delivery-form::-webkit-scrollbar-thumb {
+    background: #888888b8;
+    /* Scroll chizig‘i */
+    border-radius: 10px;
 }
 
 /* Chrome, Safari, Edge */
@@ -41,7 +56,7 @@ input[type=number] {
     width: 1.1rem;
     height: 1.1rem;
     cursor: pointer;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 
 .invoice-delivery-form__title {
@@ -54,12 +69,20 @@ input[type=number] {
 .invoice-delivery-item {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem;
+    padding: 5px 0.75rem;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     background-color: #f9f9f9;
     transition: background-color 0.2s ease;
+}
+
+.invoice-delivery-item>label {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
 }
 
 .invoice-delivery-item:hover {
@@ -125,16 +148,41 @@ input[type=number] {
 .invoice-delivery-form-radio {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
     font-size: 0.9rem;
     color: #333;
+}
+
+.delivery-form-radio-box {
+    display: flex;
+    gap: .3rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.delivery-form-radio-box-button {
+    width: 100% !important;
 }
 
 .invoice-delivery-form-radio label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0rem;
     cursor: pointer;
+}
+
+.invoice-delivery-form-radio>span {
+    margin-top: 7px;
+}
+
+.modaldiliver-box .ant-modal-content {
+    position: relative;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    pointer-events: auto;
+    padding: 10px 15px 2px 15px;
 }
 
 .invoice-btn.invoice-btn-success {
@@ -146,6 +194,7 @@ input[type=number] {
     color: white;
     border: none;
     border-radius: 4px;
+    margin-top: 10px;
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -166,6 +215,10 @@ input[type=number] {
     width: 100%;
     justify-content: space-between;
     gap: .5rem;
+}
+
+.invoice-delivery-form>h4 {
+    margin-top: 10px;
 }
 
 /* =================================*/

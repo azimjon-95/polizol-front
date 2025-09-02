@@ -283,12 +283,11 @@ const SacodSalesModule = () => {
 
   // Funksiya
   const getProductIcon = (type) => {
-    console.log(type);
     const item = productImages[type];
     if (!item) return null;
     return <img src={item.src} alt={type} className={`sacod-icon-sm ${item.className}`} />;
   }
-  console.log(finishedProducts);
+
   const showReturnInfo = (returnInfo) => {
     setSelectedReturnInfo(returnInfo);
     setIsReturnInfoModalOpen(true);

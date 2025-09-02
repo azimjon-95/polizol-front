@@ -14,6 +14,20 @@
     overflow: hidden;
 }
 
+.print-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 0;
+}
+
+.print-header h2 {
+    color: #333 !important;
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0;
+}
+
 /* Header Section */
 .xsd-attendance-header {
     background: #f8f9fa;
@@ -225,6 +239,14 @@
 
 .xsd-table-body-cell {
     padding: 6px 4px;
+    text-align: center;
+    border: 1px solid #e8e8e8;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.xsd-table-body-imzo {
+    padding: 1px 4px;
     text-align: center;
     border: 1px solid #e8e8e8;
     font-size: 12px;

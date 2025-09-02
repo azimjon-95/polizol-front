@@ -1,9 +1,22 @@
 import React, { useState, useCallback } from 'react';
-import { Select, Button } from 'antd';
+import { Select, Modal, Button, Input } from 'antd';
 import { toast } from 'react-toastify';
 import { usePayDebtMutation } from '../../../../context/cartSaleApi';
 
 const { Option } = Select;
+
+// Function to format number with thousand separators
+const formatNumber = (value) => {
+    if (!value) return '';
+    const number = parseFloat(value.replace(/\D/g, '')); // Remove non-digits
+    return number.toLocaleString('en-US', { minimumFractionDigits: 0 });
+};
+
+// Function to parse formatted number back to raw number
+const parseNumber = (value) => {
+    return value.replace(/,/g, ''); // Remove commas
+};
+
 const IsPaymentModal = ({
     modalState,
     closeModal,
@@ -12,150 +25,109 @@ const IsPaymentModal = ({
     setPaymentType,
     paymentAmount,
     setPaymentAmount,
-    Modal,
-    salesData, setSalesData
+    salesData,
+    setSalesData,
 }) => {
-    const [payDebt, {
-        isLoading
-    }] = usePayDebtMutation();
+    const [payDebt, { isLoading }] = usePayDebtMutation();
     const [paymentDescription, setPaymentDescription] = useState('');
+    const paidBy = localStorage.getItem("admin_fullname");
 
-    const processPayment = useCallback(async (saleId) => {
-        const amount = parseFloat(paymentAmount);
+    const processPayment = useCallback(async () => {
+        const rawAmount = parseNumber(paymentAmount); // Get raw number
+        const amount = parseFloat(rawAmount);
         if (!amount || amount <= 0) {
             toast.error("Iltimos, to'g'ri to'lov miqdorini kiriting");
             return;
         }
 
-        const sale = salesData.find(s => s._id === saleId);
-        if (!sale) {
-            toast.error("Sotuv topilmadi!");
-            return;
-        }
-        if (amount > (sale.payment?.debt || 0)) {
-            toast.error("To'lov miqdori qarzdan oshib ketdi!");
-            return;
-        }
-
         const paymentData = {
-            amount,
-            paymentType,
+            customerId: modalState.activeSaleId,
+            amount, // Send raw number to server
             description: paymentDescription || "Qarz to‘lovi mijoz tomonidan qaytarildi",
+            paidBy: paidBy || "Nomalum",
+            paymentType: paymentType || "naqt",
         };
-
         try {
-            await payDebt({ id: saleId, body: paymentData }).unwrap();
+            const response = await payDebt(paymentData).unwrap();
             setSalesData(prev =>
                 prev.map(sale => {
-                    if (sale._id === saleId) {
-                        const newPaidAmount = (sale.payment?.paidAmount || 0) + amount;
-                        const newDebt = (sale.payment?.totalAmount || 0) - newPaidAmount;
-                        const newStatus = newDebt <= 0 ? 'paid' : 'partial';
+                    if (sale.customerId === currentSale.customerId) {
+                        const newDebt = sale.payment?.debt || 0;
                         return {
                             ...sale,
                             payment: {
                                 ...sale.payment,
-                                paidAmount: newPaidAmount,
-                                debt: Math.max(0, newDebt),
-                                status: newStatus,
-                                paymentHistory: [
-                                    ...(sale.payment?.paymentHistory || []),
-                                    {
-                                        amount,
-                                        date: new Date().toISOString(),
-                                        description: paymentData.description,
-                                        paidBy: sale.salesperson,
-                                        paymentType,
-                                    },
-                                ],
+                                debt: newDebt,
+                                status: newDebt <= 0 ? 'paid' : 'partial',
                             },
                         };
                     }
                     return sale;
                 })
             );
-            closeModal()
+            closeModal();
             toast.success("To'lov muvaffaqiyatli amalga oshirildi!");
-        } catch (error) {
-            toast.error(error?.data?.innerData || error?.data?.message || "To'lov amalga oshirishda xatolik yuz berdi.");
+        } catch (err) {
+            toast.error(err?.data?.message || "Xatolik yuz berdi!");
         }
 
         setPaymentAmount('');
         setPaymentDescription('');
-    }, [paymentAmount, paymentDescription, paymentType, payDebt, salesData]);
+    }, [paymentAmount, paymentDescription, paidBy, paymentType, payDebt, salesData, currentSale]);
 
     return (
         <Modal
-            isOpen={modalState.isPaymentModalOpen}
-            onClose={closeModal}
+            open={modalState.isPaymentModalOpen}
+            onCancel={() => {
+                closeModal();
+                setPaymentAmount('');
+                setPaymentDescription('');
+            }}
             title="To'lov amalga oshirish"
+            footer={null}
         >
             {currentSale ? (
-                <div className="invoice-payment-form">
-                    <input
-                        className="invoice-form-input"
+                <div>
+                    <Input
                         type="text"
-                        placeholder="To'lov miqdor"
-                        value={paymentAmount ? Number(paymentAmount).toLocaleString('uz-UZ') : ''}
+                        placeholder="To'lov miqdori"
+                        value={formatNumber(paymentAmount)} // Display formatted number
                         onChange={(e) => {
-                            // Remove non-numeric characters (e.g., dots, commas)
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            // Only update if the value is empty or a valid non-negative number
-                            if (value === '' || (parseFloat(value) >= 0 && !isNaN(value))) {
-                                setPaymentAmount(value);
-                            }
+                            const val = e.target.value.replace(/\D/g, ''); // Allow only digits
+                            setPaymentAmount(val); // Store raw number
                         }}
-                        onBlur={() => {
-                            // Optional: Ensure the value is formatted when the input loses focus
-                            if (paymentAmount) {
-                                setPaymentAmount(parseFloat(paymentAmount).toString());
-                            }
-                        }}
-                        min="0"
-                        max={currentSale.payment?.debt || 0}
+                        style={{ marginBottom: 10 }}
                     />
                     <Select
-                        className="invoice-form-select"
+                        style={{ width: '100%', marginBottom: 10 }}
                         value={paymentType}
                         onChange={setPaymentType}
-                        style={{ width: '100%' }}
+                        placeholder="To'lov turini tanlang"
                     >
                         <Option value="naqt">Naqt pul</Option>
                         <Option value="bank">Bank o'tkazmasi</Option>
                     </Select>
-                    <input
-                        className="invoice-form-input"
-                        type="text"
+                    <Input
                         placeholder="Izoh (ixtiyoriy)"
                         value={paymentDescription}
                         onChange={(e) => setPaymentDescription(e.target.value)}
+                        style={{ marginBottom: 15 }}
                     />
-                    {
-                        paymentAmount <= 0 ?
-                            <Button
-                                className="invoice-btn invoice-btn-success"
-                                onClick={() => processPayment(modalState.activeSaleId)}
-                                disabled={true}
-                            >
-                                To'lovni amalga oshirish
-                            </Button>
-                            :
-                            <Button
-                                className="invoice-btn invoice-btn-success"
-                                onClick={() => processPayment(modalState.activeSaleId)}
-                                disabled={isLoading}
-                                loading={isLoading}
-                            >
-                                To'lovni amalga oshirish
-                            </Button>
-                    }
+                    <Button
+                        type="primary"
+                        block
+                        onClick={processPayment}
+                        loading={isLoading}
+                        disabled={!paymentAmount || parseFloat(parseNumber(paymentAmount)) <= 0 || !paidBy}
+                    >
+                        To'lovni amalga oshirish
+                    </Button>
                 </div>
             ) : (
-                <p>Sotuv topilmadi. Iltimos, qayta urinib ko'ring.</p>
-            )
-            }
-        </Modal >
-    )
-}
+                <p>Sotuv yoki mijoz ma'lumotlari topilmadi</p>
+            )}
+        </Modal>
+    );
+};
 
-export default IsPaymentModal
+export default IsPaymentModal;

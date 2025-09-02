@@ -1,11 +1,17 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import SignaturePad from "react-signature-canvas";
 import { useGetAllAttendanceQuery } from "../../context/attendanceApi";
 import { Spin, Modal, Table, Button, Select } from "antd";
+import { useReactToPrint } from "react-to-print";
+import {
+  useGetAllEmployeesSalaryInfoQuery
+} from "../../context/alarApi";
 import moment from "moment";
 import { skipToken } from "@reduxjs/toolkit/query";
 import './style.css';
 
 function AttendanceHistory() {
+  const sigPad = useRef();
   const [dateRange, setDateRange] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
@@ -15,7 +21,20 @@ function AttendanceHistory() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [dateFilter, setDateFilter] = useState('full'); // 'full', 'firstHalf', 'secondHalf'
   const [selectedUnit, setSelectedUnit] = useState(null);
+  const [showPrintButton, setShowPrintButton] = useState(false);
+  const printRef = useRef(null); // Ref for printable content
+  const [employees, setEmployees] = useState([]);
 
+  // Oy va yilni dateRange[0] dan olamiz (startOf("month"))
+  const selectedMonth = dateRange[0].month() + 1; // momentda month() 0 dan boshlanadi
+  const selectedYear = dateRange[0].year();
+
+  const {
+    data: employeesData
+  } = useGetAllEmployeesSalaryInfoQuery({
+    month: selectedMonth.toString().padStart(2, "0"), // 04 format
+    year: selectedYear.toString(), // 2001 format
+  });
   const validRange = dateRange && dateRange[0] && dateRange[1];
   const { data, isLoading } = useGetAllAttendanceQuery(
     validRange
@@ -26,6 +45,51 @@ function AttendanceHistory() {
       : skipToken
   );
 
+  const mergedData = useMemo(() => {
+    if (!data || !employees) return [];
+
+    return data.map((att) => {
+      const emp = employees?.find((e) => e._id === att.employee._id);
+      return {
+        ...att,
+        employee: {
+          ...att.employee,
+          salary: emp ? emp.salary : 0, // agar topilmasa 0
+        },
+      };
+    });
+  }, [data, employees]);
+
+  console.log("mergedData", mergedData);
+
+  useEffect(() => {
+    if (employeesData) {
+      const all = [
+        ...(employeesData?.innerData?.monthly || []),
+        ...(employeesData?.innerData?.daily || []),
+      ];
+      setEmployees(all);
+    }
+  }, [employeesData]);
+  // react-to-print setup - TUZATILGAN VERSIYA
+  const handlePrint = useReactToPrint({
+    contentRef: printRef, // content o'rniga contentRef ishlatildi
+    documentTitle: `Davomat ro'yxati - ${dateRange[0].format("MMMM YYYY")}`,
+    pageStyle: `
+      @page { 
+        size: A3; 
+        margin: 10mm; 
+      }
+    `,
+    onAfterPrint: () => {
+      console.log("Print muvaffaqiyatli yakunlandi");
+    },
+    onPrintError: (errorLocation, error) => {
+      console.error("Print xatosi:", errorLocation, error);
+    }
+  });
+
+
   const dateHeaders = useMemo(() => {
     if (!validRange) return [];
     const dates = [];
@@ -35,7 +99,7 @@ function AttendanceHistory() {
     if (dateFilter === 'firstHalf') {
       end = moment(start).date(15);
     } else if (dateFilter === 'secondHalf') {
-      start = moment(start).date(15);
+      start = moment(start).date(16); // 15 o'rniga 16 dan boshlash
       end = moment(end).endOf('month');
     }
 
@@ -48,20 +112,20 @@ function AttendanceHistory() {
   }, [dateRange, validRange, dateFilter]);
 
   const unitOptions = useMemo(() => {
-    if (!data) return [];
-    const units = new Set(data.map((record) => record.unit).filter(Boolean));
+    if (!mergedData) return [];
+    const units = new Set(mergedData.map((record) => record.unit).filter(Boolean));
     return Array.from(units).map((unit) => ({
       value: unit,
       label: unit,
     }));
-  }, [data]);
+  }, [mergedData]);
 
   const processedData = useMemo(() => {
-    if (!data || !validRange) return [];
+    if (!mergedData || !validRange) return [];
 
     const employeeMap = {};
 
-    data.forEach((record) => {
+    mergedData.forEach((record) => {
       const employeeId = record.employee?._id;
       const date = moment(record.date).format("YYYY-MM-DD");
 
@@ -78,7 +142,7 @@ function AttendanceHistory() {
           position: record.employee?.position,
           unit: record.unit,
           attendance: {},
-          totalShifts: 0, // Umumiy smenalar uchun yangi xususiyat
+          totalShifts: 0,
           presentDays: 0,
           percentage: 0,
         };
@@ -86,7 +150,6 @@ function AttendanceHistory() {
 
       employeeMap[employeeId].attendance[date] = record;
       employeeMap[employeeId].presentDays += 1;
-      // Har bir sanaga mos percentage ni qo'shish
       employeeMap[employeeId].totalShifts += record.percentage || 0;
     });
 
@@ -97,7 +160,7 @@ function AttendanceHistory() {
     });
 
     return Object.values(employeeMap);
-  }, [data, dateHeaders, validRange, dateFilter, selectedUnit]);
+  }, [mergedData, dateHeaders, validRange, dateFilter, selectedUnit]);
 
   const handleCellClick = (employee, date) => {
     const dateStr = date.format("YYYY-MM-DD");
@@ -157,8 +220,10 @@ function AttendanceHistory() {
       const endOfMonth = moment(startOfMonth).endOf('month');
       setDateRange([startOfMonth, endOfMonth]);
       setDateFilter('full');
+      setShowPrintButton(false);
     } else {
       setDateRange([moment().startOf("month"), moment().endOf("month")]);
+      setShowPrintButton(false);
     }
   };
 
@@ -166,10 +231,32 @@ function AttendanceHistory() {
     setSelectedUnit(value);
   };
 
+  const handleDateFilterChange = (filter) => {
+    setDateFilter(filter);
+    setShowPrintButton(true);
+  };
+
   const handleResetFilter = () => {
     if (dateFilter !== 'full') {
       setDateFilter('full');
+      setShowPrintButton(false);
     }
+  };
+
+  // Print tugmasini bosganda tekshirish
+  const handlePrintClick = () => {
+    if (!printRef.current) {
+      console.error("Print ref topilmadi!");
+      return;
+    }
+
+    if (processedData.length === 0) {
+      console.warn("Print qilish uchun ma'lumot yo'q!");
+      alert("Print qilish uchun ma'lumot yo'q!");
+      return;
+    }
+
+    handlePrint();
   };
 
   const monthValue = dateRange[0] ? dateRange[0].format('YYYY-MM') : undefined;
@@ -186,9 +273,19 @@ function AttendanceHistory() {
     Su: "Ya",
   };
 
+
+  const clear = () => {
+    sigPad.current.clear();
+  };
+
+  const save = () => {
+    const dataURL = sigPad.current.getTrimmedCanvas().toDataURL("image/png");
+    console.log("Imzo PNG:", dataURL); // serverga yuborish mumkin
+  };
+
   return (
     <div className="xsd-attendance-history-container">
-      <div className="xsd-attendance-header">
+      <div className="xsd-attendance-header no-print">
         <span className="xsd-subject-label">{monthValue} - Davomat ro'yxati</span>
         <div className="xsd-additional-info">
           <Select
@@ -208,7 +305,7 @@ function AttendanceHistory() {
             options={unitOptions}
             placeholder="Bo'limni tanlang"
             allowClear
-            className="xsd-unit-picker"
+            className="xsd-attendance-unit-picker"
             showSearch
             optionFilterProp="label"
             style={{ width: 150 }}
@@ -217,77 +314,112 @@ function AttendanceHistory() {
             <div className="xsd-date-filter-buttons">
               <Button
                 type={dateFilter === 'firstHalf' ? 'primary' : 'default'}
-                onClick={() => setDateFilter('firstHalf')}
+                onClick={() => handleDateFilterChange('firstHalf')}
               >
                 1-15
               </Button>
               <Button
                 type={dateFilter === 'secondHalf' ? 'primary' : 'default'}
-                onClick={() => setDateFilter('secondHalf')}
+                onClick={() => handleDateFilterChange('secondHalf')}
               >
-                15-{moment(dateRange[1]).format('DD')}
+                16-{moment(dateRange[1]).format('DD')}
               </Button>
               <Button
                 onClick={handleResetFilter}
                 disabled={dateFilter === 'full'}
               >
-                X
+                ✕
               </Button>
+              {showPrintButton && (
+                <Button
+                  type="primary"
+                  onClick={handlePrintClick}
+                  disabled={!processedData.length}
+                >
+                  🖨️ Chop etish
+                </Button>
+              )}
             </div>
           )}
         </div>
       </div>
 
-      <div className="xsd-attendance-table-wrapper">
-        <table className="xsd-attendance-table">
-          <thead>
-            <tr className="xsd-table-header-row">
-              <th className="xsd-table-header-cell xsd-student-number-header">№</th>
-              <th className="xsd-table-header-cell xsd-student-name-header">To'liq ism</th>
-              {dateHeaders.map((date, index) => (
-                <th key={index} className="xsd-table-header-cell xsd-date-header">
-                  <div className="xsd-date-header-content">
-                    <div className="xsd-date-day">{date.format('DD')}</div>
-                    <div className="xsd-date-weekday">{weekdayMap[date.format("dd")]}</div>
-                  </div>
-                </th>
-              ))}
-              <th className="xsd-table-header-cell xsd-stats-header">Jami smena</th>
-            </tr>
-          </thead>
-          <tbody>
-            {processedData.map((employee, index) => (
-              <tr key={employee.id} className="xsd-table-body-row">
-                <td className="xsd-table-body-cell xsd-student-number-cell">
-                  {index + 1}
-                </td>
-                <td className="xsd-table-body-cell xsd-student-name-cell">
-                  {employee.firstName} {employee.lastName}
-                </td>
-                {dateHeaders.map((date, dateIndex) => {
-                  const attendance = employee.attendance[date.format("YYYY-MM-DD")];
-                  return (
-                    <td
-                      key={dateIndex}
-                      className="xsd-table-body-cell"
-                      onClick={() => handleCellClick(employee, date)}
-                    >
-                      {attendance && (
-                        <div className="xsd-attendance-badge">
-                          {attendance.percentage}
-                        </div>
-                      )}
-                    </td>
-                  );
-                })}
-                <td className="xsd-table-body-cell xsd-stats-cell">
-                  {employee.totalShifts.toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Printable content */}
+      <div ref={printRef} className="xsd-attendance-table-wrapper">
+        <div className="print-header">
+          <h2>
+            {selectedUnit && `${selectedUnit} bo'limi - `}
+            {monthValue} - Davomat ro'yxati
+            {dateFilter !== 'full' && ` (${dateFilter === 'firstHalf' ? '1-15' : '16-' + moment(dateRange[1]).format('DD')})`}
+          </h2>
+        </div>
 
+        {processedData.length > 0 ? (
+          <table className="xsd-attendance-table">
+            <thead>
+              <tr className="xsd-table-header-row">
+                <th className="xsd-table-header-cell xsd-student-number-header">№</th>
+                <th className="xsd-table-header-cell xsd-student-name-header">To'liq ism</th>
+                {dateHeaders.map((date, index) => (
+                  <th key={index} className="xsd-table-header-cell xsd-date-header">
+                    <div className="xsd-date-header-content">
+                      <div className="xsd-date-day">{date.format('DD')}</div>
+                      <div className="xsd-date-weekday">{weekdayMap[date.format("dd")]}</div>
+                    </div>
+                  </th>
+                ))}
+                <th className="xsd-table-header-cell xsd-stats-header">Jami smena</th>
+                <th className="xsd-table-header-cell xsd-stats-header">Maosh</th>
+                <th className="xsd-table-header-cell xsd-stats-header">Imzo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {processedData.map((employee, index) => (
+                <tr key={employee.id} className="xsd-table-body-row">
+                  <td className="xsd-table-body-cell xsd-student-number-cell">
+                    {index + 1}
+                  </td>
+                  <td className="xsd-table-body-cell xsd-student-name-cell">
+                    {employee.firstName} {employee.lastName}
+                  </td>
+                  {dateHeaders.map((date, dateIndex) => {
+                    const attendance = employee.attendance[date.format("YYYY-MM-DD")];
+                    return (
+                      <td
+                        key={dateIndex}
+                        className="xsd-table-body-cell"
+                        onClick={() => handleCellClick(employee, date)}
+                        style={{ cursor: attendance ? 'pointer' : 'default' }}
+                      >
+                        {attendance && (
+                          <div className="xsd-attendance-badge">
+                            {attendance.percentage}
+                          </div>
+                        )}
+                      </td>
+                    );
+                  })}
+                  <td className="xsd-table-body-cell xsd-stats-cell">
+                    {employee.totalShifts.toFixed(2)}
+                  </td>
+                  <td className="xsd-table-body-cell xsd-student-name-cell">
+                    {employee.salary || 0}
+                  </td>
+                  <td className="xsd-table-body-imzo xsd-stats-cell">
+                    <SignaturePad
+                      ref={sigPad}
+                      canvasProps={{ width: 100, height: 25, className: "sigCanvas" }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            Ma'lumot topilmadi
+          </div>
+        )}
       </div>
 
       <Modal

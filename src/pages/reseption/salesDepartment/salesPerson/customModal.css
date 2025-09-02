@@ -86,7 +86,6 @@
 }
 
 .invoice-edit-section {
-    margin-bottom: 1.5rem;
     padding: 1rem;
     background: white;
     border-radius: 8px;
@@ -119,7 +118,7 @@
 
 .invoice-form-input {
     width: 100%;
-    padding: 0.75rem;
+    padding: px 0.75rem;
     margin-bottom: 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 6px;
@@ -199,7 +198,8 @@
 }
 
 .invoice-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.50rem 1.5rem;
+    height: 35px;
     border-radius: 6px;
     font-weight: 500;
     display: inline-flex;
@@ -210,7 +210,13 @@
 
 .invoice-btn-success {
     background: #16a34a;
+    gap: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
     color: white;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.50rem 1.5rem;
     border: none;
 }
 

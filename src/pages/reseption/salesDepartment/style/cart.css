@@ -303,7 +303,7 @@
 .isTransportDropdownOpen {
     position: absolute;
     width: 51%;
-    top: 44px;
+    top: 60px;
     right: 0;
     padding: 2px;
     z-index: 999;
