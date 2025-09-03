@@ -369,8 +369,12 @@ function AttendanceHistory() {
                   </th>
                 ))}
                 <th className="xsd-table-header-cell xsd-stats-header">Jami smena</th>
-                <th className="xsd-table-header-cell xsd-stats-header">Maosh</th>
-                <th className="xsd-table-header-cell xsd-stats-header">Imzo</th>
+                {showPrintButton && (
+                  <th className="xsd-table-header-cell xsd-stats-header">Maosh</th>
+                )}
+                {showPrintButton && (
+                  <th className="xsd-table-header-cell xsd-stats-header">Imzo</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -402,15 +406,33 @@ function AttendanceHistory() {
                   <td className="xsd-table-body-cell xsd-stats-cell">
                     {employee.totalShifts.toFixed(2)}
                   </td>
-                  <td className="xsd-table-body-cell xsd-student-name-cell">
-                    {employee.salary || 0}
-                  </td>
-                  <td className="xsd-table-body-imzo xsd-stats-cell">
-                    <SignaturePad
-                      ref={sigPad}
-                      canvasProps={{ width: 100, height: 25, className: "sigCanvas" }}
-                    />
-                  </td>
+                  {showPrintButton && (
+                    <td className="xsd-table-body-cell xsd-student-name-cell">
+                      {employee.salary || 0}
+                    </td>
+                  )}
+                  {showPrintButton && (
+                    <td className="xsd-table-body-imzo xsd-stats-cell">
+                      {showPrintButton && (
+                        // <td className="xsd-table-body-imzo xsd-stats-cell">
+                        <SignaturePad
+                          ref={sigPad}
+                          penColor="#000a73"        // chiziq rangi
+                          minWidth={0.5}          // eng ingichka chiziq qalinligi
+                          maxWidth={1.5}
+                          canvasProps={{
+                            width: "90px",
+                            height: 30,
+                            className: "sigCanvas",
+                            style: {    // yumaloqlash // fon
+                              cursor: "url('https://cdn-icons-png.flaticon.com/512/1827/1827951.png') 0 24, auto"
+                            },
+                          }}
+                        />
+                        // </td>
+                      )}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -154,92 +154,113 @@ const SalesInvoiceDashboard = () => {
         const parsed = parseFloat(value.replace(/\./g, ''));
         return isNaN(parsed) ? 0 : parsed;
     };
+
     const openDeliveryModal = useCallback((saleId) => {
         const sale = salesData.find(s => s._id === saleId);
         if (!sale) {
             toast.error("Sotuv topilmadi!");
             return;
         }
-
-        const now = new Date();
-        const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Tashkent' };
-        const defaultDate = new Intl.DateTimeFormat('uz-UZ', options).format(now);
-
-        // 1) Aggregate all order items across all history entries
-        const allOrderItems = sale.history.reduce((acc, hist, histIndex) => {
-            if (!hist || !hist.items || !Array.isArray(hist.items)) {
-                // console.warn(`History entry at index ${histIndex} (date: ${hist?.date || 'unknown'}) has no valid items array`);
-                return acc;
-            }
-            hist.items.forEach((item, itemIndex) => {
-                if (!item.productName || item.quantity === undefined) {
-                    // console.warn(`Invalid item at history index ${histIndex}, item index ${itemIndex}:`, item);
-                    return;
-                }
-                const pid = item.productId || `${item.productName}-${hist.date || defaultDate}-${histIndex}`;
-                acc.push({
-                    productId: pid,
-                    productName: item.productName,
-                    quantity: Number(item.quantity) || 0,
-                    sellingPrice: Number(item.sellingPrice) || 0,
-                    size: item.size || 'dona',
-                    historyDate: hist.date || defaultDate,
-                    discountedPrice: item.discountedPrice,
-                    transport: hist.deliveredItems?.find(di =>
-                        (di.productId || `${di.productName}-${hist.date || defaultDate}-${histIndex}`) === pid
-                    )?.transport || '',
-                });
-            });
-            return acc;
-        }, []);
-
-        // 2) Calculate total delivered quantities per product
-        const deliveredMap = sale.history.reduce((acc, hist, histIndex) => {
-            if (!hist || !hist.deliveredItems || !Array.isArray(hist.deliveredItems)) {
-                return acc;
-            }
-            hist.deliveredItems.forEach((di, diIndex) => {
-                if (!di.productName && !di.productId) {
-                    return;
-                }
-                const pid = di.productId || `${di.productName}-${hist.date || defaultDate}-${histIndex}`;
-                const qty = Number(di.deliveredQuantity) || 0;
-                acc[pid] = (acc[pid] || 0) + qty;
-            });
-            return acc;
-        }, {});
-
-        // 3) Calculate remaining quantities and filter undelivered items
-        const remainingItems = allOrderItems
-            .map(item => {
-                const pid = item.productId;
-                const deliveredQty = deliveredMap[pid] || 0;
-                const remainingQty = Math.max(0, item.quantity - deliveredQty);
-
-                const result = {
+        const calculateDeliveries = (history) => {
+            // 1) Buyurtmalar (items)
+            const allOrders = history.flatMap(hist =>
+                (hist.items || []).map(item => (console.log(item), {
+                    _id: item._id,
+                    productId: item.productId,
                     productName: item.productName,
                     quantity: item.quantity,
-                    deliveredQuantity: deliveredQty,
-                    remainingQuantity: remainingQty,
-                    sellingPrice: item.sellingPrice,
-                    size: item.size,
+                    date: item.date,
                     discountedPrice: item.discountedPrice,
-                    productId: item.productId,
-                    pricePerUnit: item.sellingPrice,
-                    historyDate: item.historyDate,
-                    transport: item.transport,
-                    deliveryQuantity: 0, // For UI
-                    selected: false,
-                };
+                    size: item.size,
+                }))
+            );
 
-                return result;
-            })
-            .filter(item => {
-                if (item.remainingQuantity > 0) return true;
-                return false;
+            // 2) Yetkazilganlar (deliveredItems)
+            const allDelivered = history.flatMap(hist =>
+                (hist.deliveredItems || []).map(di => ({
+                    productId: di.productId,
+                    _id: di._id,
+                    productName: di.productName,
+                    deliveredQuantity: di.deliveredQuantity,
+                    date: hist.date,
+                    discountedPrice: di.discountedPrice,
+                    size: di.size,
+                }))
+            );
+
+            // 🔹 3) Umumiy hisob (faqat productName bo‘yicha)
+            const overallMap = {};
+            allOrders.forEach(order => {
+                if (!overallMap[order.productName]) {
+                    overallMap[order.productName] = {
+                        ordered: 0,
+                        delivered: 0,
+                        productId: order.productId,  // 🔹 shu yerdan olish
+                        _id: order._id,
+                        discountedPrice: order.discountedPrice,
+                        size: order.size,
+                    };
+                }
+                overallMap[order.productName].ordered += order.quantity;
             });
 
-        setDeliveryItems(remainingItems);
+            // 🔹 Yetkazilganlar
+            allDelivered.forEach(del => {
+                if (!overallMap[del.productName]) {
+                    overallMap[del.productName] = {
+                        ordered: 0,
+                        delivered: 0,
+                        productId: del.productId,  // 🔹 agar buyurtmada bo‘lmasa, bu yerdan olish
+                        _id: del._id,
+                        discountedPrice: del.discountedPrice,
+                        size: del.size,
+                    };
+                }
+                overallMap[del.productName].delivered += del.deliveredQuantity;
+            });
+
+            const overallResult = Object.entries(overallMap).map(([productName, data]) => ({
+                _id: data._id,   // 🔹 natijaga qo‘shildi
+                productName,
+                productId: data.productId,   // 🔹 natijaga qo‘shildi
+                ordered: data.ordered,
+                delivered: data.delivered,
+                discountedPrice: data.discountedPrice,
+                size: data.size,
+                remaining: Math.max(0, data.ordered - data.delivered)
+            }));
+
+            // 🔹 4) Sana bo‘yicha hisob
+            const dateWiseResult = history.map(hist => {
+                const items = (hist.items || []).map(item => {
+                    // shu mahsulot uchun yetkazilganlarni topamiz
+                    const delivered = (hist.deliveredItems || [])
+                        .filter(di => di.productId === item.productId)
+                        .reduce((sum, di) => sum + (di.deliveredQuantity || 0), 0);
+
+                    return {
+                        _id: item._id,
+                        productName: item.productName,
+                        productId: item._id,
+                        ordered: item.quantity,
+                        delivered,
+                        remaining: Math.max(0, item.quantity - delivered),
+                        size: item.size,
+                        discountedPrice: item.discountedPrice,
+                    };
+                });
+
+                return {
+                    date: hist.date,
+                    items
+                };
+            });
+
+            return { dateWiseResult, overallResult };
+        };
+        const groupedItems = calculateDeliveries(sale.history)
+
+        setDeliveryItems(groupedItems.overallResult.filter(item => (item.remaining || 0) > 0));
         setModalState(prev => ({ ...prev, isDeliveryModalOpen: true, activeSaleId: saleId }));
     }, [salesData]);
 
