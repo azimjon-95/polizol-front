@@ -50,6 +50,24 @@ function Header() {
       .catch((err) => console.error("API error:", err));
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Agar profile ochilgan bo‘lsa va bosilgan joy ref ichida bo‘lmasa -> yopamiz
+      if (
+        isProfileOpen &&
+        profileToggleRef.current &&
+        !profileToggleRef.current.contains(event.target) &&
+        !searchPanelRef.current.contains(event.target)
+      ) {
+        setIsProfileOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileOpen]);
   // Number format helper
   const formatNumber = (value) => {
     if (!value) return "";

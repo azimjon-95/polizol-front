@@ -4,6 +4,7 @@ import IsPaymentModal from './modal/IsPaymentModal';
 import { NumberFormat } from '../../../hook/NumberFormat';
 import { TbTruckDelivery } from "react-icons/tb";
 import { TfiPrinter } from "react-icons/tfi";
+import { LuChartColumnIncreasing } from "react-icons/lu";
 import CustomModal from './salesPerson/CustomEditModal';
 import { toast } from 'react-toastify';
 import {
@@ -17,8 +18,9 @@ import PaymentChecklist from './modal/IsPaymentHistory';
 import { Button, Modal, Popover } from 'antd';
 import { RiFileList3Line } from "react-icons/ri";
 import { HiDotsVertical } from "react-icons/hi";
-import { Truck as DeliveryIcon, RotateCcw, Trash2, Edit, ChevronDown, ChevronUp, User, Building2, Phone, Calendar, Package, DollarSign, Truck, MapPin } from 'lucide-react';
+import { Truck as DeliveryIcon, TrendingUp, RotateCcw, Trash2, Edit, ChevronDown, ChevronUp, User, Building2, Phone, Calendar, Package, DollarSign, Truck, MapPin } from 'lucide-react';
 import DeliveryDisplayPrint from './modal/DeliveryDisplayPrintList';
+import { Link } from 'react-router-dom';
 
 
 
@@ -451,17 +453,87 @@ const SalesInvoiceDashboard = () => {
                                     Savdolar
                                 </div>
                             </th>
-
+                            <th className="hip-th" scope="col">
+                                <div className="hip-header-content">
+                                    <TrendingUp className="hip-icon-sm" aria-hidden="true" />
+                                    Ko‘rsatkich
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {isLoading ? (
                             <tr>
-                                <td colSpan="5" className="hip-td">Yuklanmoqda...</td>
+                                <td colSpan="10" className="loading-hip-td">
+                                    <div className="loading-container">
+                                        {/* Loading Spinner */}
+                                        <div className="loading-spinner-wrapper">
+                                            <div className="loading-spinner"></div>
+                                            <div className="loading-inner-circle"></div>
+                                        </div>
+
+                                        {/* Loading dots animation */}
+                                        <div className="loading-dots">
+                                            <div className="loading-dot loading-dot-1"></div>
+                                            <div className="loading-dot loading-dot-2"></div>
+                                            <div className="loading-dot loading-dot-3"></div>
+                                        </div>
+
+                                        {/* Loading text with animation */}
+                                        <div>
+                                            <p className="loading-text">Ma'lumotlar yuklanmoqda</p>
+                                            <div className="loading-text-dots">
+                                                <span className="loading-text-dot"></span>
+                                                <span className="loading-text-dot"></span>
+                                                <span className="loading-text-dot"></span>
+                                            </div>
+                                        </div>
+
+                                        {/* Progress bar animation */}
+                                        <div className="loading-progress">
+                                            <div className="loading-progress-bar">
+                                                <div className="loading-progress-shine"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         ) : salesData.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="hip-td">Ma'lumotlar topilmadi.</td>
+                                <td colSpan="10" className="hip-td">
+                                    <div className="empty-state-container">
+                                        {/* Empty state illustration */}
+                                        <div className="empty-state-icon-wrapper">
+                                            <User className="empty-state-icon" />
+                                            <div className="pulse-ring pulse-ring-1"></div>
+                                            <div className="pulse-ring pulse-ring-2"></div>
+                                        </div>
+
+                                        {/* No data message */}
+                                        <div className="empty-state-content">
+                                            <h3 className="empty-state-title">Mijozlar topilmadi</h3>
+                                            <p className="empty-state-description">
+                                                Hozircha ro'yxatda mijozlar mavjud emas.
+                                                Yangi mijozlar qo'shilgandan so'ng ular shu yerda ko'rinadi.
+                                            </p>
+                                        </div>
+
+                                        {/* Search suggestion */}
+                                        <div className="empty-state-suggestion">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                            <span>Boshqa filtrlar bilan qidiring</span>
+                                        </div>
+
+                                        {/* Floating animation elements */}
+                                        <div className="floating-elements">
+                                            <div className="floating-dot floating-dot-1"></div>
+                                            <div className="floating-dot floating-dot-2"></div>
+                                            <div className="floating-dot floating-dot-3"></div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         ) : (
                             salesData.map((customer) => {
@@ -588,13 +660,19 @@ const SalesInvoiceDashboard = () => {
                                                     <span className="hip-history-count">{customer.totalUndelivered} <TbTruckDelivery style={{ fontSize: "16px", marginLeft: "15px" }} /></span>
                                                 </div>
                                             </td>
-
+                                            <td className="hip-td">
+                                                <div className="hip-td-box-chart">
+                                                    <Link className="invoice-btn-Vsc-chart" to={`/customer/${customer._id}`}>
+                                                        <LuChartColumnIncreasing />
+                                                    </Link>
+                                                </div>
+                                            </td>
                                         </tr>
                                         {expandedRows.has(customer._id) && customer.history && (
                                             <>
                                                 {customer.history.map((historyItem, inx) => (
                                                     <tr key={inx} className="hip-history-row">
-                                                        <td colSpan="8" className="hip-history-td">
+                                                        <td colSpan="9" className="hip-history-td">
                                                             <div className="hip-history-content">
                                                                 <div className="hip-history-header">
                                                                     <div>
@@ -676,7 +754,7 @@ const SalesInvoiceDashboard = () => {
                                                     </tr>
                                                 ))}
                                                 <tr className="hip-history-footer">
-                                                    <td colSpan="8" className="hip-history-td">
+                                                    <td colSpan="9" className="hip-history-td">
                                                         <div className="hip-footer-content">
                                                             <span className="hip-label">Barcha savdolar jami:</span>
                                                             <span className="hip-value hip-text-bold">{formatCurrency(totalHistoryAmount)}</span>

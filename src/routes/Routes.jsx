@@ -7,6 +7,7 @@ import Norma from "../pages/productNorma/ProductNormaMain";
 import ProductionSystem from "../pages/productionProcess/ProductionSystem";
 import FactoryConfigPanel from "../pages/admin/setting/Setting";
 import FactorySalesSystem from "../pages/reseption/salesDepartment/SalesDepartment";
+import CustomerStatsPage from "../pages/reseption/salesDepartment/modal/CustomerStatsPage";
 import Atendance from "../pages/attendance/Atendance";
 import CatigoryManagement from "../pages/admin/setting/CategoryManagement";
 import Salary from "../pages/salary/Salary";
@@ -109,6 +110,12 @@ export const routes = [
     path: "/oylik",
     element: <SalaryManagement />,
     role: ["direktor", "buxgalteriya", "menejir"],
+    private: true,
+  },
+  {
+    path: "/customer/:id",
+    element: <CustomerStatsPage />,
+    role: ["direktor", "buxgalteriya", "menejir", "sotuvchi", "sotuvchi eksport", "sotuvchi menejir"],
     private: true,
   },
 ];

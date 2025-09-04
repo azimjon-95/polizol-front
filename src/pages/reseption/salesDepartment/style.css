@@ -44,6 +44,22 @@
     text-transform: uppercase;
 }
 
+.invoice-btn-Vsc-chart {
+    background: goldenrod;
+    color: #333;
+    padding: .35rem .5rem !important;
+    border: none;
+    overflow: hidden;
+    margin-left: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .2s ease;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
 .invoice-btn-VscHistory:hover {
     background: goldenrod;
     color: #fff;
@@ -62,6 +78,13 @@
 .hip-td-box {
     display: flex;
     align-items: center;
+}
+
+.hip-td-box-chart {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .invoice-btn-primary+.ant-btn {
