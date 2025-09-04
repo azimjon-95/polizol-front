@@ -516,7 +516,7 @@
 }
 
 .card-doc-sign {
-    display: flex;
+    display: flex !important;
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid #e5e7eb;
@@ -1010,13 +1010,6 @@
     .card-doc-contact {
         font-size: 12px;
         margin: 12px 0;
-    }
-
-    .card-doc-sign {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding-top: 10px;
     }
 
     .card-doc-qr {
