@@ -103,6 +103,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    text-wrap: nowrap !important;
 }
 
 .hip-tr {
@@ -726,10 +727,6 @@
         gap: 15px;
     }
 
-    .hip-td-box {
-        flex-direction: column;
-        gap: 6px;
-    }
 
     .hip-table {
         font-size: 0.875rem;
