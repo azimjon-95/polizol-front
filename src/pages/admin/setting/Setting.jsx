@@ -70,7 +70,7 @@ const FactoryConfigPanel = () => {
             }
             resetForm();
         } catch (err) {
-            toast.error(`Xato yuz berdi: ${err.message || 'Server xatosi'}`);
+            toast.error(`Xato yuz berdi: ${err.data.message || 'Server xatosi'}`);
         }
     };
 
@@ -119,7 +119,7 @@ const FactoryConfigPanel = () => {
                                 toast.success('Konfiguratsiya muvaffaqiyatli o\'chirildi!');
                             } catch (err) {
                                 toast.dismiss(toastId);
-                                toast.error(`O'chirishda xato: ${err.message || 'Server xatosi'}`);
+                                toast.error(`O'chirishda xato: ${err.data.message || 'Server xatosi'}`);
                             }
                         }}
                     >

@@ -329,28 +329,9 @@
 }
 
 /* Skeleton Styles */
-.skeleton {
-    background: #334155;
-    /* Matches salesperson-card background for consistency */
-    border-radius: 4px;
-    animation: pulse 1.5s ease-in-out infinite;
-}
 
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
 
-    50% {
-        opacity: 0.5;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-.skeleton-card {
+*/ .skeleton-card {
     background: linear-gradient(to right, #334155, #475569);
     /* Mimics stat-card gradient */
 }

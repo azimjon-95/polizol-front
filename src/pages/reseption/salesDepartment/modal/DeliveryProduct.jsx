@@ -123,7 +123,6 @@ const DeliveryProduct = ({
         })),
     [deliveryItems]
   );
-  console.log(validItems);
   // React to print configuration
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -193,8 +192,7 @@ const DeliveryProduct = ({
       toast.success(updatedSale.message || "Mahsulotlar yuborildi!");
       closeModal();
     } catch (error) {
-      toast.error("Mahsulotlarni yuborishda xatolik yuz berdi!");
-      console.error("Delivery error:", error);
+      toast.error(error.data.message || "Mahsulotlarni yuborishda xatolik yuz berdi!");
     }
   }, [
     validItems,
