@@ -198,6 +198,7 @@ input[type=number] {
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    margin-bottom: 15px;
 }
 
 .invoice-btn.invoice-btn-success:hover {

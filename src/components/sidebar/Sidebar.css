@@ -64,7 +64,7 @@ aside {
   color: #fff;
   opacity: 0;
   transform: translateY(-50px);
-  animation: flyIn 0.6s ease forwards, pulse 1.5s ease-in-out infinite;
+  animation: flyIn 0.6s ease forwards, pul 1.5s ease-in-out infinite;
 }
 
 .LogoPol span:nth-child(1) {
@@ -120,7 +120,7 @@ aside {
 }
 
 /* Pulsatsiya effekti */
-@keyframes pulse {
+@keyframes pul {
 
   0%,
   100% {

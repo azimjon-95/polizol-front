@@ -11,6 +11,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
         startDate,
         endDate,
     });
+    console.log(productionHistory);
 
     // Format date
     const formatDate = (dateString) => {
@@ -46,6 +47,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             </tr>
                             <tr>
                                 <td className="lib-column-header">Xajjatlar</td>
+                                <td className="lib-column-header">Miqdori</td>
                                 <td className="lib-column-header">Baxosi</td>
                                 <td className="lib-column-header">Qiyati</td>
                                 <td className="lib-column-header">Ishlab chiqarilgan maxsulot</td>
@@ -65,11 +67,13 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                                     material?.materialName?.toLowerCase().includes("skotch")) {
                                     rowClass = "lib-row-blue";
                                 }
+                                console.log(material);
 
                                 return (
                                     <tr key={index} className={rowClass}>
                                         {/* Material columns */}
                                         <td className="lib-cell-left">{material?.materialName || <span>&nbsp;</span>}</td>
+                                        <td className="lib-cell-left">{formatNumber(material?.quantityUsed) || <span>&nbsp;</span>}</td>
                                         <td className="lib-cell-right">{material?.unitPrice ? formatNumber(material.unitPrice) : <span>&nbsp;</span>}</td>
                                         <td className="lib-cell-right">{material?.totalCost ? formatNumber(material.totalCost) : <span>&nbsp;</span>}</td>
 
@@ -85,6 +89,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             {/* Special rows */}
                             <tr className="lib-row-gas">
                                 <td className="lib-cell-left">Tabiiy gaz</td>
+                                <td className="lib-cell-right"></td>
                                 <td className="lib-cell-right">{formatNumber(Math.round(batch.gasCost / batch.gasConsumption))}</td>
                                 <td className="lib-cell-right">{formatNumber(batch.gasCost)}</td>
                                 <td className="lib-cell-empty"></td>
@@ -95,6 +100,8 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
 
                             <tr className="lib-row-blue">
                                 <td className="lib-cell-left">Elektr energiyasi</td>
+                                <td className="lib-cell-right"></td>
+
                                 <td className="lib-cell-right">{formatNumber(Math.round(batch.electricityCost / batch.electricityConsumption))}</td>
                                 <td className="lib-cell-right">{formatNumber(batch.electricityCost)}</td>
                                 <td className="lib-cell-empty"></td>
@@ -106,6 +113,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             <tr className="lib-row-material">
                                 <td className="lib-cell-left">Ishchi xarajatlari</td>
                                 <td className="lib-cell-empty"></td>
+                                <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-right">{formatNumber(batch.workerExpenses)}</td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
@@ -115,6 +123,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
 
                             <tr className="lib-row-material">
                                 <td className="lib-cell-left">Boshqa xarajatlari</td>
+                                <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-right">{formatNumber(batch.otherExpenses)}</td>
                                 <td className="lib-cell-empty"></td>
@@ -126,7 +135,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             {/* Totals */}
                             <tr className="lib-total-row">
                                 <td className="lib-cell-left">Ish/chiq.xarajatlari</td>
-                                <td></td>
+                                <td className="lib-cell-empty"></td><td></td>
                                 <td className="lib-cell-right">
                                     {formatNumber(
                                         batch.materialStatistics.totalMaterialCost +
@@ -145,6 +154,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             <tr className="lib-total-row">
                                 <td className="lib-cell-left">Jami xarajatlari</td>
                                 <td className="lib-cell-empty"></td>
+                                <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-right">{formatNumber(batch.totalBatchCost)}</td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
@@ -155,6 +165,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                             <tr className="lib-row-foil">
                                 <td className="lib-cell-left">Foyda</td>
                                 <td className="lib-cell-right"></td>
+                                <td className="lib-cell-right"></td>
                                 <td className="lib-cell-right">{formatNumber(potentialRevenue - batch.totalBatchCost)}</td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
@@ -164,6 +175,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
 
                             <tr className="lib-total-row">
                                 <td className="lib-cell-left">Tovar maxsulot</td>
+                                <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-empty"></td>
                                 <td className="lib-cell-right">

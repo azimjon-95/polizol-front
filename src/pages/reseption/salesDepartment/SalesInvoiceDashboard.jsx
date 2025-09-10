@@ -4,6 +4,7 @@ import IsPaymentModal from './modal/IsPaymentModal';
 import { NumberFormat } from '../../../hook/NumberFormat';
 import { TbTruckDelivery } from "react-icons/tb";
 import { TfiPrinter } from "react-icons/tfi";
+import { LuChartColumnIncreasing } from "react-icons/lu";
 import CustomModal from './salesPerson/CustomEditModal';
 import { toast } from 'react-toastify';
 import {
@@ -17,8 +18,9 @@ import PaymentChecklist from './modal/IsPaymentHistory';
 import { Button, Modal, Popover } from 'antd';
 import { RiFileList3Line } from "react-icons/ri";
 import { HiDotsVertical } from "react-icons/hi";
-import { Truck as DeliveryIcon, RotateCcw, Trash2, Edit, ChevronDown, ChevronUp, User, Building2, Phone, Calendar, Package, DollarSign, Truck, MapPin } from 'lucide-react';
+import { Truck as DeliveryIcon, TrendingUp, RotateCcw, Trash2, Edit, ChevronDown, ChevronUp, User, Building2, Phone, Calendar, Package, DollarSign, Truck, MapPin } from 'lucide-react';
 import DeliveryDisplayPrint from './modal/DeliveryDisplayPrintList';
+import { Link } from 'react-router-dom';
 
 
 
@@ -154,92 +156,113 @@ const SalesInvoiceDashboard = () => {
         const parsed = parseFloat(value.replace(/\./g, ''));
         return isNaN(parsed) ? 0 : parsed;
     };
+
     const openDeliveryModal = useCallback((saleId) => {
         const sale = salesData.find(s => s._id === saleId);
         if (!sale) {
             toast.error("Sotuv topilmadi!");
             return;
         }
-
-        const now = new Date();
-        const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Tashkent' };
-        const defaultDate = new Intl.DateTimeFormat('uz-UZ', options).format(now);
-
-        // 1) Aggregate all order items across all history entries
-        const allOrderItems = sale.history.reduce((acc, hist, histIndex) => {
-            if (!hist || !hist.items || !Array.isArray(hist.items)) {
-                // console.warn(`History entry at index ${histIndex} (date: ${hist?.date || 'unknown'}) has no valid items array`);
-                return acc;
-            }
-            hist.items.forEach((item, itemIndex) => {
-                if (!item.productName || item.quantity === undefined) {
-                    // console.warn(`Invalid item at history index ${histIndex}, item index ${itemIndex}:`, item);
-                    return;
-                }
-                const pid = item.productId || `${item.productName}-${hist.date || defaultDate}-${histIndex}`;
-                acc.push({
-                    productId: pid,
-                    productName: item.productName,
-                    quantity: Number(item.quantity) || 0,
-                    sellingPrice: Number(item.sellingPrice) || 0,
-                    size: item.size || 'dona',
-                    historyDate: hist.date || defaultDate,
-                    discountedPrice: item.discountedPrice,
-                    transport: hist.deliveredItems?.find(di =>
-                        (di.productId || `${di.productName}-${hist.date || defaultDate}-${histIndex}`) === pid
-                    )?.transport || '',
-                });
-            });
-            return acc;
-        }, []);
-
-        // 2) Calculate total delivered quantities per product
-        const deliveredMap = sale.history.reduce((acc, hist, histIndex) => {
-            if (!hist || !hist.deliveredItems || !Array.isArray(hist.deliveredItems)) {
-                return acc;
-            }
-            hist.deliveredItems.forEach((di, diIndex) => {
-                if (!di.productName && !di.productId) {
-                    return;
-                }
-                const pid = di.productId || `${di.productName}-${hist.date || defaultDate}-${histIndex}`;
-                const qty = Number(di.deliveredQuantity) || 0;
-                acc[pid] = (acc[pid] || 0) + qty;
-            });
-            return acc;
-        }, {});
-
-        // 3) Calculate remaining quantities and filter undelivered items
-        const remainingItems = allOrderItems
-            .map(item => {
-                const pid = item.productId;
-                const deliveredQty = deliveredMap[pid] || 0;
-                const remainingQty = Math.max(0, item.quantity - deliveredQty);
-
-                const result = {
+        const calculateDeliveries = (history) => {
+            // 1) Buyurtmalar (items)
+            const allOrders = history.flatMap(hist =>
+                (hist.items || []).map(item => (console.log(item), {
+                    _id: item._id,
+                    productId: item.productId,
                     productName: item.productName,
                     quantity: item.quantity,
-                    deliveredQuantity: deliveredQty,
-                    remainingQuantity: remainingQty,
-                    sellingPrice: item.sellingPrice,
-                    size: item.size,
+                    date: item.date,
                     discountedPrice: item.discountedPrice,
-                    productId: item.productId,
-                    pricePerUnit: item.sellingPrice,
-                    historyDate: item.historyDate,
-                    transport: item.transport,
-                    deliveryQuantity: 0, // For UI
-                    selected: false,
-                };
+                    size: item.size,
+                }))
+            );
 
-                return result;
-            })
-            .filter(item => {
-                if (item.remainingQuantity > 0) return true;
-                return false;
+            // 2) Yetkazilganlar (deliveredItems)
+            const allDelivered = history.flatMap(hist =>
+                (hist.deliveredItems || []).map(di => ({
+                    productId: di.productId,
+                    _id: di._id,
+                    productName: di.productName,
+                    deliveredQuantity: di.deliveredQuantity,
+                    date: hist.date,
+                    discountedPrice: di.discountedPrice,
+                    size: di.size,
+                }))
+            );
+
+            // 🔹 3) Umumiy hisob (faqat productName bo‘yicha)
+            const overallMap = {};
+            allOrders.forEach(order => {
+                if (!overallMap[order.productName]) {
+                    overallMap[order.productName] = {
+                        ordered: 0,
+                        delivered: 0,
+                        productId: order.productId,  // 🔹 shu yerdan olish
+                        _id: order._id,
+                        discountedPrice: order.discountedPrice,
+                        size: order.size,
+                    };
+                }
+                overallMap[order.productName].ordered += order.quantity;
             });
 
-        setDeliveryItems(remainingItems);
+            // 🔹 Yetkazilganlar
+            allDelivered.forEach(del => {
+                if (!overallMap[del.productName]) {
+                    overallMap[del.productName] = {
+                        ordered: 0,
+                        delivered: 0,
+                        productId: del.productId,  // 🔹 agar buyurtmada bo‘lmasa, bu yerdan olish
+                        _id: del._id,
+                        discountedPrice: del.discountedPrice,
+                        size: del.size,
+                    };
+                }
+                overallMap[del.productName].delivered += del.deliveredQuantity;
+            });
+
+            const overallResult = Object.entries(overallMap).map(([productName, data]) => ({
+                _id: data._id,   // 🔹 natijaga qo‘shildi
+                productName,
+                productId: data.productId,   // 🔹 natijaga qo‘shildi
+                ordered: data.ordered,
+                delivered: data.delivered,
+                discountedPrice: data.discountedPrice,
+                size: data.size,
+                remaining: Math.max(0, data.ordered - data.delivered)
+            }));
+
+            // 🔹 4) Sana bo‘yicha hisob
+            const dateWiseResult = history.map(hist => {
+                const items = (hist.items || []).map(item => {
+                    // shu mahsulot uchun yetkazilganlarni topamiz
+                    const delivered = (hist.deliveredItems || [])
+                        .filter(di => di.productId === item.productId)
+                        .reduce((sum, di) => sum + (di.deliveredQuantity || 0), 0);
+
+                    return {
+                        _id: item._id,
+                        productName: item.productName,
+                        productId: item._id,
+                        ordered: item.quantity,
+                        delivered,
+                        remaining: Math.max(0, item.quantity - delivered),
+                        size: item.size,
+                        discountedPrice: item.discountedPrice,
+                    };
+                });
+
+                return {
+                    date: hist.date,
+                    items
+                };
+            });
+
+            return { dateWiseResult, overallResult };
+        };
+        const groupedItems = calculateDeliveries(sale.history)
+
+        setDeliveryItems(groupedItems.overallResult.filter(item => (item.remaining || 0) > 0));
         setModalState(prev => ({ ...prev, isDeliveryModalOpen: true, activeSaleId: saleId }));
     }, [salesData]);
 
@@ -430,17 +453,87 @@ const SalesInvoiceDashboard = () => {
                                     Savdolar
                                 </div>
                             </th>
-
+                            <th className="hip-th" scope="col">
+                                <div className="hip-header-content">
+                                    <TrendingUp className="hip-icon-sm" aria-hidden="true" />
+                                    Ko‘rsatkich
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {isLoading ? (
                             <tr>
-                                <td colSpan="5" className="hip-td">Yuklanmoqda...</td>
+                                <td colSpan="10" className="loading-hip-td">
+                                    <div className="loading-container">
+                                        {/* Loading Spinner */}
+                                        <div className="loading-spinner-wrapper">
+                                            <div className="loading-spinner"></div>
+                                            <div className="loading-inner-circle"></div>
+                                        </div>
+
+                                        {/* Loading dots animation */}
+                                        <div className="loading-dots">
+                                            <div className="loading-dot loading-dot-1"></div>
+                                            <div className="loading-dot loading-dot-2"></div>
+                                            <div className="loading-dot loading-dot-3"></div>
+                                        </div>
+
+                                        {/* Loading text with animation */}
+                                        <div>
+                                            <p className="loading-text">Ma'lumotlar yuklanmoqda</p>
+                                            <div className="loading-text-dots">
+                                                <span className="loading-text-dot"></span>
+                                                <span className="loading-text-dot"></span>
+                                                <span className="loading-text-dot"></span>
+                                            </div>
+                                        </div>
+
+                                        {/* Progress bar animation */}
+                                        <div className="loading-progress">
+                                            <div className="loading-progress-bar">
+                                                <div className="loading-progress-shine"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         ) : salesData.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="hip-td">Ma'lumotlar topilmadi.</td>
+                                <td colSpan="10" className="hip-td">
+                                    <div className="empty-state-container">
+                                        {/* Empty state illustration */}
+                                        <div className="empty-state-icon-wrapper">
+                                            <User className="empty-state-icon" />
+                                            <div className="pulse-ring pulse-ring-1"></div>
+                                            <div className="pulse-ring pulse-ring-2"></div>
+                                        </div>
+
+                                        {/* No data message */}
+                                        <div className="empty-state-content">
+                                            <h3 className="empty-state-title">Mijozlar topilmadi</h3>
+                                            <p className="empty-state-description">
+                                                Hozircha ro'yxatda mijozlar mavjud emas.
+                                                Yangi mijozlar qo'shilgandan so'ng ular shu yerda ko'rinadi.
+                                            </p>
+                                        </div>
+
+                                        {/* Search suggestion */}
+                                        <div className="empty-state-suggestion">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                            <span>Boshqa filtrlar bilan qidiring</span>
+                                        </div>
+
+                                        {/* Floating animation elements */}
+                                        <div className="floating-elements">
+                                            <div className="floating-dot floating-dot-1"></div>
+                                            <div className="floating-dot floating-dot-2"></div>
+                                            <div className="floating-dot floating-dot-3"></div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         ) : (
                             salesData.map((customer) => {
@@ -567,13 +660,19 @@ const SalesInvoiceDashboard = () => {
                                                     <span className="hip-history-count">{customer.totalUndelivered} <TbTruckDelivery style={{ fontSize: "16px", marginLeft: "15px" }} /></span>
                                                 </div>
                                             </td>
-
+                                            <td className="hip-td">
+                                                <div className="hip-td-box-chart">
+                                                    <Link className="invoice-btn-Vsc-chart" to={`/customer/${customer._id}`}>
+                                                        <LuChartColumnIncreasing />
+                                                    </Link>
+                                                </div>
+                                            </td>
                                         </tr>
                                         {expandedRows.has(customer._id) && customer.history && (
                                             <>
                                                 {customer.history.map((historyItem, inx) => (
                                                     <tr key={inx} className="hip-history-row">
-                                                        <td colSpan="8" className="hip-history-td">
+                                                        <td colSpan="9" className="hip-history-td">
                                                             <div className="hip-history-content">
                                                                 <div className="hip-history-header">
                                                                     <div>
@@ -655,7 +754,7 @@ const SalesInvoiceDashboard = () => {
                                                     </tr>
                                                 ))}
                                                 <tr className="hip-history-footer">
-                                                    <td colSpan="8" className="hip-history-td">
+                                                    <td colSpan="9" className="hip-history-td">
                                                         <div className="hip-footer-content">
                                                             <span className="hip-label">Barcha savdolar jami:</span>
                                                             <span className="hip-value hip-text-bold">{formatCurrency(totalHistoryAmount)}</span>
