@@ -1,21 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { Select, Modal, Button, Input } from 'antd';
+import { Select, Modal, Button, Input, InputNumber } from "antd";
 import { toast } from 'react-toastify';
 import { usePayDebtMutation } from '../../../../context/cartSaleApi';
 
+
 const { Option } = Select;
-
-// Function to format number with thousand separators
-const formatNumber = (value) => {
-    if (!value) return '';
-    const number = parseFloat(value.replace(/\D/g, '')); // Remove non-digits
-    return number.toLocaleString('en-US', { minimumFractionDigits: 0 });
-};
-
-// Function to parse formatted number back to raw number
-const parseNumber = (value) => {
-    return value.replace(/,/g, ''); // Remove commas
-};
 
 const IsPaymentModal = ({
     modalState,
@@ -31,10 +20,9 @@ const IsPaymentModal = ({
     const [payDebt, { isLoading }] = usePayDebtMutation();
     const [paymentDescription, setPaymentDescription] = useState('');
     const paidBy = localStorage.getItem("admin_fullname");
-
+    console.log(typeof paymentAmount);
     const processPayment = useCallback(async () => {
-        const rawAmount = parseNumber(paymentAmount); // Get raw number
-        const amount = parseFloat(rawAmount);
+        const amount = paymentAmount;
         if (!amount || amount <= 0) {
             toast.error("Iltimos, to'g'ri to'lov miqdorini kiriting");
             return;
@@ -75,6 +63,21 @@ const IsPaymentModal = ({
         setPaymentDescription('');
     }, [paymentAmount, paymentDescription, paidBy, paymentType, payDebt, salesData, currentSale]);
 
+
+    const formatter = (val) => {
+        if (!val && val !== 0) return "";
+        const [start, end] = `${val}`.split(".") || [];
+        const v = `${start}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return `${end ? `${v}.${end}` : `${v}`}`;
+    };
+
+
+    const parser = (val) => val?.replace(/\$\s?|(,*)/g, "");
+
+    const onChange = (val) => {
+        setPaymentAmount(val);
+    };
+
     return (
         <Modal
             open={modalState.isPaymentModalOpen}
@@ -88,18 +91,15 @@ const IsPaymentModal = ({
         >
             {currentSale ? (
                 <div>
-                    <Input
-                        type="text"
-                        placeholder="To'lov miqdori"
-                        value={formatNumber(paymentAmount)} // Display formatted number
-                        onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, ''); // Allow only digits
-                            setPaymentAmount(val); // Store raw number
-                        }}
-                        style={{ marginBottom: 10 }}
+                    <InputNumber
+                        value={paymentAmount}
+                        formatter={formatter}
+                        parser={parser}
+                        onChange={onChange}
+                        style={{ width: "100%" }}
                     />
                     <Select
-                        style={{ width: '100%', marginBottom: 10 }}
+                        style={{ width: '100%', margin: "10px 0" }}
                         value={paymentType}
                         onChange={setPaymentType}
                         placeholder="To'lov turini tanlang"
@@ -118,7 +118,7 @@ const IsPaymentModal = ({
                         block
                         onClick={processPayment}
                         loading={isLoading}
-                        disabled={!paymentAmount || parseFloat(parseNumber(paymentAmount)) <= 0 || !paidBy}
+                        disabled={!paymentAmount || !paidBy}
                     >
                         To'lovni amalga oshirish
                     </Button>

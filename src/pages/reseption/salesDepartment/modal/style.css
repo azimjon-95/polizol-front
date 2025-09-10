@@ -185,6 +185,11 @@ input[type=number] {
     padding: 10px 15px 2px 15px;
 }
 
+/* InputNumber ichidagi tepaga-pastga tugmalarni olib tashlash */
+.ant-input-number-handler-wrap {
+    display: none !important;
+}
+
 .invoice-btn.invoice-btn-success {
     display: flex;
     align-items: center;
