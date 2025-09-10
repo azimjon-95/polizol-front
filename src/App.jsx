@@ -25,7 +25,6 @@ const App = () => {
   const defaultRoute = rolePaths[authRole] || "/dashboard"; // fallback
 
   return (
-    
     <Routes>
       <Route element={<Layout />}>
         {routes.map(({ path, element, private: isPrivate, role }) => (

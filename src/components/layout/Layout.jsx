@@ -9,12 +9,12 @@ const NON_SIDEBAR_ROLES = [
   "sotuvchi eksport",
   "sotuvchi menejir",
   "polizol ish boshqaruvchi",
-  "okisleniya ish boshqaruvchi",
+  "Okisleniya ish boshqaruvchi",
   "rubiroid ish boshqaruvchi",
 ];
 const LOCATION_ROLES = [
   "polizol ish boshqaruvchi",
-  "okisleniya ish boshqaruvchi",
+  "Okisleniya ish boshqaruvchi",
   "rubiroid ish boshqaruvchi",
 ];
 

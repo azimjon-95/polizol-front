@@ -15,7 +15,7 @@ import SalaryManagement from "../pages/reseption/salary/SalaryManagement";
 export const rolePaths = {
   "polizol ish boshqaruvchi": "/attendance",
   "rubiroid ish boshqaruvchi": "/attendance",
-  "okisleniya ish boshqaruvchi": "/attendance",
+  "Okisleniya ish boshqaruvchi": "/attendance",
 
   direktor: "/dashboard",
   buxgalteriya: "/dashboard",
@@ -95,7 +95,7 @@ export const routes = [
       "buxgalteriya",
       "polizol ish boshqaruvchi",
       "rubiroid ish boshqaruvchi",
-      "okisleniya ish boshqaruvchi",
+      "Okisleniya ish boshqaruvchi",
     ],
     private: true,
   },

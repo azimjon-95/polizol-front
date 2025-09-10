@@ -53,7 +53,7 @@ const DEPARTMENT_OPTIONS = [
 ];
 const LOCATION_ROLES = [
   "polizol ish boshqaruvchi",
-  "okisleniya ish boshqaruvchi",
+  "Okisleniya ish boshqaruvchi",
   "rubiroid ish boshqaruvchi",
 ];
 
@@ -62,11 +62,14 @@ function Attendance() {
   const [markedToday, setMarkedToday] = useState({});
   const [filterUnit, setFilterUnit] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs().format("YYYY-MM-DD")
+  );
   const [loadingStates, setLoadingStates] = useState({}); // New state for button-specific loading
   const [markAttendance] = useMarkAttendanceMutation();
   const [deleteAttendance] = useDeleteAttendanceMutation();
-  const { data: workers, isLoading: isWorkersLoading } = useGetProductionEmployeesQuery();
+  const { data: workers, isLoading: isWorkersLoading } =
+    useGetProductionEmployeesQuery();
   const role = localStorage.getItem("role");
   const isLocationRole = role && LOCATION_ROLES.includes(role);
   const navigate = useNavigate();
@@ -81,7 +84,9 @@ function Attendance() {
       const newMarkedToday = {};
       const newAttendanceData = {};
       existingRecords.forEach((r) => {
-        const key = r.department ? `${r.employee._id}_${r.department}` : r.employee._id;
+        const key = r.department
+          ? `${r.employee._id}_${r.department}`
+          : r.employee._id;
         newMarkedToday[key] = true;
         newAttendanceData[key] = {
           department: r.department,
@@ -136,7 +141,7 @@ function Attendance() {
           department: department ?? record.department ?? filterUnit,
           cleaning: record.cleaning,
         }).unwrap();
-        refetch()
+        refetch();
 
         toast.success("Davomat saqlandi", { autoClose: 3000 });
         setMarkedToday((prev) => ({ ...prev, [key]: true }));
@@ -157,7 +162,9 @@ function Attendance() {
 
   const handleDelete = useCallback(
     async (employeeId, department) => {
-      const existingRecord = existingRecords?.find((r) => r.employee._id === employeeId)
+      const existingRecord = existingRecords?.find(
+        (r) => r.employee._id === employeeId
+      );
 
       if (!existingRecord) {
         toast.warning("O‘chirish uchun davomat topilmadi", { autoClose: 3000 });
@@ -170,9 +177,8 @@ function Attendance() {
           attendanceId: existingRecord._id,
           unit: department ?? existingRecord.department ?? filterUnit,
         }).unwrap();
-        refetch()
+        refetch();
         toast.success("Davomat o‘chirildi", { autoClose: 3000 });
-
       } catch (err) {
         console.error(err);
         toast.error(err?.data?.message || "O‘chirishda xatolik yuz berdi", {
@@ -188,11 +194,14 @@ function Attendance() {
     [attendanceData, deleteAttendance, filterUnit, existingRecords]
   );
 
-
   const filteredWorkers = useMemo(() => {
     if (!workers?.innerData) return [];
     return workers.innerData
-      .filter((w) => filterUnit === "all" || w.unit?.toLowerCase().includes(filterUnit?.toLowerCase()))
+      .filter(
+        (w) =>
+          filterUnit === "all" ||
+          w.unit?.toLowerCase().includes(filterUnit?.toLowerCase())
+      )
       .filter((w) => {
         if (!searchTerm.trim()) return true;
         const fio = [w.firstName, w.lastName, w.middleName]
@@ -212,16 +221,17 @@ function Attendance() {
         (i) => i.unit === department
       );
       const key = `${record._id}_${department}`;
-      const isDisabled = Boolean(existingRecordForUnit) || loadingStates[`delete_${key}`];
+      const isDisabled =
+        Boolean(existingRecordForUnit) || loadingStates[`delete_${key}`];
 
       return (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-
           <Select
             placeholder="Foiz tanlang"
             style={{ width: 120 }}
             value={
-              existingRecordForUnit?.percentage ?? attendanceData[key]?.percentage
+              existingRecordForUnit?.percentage ??
+              attendanceData[key]?.percentage
             }
             onChange={(value) => handleChange(key, "percentage", value)}
             disabled={isDisabled}
@@ -285,11 +295,15 @@ function Attendance() {
 
       return isMarked && !isLocationRole ? (
         <Popconfirm
-          title={`${DEPARTMENT_OPTIONS.find((opt) => opt.value === department)?.label} bo‘limi davomatini o‘chirishni xohlaysizmi?`}
+          title={`${
+            DEPARTMENT_OPTIONS.find((opt) => opt.value === department)?.label
+          } bo‘limi davomatini o‘chirishni xohlaysizmi?`}
           onConfirm={() => handleDelete(record._id, department)}
           okText="Ha"
           cancelText="Yo‘q"
-          disabled={loadingStates[`save_${key}`] || loadingStates[`delete_${key}`]}
+          disabled={
+            loadingStates[`save_${key}`] || loadingStates[`delete_${key}`]
+          }
         >
           <Button
             type="primary"
@@ -326,26 +340,32 @@ function Attendance() {
           if (record.unit?.toLowerCase() === "avto kara") {
             return (
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {DEPARTMENT_OPTIONS.map((dept) => renderAvtoKaraSelect(record, dept.value))}
+                {DEPARTMENT_OPTIONS.map((dept) =>
+                  renderAvtoKaraSelect(record, dept.value)
+                )}
               </div>
             );
           }
 
           const isTransport = record.unit === "transport";
           const isOkisleniya = record.unit === "Okisleniya";
-          const isDisabled = (!isTransport && markedToday[record._id]) || loadingStates[`delete_${record._id}`];
+          const isDisabled =
+            (!isTransport && markedToday[record._id]) ||
+            loadingStates[`delete_${record._id}`];
           const options = isTransport
             ? PERCENTAGE_OPTIONS.transport
             : isOkisleniya
-              ? PERCENTAGE_OPTIONS.Okisleniya
-              : PERCENTAGE_OPTIONS.default;
+            ? PERCENTAGE_OPTIONS.Okisleniya
+            : PERCENTAGE_OPTIONS.default;
 
           return (
             <Select
               placeholder="Foiz tanlang"
               style={{ width: 120 }}
               value={attendanceData[record._id]?.percentage}
-              onChange={(value) => handleChange(record._id, "percentage", value)}
+              onChange={(value) =>
+                handleChange(record._id, "percentage", value)
+              }
               disabled={isDisabled}
               allowClear
               size="small"
@@ -362,11 +382,14 @@ function Attendance() {
       {
         title: "Shanbalik",
         render: (_, record) => {
-          const isDisabled = markedToday[record._id] || loadingStates[`delete_${record._id}`];
+          const isDisabled =
+            markedToday[record._id] || loadingStates[`delete_${record._id}`];
           return (
             <Checkbox
               checked={attendanceData[record._id]?.cleaning ?? false}
-              onChange={(e) => handleChange(record._id, "cleaning", e.target.checked)}
+              onChange={(e) =>
+                handleChange(record._id, "cleaning", e.target.checked)
+              }
               disabled={isDisabled}
             />
           );
@@ -378,12 +401,16 @@ function Attendance() {
           if (record.unit?.toLowerCase() === "avto kara") {
             return (
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {DEPARTMENT_OPTIONS.map((dept) => renderAvtoKaraActions(record, dept.value))}
+                {DEPARTMENT_OPTIONS.map((dept) =>
+                  renderAvtoKaraActions(record, dept.value)
+                )}
               </div>
             );
           }
 
-          const isDisabled = (record.unit !== "transport" && markedToday[record._id]) || loadingStates[`delete_${record._id}`];
+          const isDisabled =
+            (record.unit !== "transport" && markedToday[record._id]) ||
+            loadingStates[`delete_${record._id}`];
 
           return (
             <div style={{ display: "flex", gap: 8 }}>
@@ -396,7 +423,9 @@ function Attendance() {
                   loading={loadingStates[`save_${record._id}`]}
                   disabled={isDisabled}
                   size="small"
-                  gambar >Saqlash
+                  gambar
+                >
+                  Saqlash
                 </Button>
               )}
             </div>
@@ -406,41 +435,52 @@ function Attendance() {
       ...(isLocationRole
         ? []
         : [
-          {
-            title: "O‘chirish",
-            render: (i, record) => {
-              if (record.unit?.toLowerCase() === "avto kara") {
-                return (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    {DEPARTMENT_OPTIONS.map((dept) => renderAvtoKaraDelete(record, dept.value))}
-                  </div>
-                );
-              }
+            {
+              title: "O‘chirish",
+              render: (i, record) => {
+                if (record.unit?.toLowerCase() === "avto kara") {
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 4,
+                      }}
+                    >
+                      {DEPARTMENT_OPTIONS.map((dept) =>
+                        renderAvtoKaraDelete(record, dept.value)
+                      )}
+                    </div>
+                  );
+                }
 
-              return markedToday[record._id] ? (
-                <Popconfirm
-                  title="Davomatni o‘chirishni xohlaysizmi?"
-                  onConfirm={() => handleDelete(record._id, "")}
-                  okText="Ha"
-                  cancelText="Yo‘q"
-                  disabled={loadingStates[`save_${record._id}`] || loadingStates[`delete_${record._id}`]}
-                >
-                  <Button
-                    type="primary"
-                    danger
-                    size="small"
-                    loading={loadingStates[`delete_${record._id}`]}
-                    disabled={loadingStates[`save_${record._id}`]}
+                return markedToday[record._id] ? (
+                  <Popconfirm
+                    title="Davomatni o‘chirishni xohlaysizmi?"
+                    onConfirm={() => handleDelete(record._id, "")}
+                    okText="Ha"
+                    cancelText="Yo‘q"
+                    disabled={
+                      loadingStates[`save_${record._id}`] ||
+                      loadingStates[`delete_${record._id}`]
+                    }
                   >
-                    O‘chirish
-                  </Button>
-                </Popconfirm>
-              ) : (
-                <i style={{ fontSize: "13px", color: "grey" }}>Mavjud emas</i>
-              );
+                    <Button
+                      type="primary"
+                      danger
+                      size="small"
+                      loading={loadingStates[`delete_${record._id}`]}
+                      disabled={loadingStates[`save_${record._id}`]}
+                    >
+                      O‘chirish
+                    </Button>
+                  </Popconfirm>
+                ) : (
+                  <i style={{ fontSize: "13px", color: "grey" }}>Mavjud emas</i>
+                );
+              },
             },
-          },
-        ]),
+          ]),
     ],
     [
       attendanceData,
@@ -456,8 +496,6 @@ function Attendance() {
       renderAvtoKaraDelete,
     ]
   );
-
-
 
   const departmentColumn = useMemo(
     () => ({
@@ -476,16 +514,17 @@ function Attendance() {
         }
 
         // Find the existing record for this employee on the selected date
-        const existingRecord = existingRecords?.find((r) => r.employee._id === record._id && r.date === selectedDate
+        const existingRecord = existingRecords?.find(
+          (r) => r.employee._id === record._id && r.date === selectedDate
         );
 
         // Prioritize department from server (existingRecords), then attendanceData, then filterUnit
         const defaultDepartment =
           existingRecord?.department ??
-          (filterUnit !== "all" && DEPARTMENT_OPTIONS.some((opt) => opt.value === filterUnit)
+          (filterUnit !== "all" &&
+          DEPARTMENT_OPTIONS.some((opt) => opt.value === filterUnit)
             ? filterUnit
             : attendanceData[record._id]?.department);
-
 
         const isDisabled =
           (record.unit !== "transport" && markedToday[record._id]) ||
@@ -510,12 +549,24 @@ function Attendance() {
         );
       },
     }),
-    [attendanceData, filterUnit, handleChange, markedToday, loadingStates, existingRecords, selectedDate]
+    [
+      attendanceData,
+      filterUnit,
+      handleChange,
+      markedToday,
+      loadingStates,
+      existingRecords,
+      selectedDate,
+    ]
   );
   const columns = useMemo(
     () =>
       filterUnit === "all"
-        ? [...baseColumns.slice(0, 2), departmentColumn, ...baseColumns.slice(2)]
+        ? [
+            ...baseColumns.slice(0, 2),
+            departmentColumn,
+            ...baseColumns.slice(2),
+          ]
         : baseColumns,
     [baseColumns, departmentColumn, filterUnit]
   );
@@ -617,13 +668,11 @@ function Attendance() {
           </div>
           {/* </div> */}
         </TabPane>
-        {
-          !isLocationRole && (
-            <TabPane tab="Kunlik xodimlar" key="3">
-              <DailyWorkers />
-            </TabPane>
-          )
-        }
+        {!isLocationRole && (
+          <TabPane tab="Kunlik xodimlar" key="3">
+            <DailyWorkers />
+          </TabPane>
+        )}
         <TabPane tab="Davomat tarixi" key="2">
           <AttendanceHistory />
         </TabPane>
@@ -633,7 +682,3 @@ function Attendance() {
 }
 
 export default Attendance;
-
-
-
-
