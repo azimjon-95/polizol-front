@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, Typography, Divider, Input, Tag, Table, Modal, Button, Select, Form } from 'antd';
 import { useSelector } from "react-redux";
+import { MdOutlineConfirmationNumber } from "react-icons/md";
 import {
     LuPackagePlus, LuBuilding2, LuPhone, LuCalendar, LuDollarSign, LuCreditCard, LuTruck,
     LuUsers, LuFileText, LuChevronRight, LuChevronDown, LuPackage, LuWeight, LuBanknote, LuFilter, LuWallet
@@ -13,6 +14,7 @@ import { PhoneNumberFormat } from '../../hook/NumberFormat';
 import './style/incom.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -359,6 +361,18 @@ const IncomeListModal = () => {
                         <Option value="debt"><LuBanknote className="nns-filter-icon" /> Qarzli</Option>
                         <Option value="paid"><LuCreditCard className="nns-filter-icon" /> To'langan</Option>
                     </Select>
+
+                    <Link style={{
+                        color: '#002bac',
+                        fontSize: '20px',
+                        border: '1px solid #002bac',
+                        padding: '6px 5px 0px 5px',
+                        borderRadius: '6px',
+                        cursor: 'pointer'
+
+                    }} to="/firm">
+                        <MdOutlineConfirmationNumber />
+                    </Link>
                 </div>
             </div>
 
