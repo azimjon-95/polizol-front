@@ -56,12 +56,6 @@ const App = () => {
 
 export default App;
 
-
-
-
-
-
-
 // import React from "react";
 // import { Routes, Route, Navigate } from "react-router-dom";
 // import PrivateRoute from "./auth/PrivateRoute";
@@ -114,4 +108,3 @@ export default App;
 // };
 
 // export default App;
-
