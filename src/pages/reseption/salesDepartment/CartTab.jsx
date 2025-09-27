@@ -2,12 +2,8 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Minus, Plus, FileText, Factory } from 'lucide-react';
 import { Select } from 'antd';
-import {
-    useCreateCartSaleMutation,
-    useGetCompanysQuery,
-} from '../../../context/cartSaleApi';
+import { useCreateCartSaleMutation, useGetCompanysQuery, } from '../../../context/cartSaleApi';
 import { useGetSalesEmployeesQuery } from '../../../context/planSalesApi';
-import { useGetFactoriesQuery } from '../../../context/clinicApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './style/cart.css';
@@ -29,12 +25,10 @@ const getWidthByLength = (length) => {
 const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromCart, onCompleteSale }) => {
     const navigate = useNavigate();
     const { data: salesEmployees = { innerData: [] } } = useGetSalesEmployeesQuery();
-    const { data: factories = { innerData: [] } } = useGetFactoriesQuery();
     const { data: customers = { innerData: [] } } = useGetCompanysQuery();
     const [createCartSale, { isLoading: isCreatingCartSale }] = useCreateCartSaleMutation();
 
-    const initialNdsRate = factories?.innerData?.[0]?.nds || 12;
-    const [ndsRate, setNdsRate] = useState(initialNdsRate);
+    const [ndsRate, setNdsRate] = useState(0);
     const [discountReason, setDiscountReason] = useState(
         "Mijoz talabiga ko‘ra, uni yo‘qotmaslik uchun chegirma berildi"
     );
