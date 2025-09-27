@@ -12,6 +12,7 @@ import Atendance from "../pages/attendance/Atendance";
 import CatigoryManagement from "../pages/admin/setting/CategoryManagement";
 import Salary from "../pages/salary/Salary";
 import SalaryManagement from "../pages/reseption/salary/SalaryManagement";
+import FirmManagement from "../pages/materials/firms/Firms";
 
 export const rolePaths = {
   "polizol ish boshqaruvchi": "/attendance",
@@ -116,6 +117,12 @@ export const routes = [
     path: "/customer/:id",
     element: <CustomerStatsPage />,
     role: ["direktor", "buxgalteriya", "menejir", "sotuvchi", "sotuvchi eksport", "sotuvchi menejir"],
+    private: true,
+  },
+  {
+    path: "/firm",
+    element: <FirmManagement />,
+    role: ["direktor", "buxgalteriya", "menejir"],
     private: true,
   },
 ];

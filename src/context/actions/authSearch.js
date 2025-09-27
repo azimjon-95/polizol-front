@@ -24,3 +24,6 @@ const searchSlice = createSlice({
 
 export const { toggleSearchPanel, setSearchQuery, clearSearchQuery } = searchSlice.actions;
 export default searchSlice.reducer;
+
+
+

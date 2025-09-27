@@ -4,11 +4,8 @@ import {
     useGetCustomerStatsQuery,
     useUpdateCustomerMutation,
 } from "../../../../context/customerApi";
-import { LeftOutlined } from "@ant-design/icons";
 
 import {
-    LineChart,
-    Line,
     XAxis,
     YAxis,
     Tooltip,
@@ -28,9 +25,7 @@ const CustomerStatsPage = () => {
     const [formData, setFormData] = useState({});
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-    // const data?.innerData = mewData?.innerData || [];
-    console.log(data?.innerData);
-    // Loading state
+
     if (isLoading) {
         return (
             <div className="cs-loading-wrapper">
@@ -85,7 +80,8 @@ const CustomerStatsPage = () => {
             type: customer?.type || '',
             phone: customer?.phone || '',
             companyAddress: customer?.companyAddress || '',
-            company: customer?.company || ''
+            company: customer?.company || '',
+            balans: customer?.balans || 0
         });
     };
 
@@ -230,9 +226,6 @@ const CustomerStatsPage = () => {
                                             <span className="cs-payment-type">
                                                 {payment.paymentType?.toUpperCase() || 'NAQD'}
                                             </span>
-                                            {/* <span className="cs-payment-by">
-                                                {payment.paidBy || 'Noma\'lum'}
-                                            </span> */}
                                         </div>
                                     </div>
                                 </div>
@@ -323,6 +316,17 @@ const CustomerStatsPage = () => {
                                 />
                             </div>
 
+                            <div className="cs-form-group">
+                                <label className="cs-form-label">💵 Balans</label>
+                                <input
+                                    type="number"
+                                    className="cs-form-input"
+                                    value={formData.balans || 0}
+                                    onChange={(e) => handleFormChange('balans', Number(e.target.value))}
+                                    placeholder="Balansni kiriting"
+                                />
+                            </div>
+
                             <div className="cs-form-actions">
                                 <button
                                     type="button"
@@ -355,3 +359,13 @@ const CustomerStatsPage = () => {
 };
 
 export default CustomerStatsPage;
+
+
+
+
+
+
+
+
+
+
