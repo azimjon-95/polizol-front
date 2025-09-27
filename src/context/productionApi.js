@@ -58,9 +58,8 @@ export const ProductionSystemApi = api.injectEndpoints({
     // router.get("/production/inventory",
     getInventory: builder.query({
       query: ({ startDate, endDate }) => ({
-        url: `/inventory?startDate=${
-          startDate || new Date().toISOString().split("T")[0]
-        }&endDate=${endDate || new Date().toISOString().split("T")[0]}`,
+        url: `/inventory?startDate=${startDate || new Date().toISOString().split("T")[0]
+          }&endDate=${endDate || new Date().toISOString().split("T")[0]}`,
         method: "GET",
       }),
       providesTags: ["Inventory"], // For cache invalidation
@@ -86,6 +85,19 @@ export const ProductionSystemApi = api.injectEndpoints({
       transformResponse: (response) => response.innerData, // Extract innerData from response
       invalidatesTags: ["FinishedProducts"], // Invalidate related caches
     }),
+
+
+    // Eng ko‘p sotilgan mahsulotlar (oy bo‘yicha)
+    getTopProductsByMonth: builder.query({
+      query: (monthYear) => {
+        // agar monthYear bo‘sh bo‘lsa (undefined) => default hozirgi oy
+        return {
+          url: `/top-products${monthYear ? `?monthYear=${monthYear}` : ""}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["TopProducts"],
+    }),
   }),
 });
 
@@ -99,4 +111,5 @@ export const {
   useProductionForSalesBN5Mutation,
   useUpdateFinishedMutation,
   useDeleteFinishedMutation,
+  useGetTopProductsByMonthQuery
 } = ProductionSystemApi;
