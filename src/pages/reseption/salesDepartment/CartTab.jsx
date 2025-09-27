@@ -573,14 +573,16 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
                                 <div className="card-summary-row">
                                     <span>Mijoz tanlang:</span>
                                     <Select
-                                        value={selectedCustomer?._id || (isNewCustomer ? 'new' : undefined)}
+                                        showSearch
+                                        optionFilterProp="children"
+                                        value={selectedCustomer?._id || (isNewCustomer ? "new" : undefined)}
                                         onChange={handleCustomerSelect}
                                         className="card-price-Select"
-                                        style={{ width: '200px', margin: '10px 0' }}
+                                        style={{ width: "200px", margin: "10px 0" }}
                                         placeholder="Tanlang..."
                                         aria-label="Select customer"
                                     >
-                                        {customers.innerData.map((customer) => (
+                                        {customers?.innerData?.map((customer) => (
                                             <Option key={customer._id} value={customer._id}>
                                                 {customer.name}
                                             </Option>
@@ -588,6 +590,7 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
                                         <Option value="new">Yangi mijoz</Option>
                                     </Select>
                                 </div>
+
                                 {isNewCustomer && (
                                     <>
                                         <div className="card-summary-row">
