@@ -9,6 +9,7 @@ import {
   useUpdateFinishedMutation,
   useDeleteFinishedMutation,
 } from "../../context/productionApi";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import BitumProductionSystem from "./bitumProduction/BitumProductionSystem";
 import InventoryTable from "./bitumProduction/InventoryTable";
 import ProductionHistoryTable from "./productionHistory/ProductionHistoryTable";
@@ -106,20 +107,37 @@ const ProductionSystem = () => {
     }
   };
 
-  const [year, month] = selectedMonth.split(".").map(Number);
-  const startDate = new Date(year, month - 1, 1).toISOString().split("T")[0];
-  const endDate = new Date(year, month, 0).toISOString().split("T")[0];
+  const today = new Date();
+  const defaultStart = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, "0")}.01`;
+  const defaultEnd = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, "0")}.${String(today.getDate()).padStart(2, "0")}`;
 
-  const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value.replace("-", "."));
+  const [startDate, setStartDate] = useState(defaultStart);
+  const [endDate, setEndDate] = useState(defaultEnd);
+
+  const handleStartChange = (e) => {
+    setStartDate(e.target.value);
   };
 
+  const handleEndChange = (e) => {
+    setEndDate(e.target.value);
+  };
   const tabBarExtraContent = (
     <div className="month-filter-container">
       <input
-        type="month"
-        value={selectedMonth.replace(".", "-")}
-        onChange={handleMonthChange}
+        type="text"
+        value={startDate}
+        onChange={handleStartChange}
+        placeholder="YYYY.MM.DD"
+        className="month-filter-input"
+      />
+      <span style={{ margin: "8px 5px 0  5px" }}>
+        <FaArrowRightArrowLeft />
+      </span>
+      <input
+        type="text"
+        value={endDate}
+        onChange={handleEndChange}
+        placeholder="YYYY.MM.DD"
         className="month-filter-input"
       />
     </div>
@@ -316,3 +334,5 @@ const ProductionSystem = () => {
 };
 
 export default ProductionSystem;
+
+

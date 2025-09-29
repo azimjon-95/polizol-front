@@ -29,7 +29,7 @@ const Bn5ProcessDialog = ({
     electricity: "200",
     gasAmount: "200",
     notes: "",
-    extra: "271000",
+    extra: "0",
     kraftPaper: "20",
     sellingPrice: "6500",
     qop: "87",
@@ -96,7 +96,7 @@ const Bn5ProcessDialog = ({
     const gas = parseFloat(currentBn5Process.gasAmount) || 0;
     const kraft = parseFloat(currentBn5Process.kraftPaper) || 0;
     const qop = parseFloat(currentBn5Process.qop) || 0;
-    const extra = parseFloat(currentBn5Process.extra) || 271000;
+    const extra = parseFloat(currentBn5Process.extra) || 0;
 
     const bn5Price = material?.find((m) => m.category === "BN-5")?.price || 0;
     const melPrice = material?.find((m) => m.category === "Mel")?.price || 0;
@@ -128,14 +128,14 @@ const Bn5ProcessDialog = ({
     let pricePerKg = 0;
     if (totalWeight > 0) {
       const costPerKg = total / totalWeight;
-      const factor = 4.798178632431936; // Scaling factor to achieve 4105 for default values
+      const factor = 1.17; // Scaling factor to achieve 4105 for default values
       pricePerKg = costPerKg * factor;
     }
 
     setCurrentBn5Process((prev) => ({
       ...prev,
       price: Math.round(pricePerKg - 9),
-      extra: prev.extra || "271000",
+      extra: prev.extra,
     }));
   }, [
     currentBn5Process.bn5Amount,
@@ -203,7 +203,7 @@ const Bn5ProcessDialog = ({
           gasAmount: parseFloat(currentBn5Process.gasAmount) || 0,
           kraftPaper: parseFloat(currentBn5Process.kraftPaper) || 0,
           qop: parseFloat(currentBn5Process.qop) || 0,
-          extra: parseFloat(currentBn5Process.extra) || 271000,
+          extra: parseFloat(currentBn5Process.extra) || 0,
           price: parseFloat(currentBn5Process.price) || 0,
           sellingPrice: parseFloat(currentBn5Process.sellingPrice) || 0,
         },
@@ -228,12 +228,12 @@ const Bn5ProcessDialog = ({
     } catch (error) {
       toast.error(
         error?.data?.message ||
-          "Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring!"
+        "Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring!"
       );
       console.error(error);
     } finally {
       setIsLoading(false);
-    } 
+    }
   };
 
   const renderInputFields = () => {
@@ -262,7 +262,7 @@ const Bn5ProcessDialog = ({
       {
         label: "Boshqa xarajatlar",
         key: "extra",
-        placeholder: "271000",
+        placeholder: "0",
       },
       { label: "Kraf qog‘oz (kg)", key: "kraftPaper", placeholder: "20" },
       { label: "BN-5 Qop (dona)", key: "qop", placeholder: "87" },
@@ -352,9 +352,8 @@ const Bn5ProcessDialog = ({
               {Object.keys(packagingConfig).map((type) => (
                 <button
                   key={type}
-                  className={`bitum-action-button ${
-                    packagingType === type ? "active" : ""
-                  }`}
+                  className={`bitum-action-button ${packagingType === type ? "active" : ""
+                    }`}
                   onClick={() => {
                     setPackagingType(type);
                     setUnitType(type === "bag" ? "dona" : "kilo");

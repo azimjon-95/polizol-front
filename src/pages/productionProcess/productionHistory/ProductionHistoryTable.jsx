@@ -6,9 +6,7 @@ import './style.css';
 
 const ProductionHistoryTable = ({ startDate, endDate }) => {
     const {
-        data: productionHistory = [],
-        isLoading: historyLoading,
-        error: historyError,
+        data: productionHistory = []
     } = useGetProductionHistoryQuery({ startDate, endDate });
 
     const [merged, setMerged] = useState(false);
@@ -97,7 +95,7 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
             );
 
             // Add batch header
-            excelData.push([`Sana: ${formatDate(batch.date)}`]);
+            excelData.push([`Sana: ${startDate} — ${endDate}`]);
             excelData.push([
                 "Xom ashyo",
                 "Miqdori",
@@ -240,7 +238,11 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                         <thead>
                             <tr>
                                 <td className="lib-date-header" colSpan="8">
-                                    {formatDate(batch.date)}
+                                    {merged ? (
+                                        <p>{startDate} — {endDate}</p>
+                                    ) : (
+                                        formatDate(batch.date)
+                                    )}
                                 </td>
                             </tr>
                             <tr>

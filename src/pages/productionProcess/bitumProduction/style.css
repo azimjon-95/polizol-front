@@ -618,8 +618,10 @@
 .month-filter-input {
     padding: 6px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
+    width: 90px;
+    outline: none;
     background: rgba(255, 255, 255, 0.1);
     color: #333;
 }

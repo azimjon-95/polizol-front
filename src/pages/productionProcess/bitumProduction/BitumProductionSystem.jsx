@@ -6,7 +6,6 @@ import { GiOilDrum } from "react-icons/gi";
 import { TbNeedleThread } from "react-icons/tb";
 import { FaIndustry, FaFlask } from 'react-icons/fa';
 import { useCreateBn5ProductionMutation } from '../../../context/productionApi';
-import { useGetFactoriesQuery } from '../../../context/clinicApi';
 import { Button } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,9 +21,6 @@ const BitumProductionSystem = () => {
   }] = useCreateBn5ProductionMutation();
   const { data: material, refetch, isLoading, isFetching } = useGetFilteredMaterialsQuery();
 
-  const { data } = useGetFactoriesQuery();
-  const factories = data?.innerData[0] || [];
-
 
   const [currentBn3Production, setCurrentBn3Production] = useState({
     id: null,
@@ -34,7 +30,7 @@ const BitumProductionSystem = () => {
     gasAmount: '800',
     temperature: '250',
     electricEnergy: '14.5',
-    boilingHours: '19',
+    boilingHours: '12',
     notes: '',
     electricity: '500',
     price: '',
@@ -92,15 +88,9 @@ const BitumProductionSystem = () => {
 
   // Validate BN-3 production inputs
   const validateBn3Production = () => {
-    const { bn3Amount, gasAmount, boilingHours } = currentBn3Production;
+    const { bn3Amount } = currentBn3Production;
     const bn3 = parseFloat(bn3Amount) || 0;
-    const gas = parseFloat(gasAmount) || 0;
-    const hours = parseFloat(boilingHours) || 0;
 
-    if (!gas || hours !== 19) {
-      toast.error('Gaz miqdorini kiriting va 19 soat qaynaganligini tasdiqlang!');
-      return false;
-    }
     if ((materialObj?.bn3?.quantity || 0) < bn3) {
       toast.error("Omborida yetarli BN-3 yo'q!");
       return false;
@@ -175,7 +165,7 @@ const BitumProductionSystem = () => {
       placeholder: '4500',
     },
     { label: 'Boshqa xarajatlar', key: 'extra', placeholder: '5.850' },
-    { label: 'Qaynash vaqti (soat)', key: 'boilingHours', placeholder: '19' },
+    // { label: 'Qaynash vaqti (soat)', key: 'boilingHours', placeholder: '19' },
     { label: 'BN-5 (1kg narx)', key: 'price', placeholder: '10.000', readOnly: true },
   ];
 
