@@ -9,6 +9,7 @@ import polizol from "../../assets/polizol.jpg";
 import praymer from "../../assets/praymer.png";
 import betumImg from "../../assets/betum.png";
 import stakanBNI from "../../assets/stakanBN.png";
+import bn5 from "../../assets/bn5.png";
 import { useGetFinishedProductsQuery, useUpdateFinishedMutation } from "../../context/productionApi";
 import { capitalizeFirstLetter } from "../../hook/CapitalizeFirstLitter";
 import { NumberFormat } from "../../hook/NumberFormat";
@@ -212,22 +213,32 @@ const StockInventory = () => {
                 ) : productsError ? (
                     <p className="error-text">Xatolik: {productsError.message}</p>
                 ) : filteredProducts?.length > 0 ? (
-                    filteredProducts.map((product) => (
-                        <div key={product._id || product.id} className="product-card-container">
-                            <button
-                                type="primary"
-                                onClick={() => handleShowEditModal(product)}
-                            >
-                                <FiEdit />
-                            </button>
-                            {product.category === "ruberoid" ? (
-                                <div className="product-imagepolizol">
-                                    <img src={ruberoid} alt="Ruberoid" />
+
+                    filteredProducts.map((product, inx) => {
+                        const categoryConfig = {
+                            "BN-5": { img: bn5, className: "product-imagepolizol" },
+                            ruberoid: { img: ruberoid, className: "product-imagepolizol" },
+                            polizol: { img: polizol, className: "product-imagepolizol" },
+                            Praymer: { img: praymer, className: "product-imageBIPRO", extra: `${NumberFormat(product.quantity * 18)} kg` },
+                            Stakan: { img: stakanBNI, className: "product-imagebnStak" },
+                            Qop: { img: betumImg, className: "product-imagebn" },
+                            default: { img: folgizol, className: "product-image" },
+                        };
+
+                        const { img, className, extra } = categoryConfig[product.category] || categoryConfig.default;
+
+                        return (
+                            <div key={inx} className="product-card-container">
+                                <button type="primary" onClick={() => handleShowEditModal(product)}>
+                                    <FiEdit />
+                                </button>
+
+                                <div className={className}>
+                                    <img src={img} alt={product.category} />
+
                                     {product.isReturned && (
                                         <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
+                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>Mijozdan qaytgan</p>
                                             <Button
                                                 type="link"
                                                 onClick={() => handleShowReturnInfo(product)}
@@ -237,11 +248,10 @@ const StockInventory = () => {
                                             </Button>
                                         </div>
                                     )}
+
                                     {product.isDefective && (
                                         <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
+                                            <p style={{ color: "#333", fontWeight: "bold" }}>Brak mahsulot</p>
                                             <Button
                                                 type="link"
                                                 onClick={() => handleShowDefectiveInfo(product)}
@@ -251,204 +261,34 @@ const StockInventory = () => {
                                             </Button>
                                         </div>
                                     )}
+
+                                    {extra && <p className="praymerKgs">{extra}</p>}
                                 </div>
-                            ) : product.category === "polizol" ? (
-                                <div className="product-imagepolizol">
-                                    <img src={polizol} alt="Polizol" />
-                                    {product.isReturned && (
-                                        <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowReturnInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
+
+                                <h3 className="product-name">{capitalizeFirstLetter(product.productName)}</h3>
+                                <p className="product-category">
+                                    📂 Kategoriya: <span>{product.category}</span>
+                                </p>
+
+                                <div className="product-quantity-block">
+                                    {product.category === "Praymer" ? (
+                                        <span className="product-quantity">
+                                            {NumberFormat(product.quantity)} <GiEmptyMetalBucketHandle />
+                                        </span>
+                                    ) : ["Stakan", "Qop", "BN-5"].includes(product.category) ? (
+                                        <span className="product-quantity">{NumberFormat(product.quantity)} kg</span>
+                                    ) : (
+                                        <span className="product-quantity">{NumberFormat(product.quantity)} dona</span>
                                     )}
-                                    {product.isDefective && (
-                                        <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowDefectiveInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : product.category === "Praymer" ? (
-                                <div className="product-imageBIPRO">
-                                    <img src={praymer} alt="Praymer" />
-                                    {product.isReturned && (
-                                        <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowReturnInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                    {product.isDefective && (
-                                        <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowDefectiveInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                    <p className="praymerKgs">
-                                        {NumberFormat(product.quantity * 18)} kg
-                                    </p>
-                                </div>
-                            ) : product.category === "Stakan" ? (
-                                <div className="product-imagebnStak">
-                                    <img src={stakanBNI} alt="Stakan" />
-                                    {product.isReturned && (
-                                        <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowReturnInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                    {product.isDefective && (
-                                        <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowDefectiveInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : product.category === "Qop" ? (
-                                <div className="product-imagebn">
-                                    <img src={betumImg} alt="Bitum" />
-                                    {product.isReturned && (
-                                        <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowReturnInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                    {product.isDefective && (
-                                        <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowDefectiveInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="product-image">
-                                    <img src={folgizol} alt="Folgizol" />
-                                    {product.isReturned && (
-                                        <div className="return-info">
-                                            <p style={{ color: "#d32f2f", fontWeight: "bold" }}>
-                                                Mijozdan qaytgan
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowReturnInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                    {product.isDefective && (
-                                        <div className="defective-info">
-                                            <p style={{ color: "#333", fontWeight: "bold" }}>
-                                                Brak mahsulot
-                                            </p>
-                                            <Button
-                                                type="link"
-                                                onClick={() => handleShowDefectiveInfo(product)}
-                                                style={{ padding: 0, color: "#fff" }}
-                                            >
-                                                Batafsil
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                            <h3 className="product-name">
-                                {capitalizeFirstLetter(product.productName)}
-                            </h3>
-                            <p className="product-category">
-                                📂 Kategoriya: <span>{product.category}</span>
-                            </p>
-                            {/* <p className="product-cost">
-                                💰 <strong>Tannarx:</strong>{" "}
-                                <span>
-                                    {NumberFormat(Math.floor(product.productionCost))} so'm
-                                </span>
-                            </p> */}
-                            <div className="product-quantity-block">
-                                {product.category === "Praymer" ? (
-                                    <span className="product-quantity">
-                                        {NumberFormat(product.quantity)}{" "}
-                                        <GiEmptyMetalBucketHandle />
+                                    <span className="product-Cost">
+                                        Narxi: {NumberFormat(Math.floor(product.sellingPrice))} so'm
                                     </span>
-                                ) : product.category === "Stakan" || product.category === "Qop" ? (
-                                    <span className="product-quantity">
-                                        {NumberFormat(product.quantity)} kg
-                                    </span>
-                                ) : (
-                                    <span className="product-quantity">
-                                        {NumberFormat(product.quantity)} dona
-                                    </span>
-                                )}
-                                <span className="product-Cost">
-                                    Narxi: {NumberFormat(+product.sellingPrice)} so'm
-                                </span>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
+
+
                 ) : (
                     <div className="empty-state-container">
                         <Archive size={48} className="empty-icon" />

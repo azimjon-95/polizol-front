@@ -458,7 +458,7 @@ const SacodSalesModule = () => {
                 <div className="sacod-product-stock">
                   <Package className="sacod-icon-xs" />
                   {product.quantity.toLocaleString()}{" "}
-                  {product.category === "Qop" || product.category === "Stakan"
+                  {product.category === "Qop" || product.category === "Stakan" || product.category === "BN-5"
                     ? "kg"
                     : "dona"}
                 </div>
