@@ -203,9 +203,21 @@ import { Button } from "antd";
 function Salary({ data }) {
   const tableRef = useRef(); // Jadvalni olish uchun ref
 
-  // UTC kunlar
+  // // UTC kunlar
+  // const today = dayjs().utc();
+  // const startOfMonth = today.startOf("month");
+  // const totalDays = startOfMonth.daysInMonth();
+  // const daysOfMonth = Array.from({ length: totalDays }, (_, i) =>
+  //   startOfMonth.add(i, "day").format("YYYY-MM-DD")
+  // );
+  // UTC kunlar - data asosida oy aniqlash
   const today = dayjs().utc();
-  const startOfMonth = today.startOf("month");
+
+  // Data mavjud bo'lsa, birinchi recorddan oyni olamiz
+  const referenceDate =
+    data && data.length > 0 ? dayjs(data[0].date).tz("Asia/Tashkent") : today;
+
+  const startOfMonth = referenceDate.startOf("month");
   const totalDays = startOfMonth.daysInMonth();
   const daysOfMonth = Array.from({ length: totalDays }, (_, i) =>
     startOfMonth.add(i, "day").format("YYYY-MM-DD")
@@ -229,6 +241,7 @@ function Salary({ data }) {
 
   data?.forEach((record) => {
     const dateKey = dayjs(record.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
+    console.log(">>>", dateKey);
 
     if (!productionMap[dateKey]) {
       productionMap[dateKey] = { produced: 0, loaded: 0, loadedKg: 0 };
@@ -338,6 +351,8 @@ function Salary({ data }) {
                 (sum, day) => sum + (empObj.days[day] || 0),
                 0
               );
+              console.log(empObj);
+
               return (
                 <tr key={fio}>
                   <td>{idx + 1}</td>
@@ -369,6 +384,24 @@ function Salary({ data }) {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={3}>Jami</th>
+              {daysOfMonth.map((day) => {
+                // Har bir kun uchun barcha ishchilarning summasini hisoblash
+                const dayTotal = Object.values(employeeMap).reduce(
+                  (sum, empObj) => sum + (empObj.days[day] || 0),
+                  0
+                );
+                return (
+                  <th key={`total-${day}`}>
+                    {dayTotal ? dayTotal.toLocaleString() : ""}
+                  </th>
+                );
+              })}
+              <th>{totalSum.toLocaleString()}</th>
+            </tr>
+          </tfoot>
         </table>
         <div
           className="salary_header"

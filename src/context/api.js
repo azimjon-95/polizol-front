@@ -46,6 +46,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Bazaviy query
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: "https://polizolserver.medme.uz/api",
+  // baseUrl: "http://localhost:5050/api",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("token");
     if (token) {
