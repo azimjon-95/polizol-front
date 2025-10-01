@@ -13,17 +13,24 @@ import polizolImg from '../../../assets/polizol.jpg';
 import praymerImg from '../../../assets/praymer.png';
 import stakanImg from '../../../assets/stakanBN.png';
 import bn5 from '../../../assets/bn5.png';
+import {
+  RiSearchLine,
+  RiCloseLine,
+} from "react-icons/ri";
 import { FaMoneyBillWave } from "react-icons/fa";
-
 import ruberoidImg from '../../../assets/ruberoid.jpg';
-
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SalespersonManagement from "./salesPerson/SalespersonManagement";
 import CartTab from "./CartTab";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, message } from "antd";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch, } from "react-redux";
+import {
+  toggleSearchPanel,
+  setSearchQuery,
+  clearSearchQuery,
+} from "../../../context/actions/authSearch";
 import { useGetFinishedProductsQuery } from "../../../context/productionApi";
 import { useGetFilteredSalesQuery } from "../../../context/cartSaleApi";
 import "./style.css";
@@ -31,6 +38,8 @@ import SalesInvoiceDashboard from "./SalesInvoiceDashboard";
 
 const SacodSalesModule = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const profileToggleRef = useRef(null);
   const [cart, setCart] = useState([]);
   const [sales, setSales] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +54,7 @@ const SacodSalesModule = () => {
     discount: 0,
     paymentStatus: "partial",
   });
+  const { isSearchOpen, searchQuery } = useSelector((state) => state.search);
   const [salesperson] = useState("Azimjon Mamutaliyev");
   const [isContractModalOpen, setIsContractModalOpen] = useState(false);
   const [isReturnInfoModalOpen, setIsReturnInfoModalOpen] = useState(false);
@@ -64,11 +74,16 @@ const SacodSalesModule = () => {
     discounts: {},
   });
 
-  const { data: finishedProducts } = useGetFinishedProductsQuery();
   const { data: filteredSales } = useGetFilteredSalesQuery();
-  const filteredSalesLength = useSelector(
-    (state) => state.length.filteredSalesLength
+  const { data: filteredProducts } = useGetFinishedProductsQuery();
+  const filteredSalesData = useSelector(
+    (state) => state.search.searchQuery
   );
+
+  const finishedProducts = filteredProducts?.filter(product =>
+    product.productName.toLowerCase().includes(filteredSalesData.toLowerCase())
+  );
+
   const searchPanelRef = useRef(null);
 
   const showLogoutModal = () => {
@@ -78,6 +93,7 @@ const SacodSalesModule = () => {
   const handleModalOk = async () => {
     setIsLoggingOut(true);
     try {
+      dispatch(clearSearchQuery());
       message.success("Muvaffaqiyatli tizimdan chiqdingiz!");
       setTimeout(() => {
         localStorage.clear();
@@ -363,13 +379,35 @@ const SacodSalesModule = () => {
           {role === "sotuvchi menejir" ||
             role === "sotuvchi" ||
             role === "sotuvchi eksport" ? (
-            <button
-              className="profile-btn about-log"
-              ref={searchPanelRef}
-              onClick={showLogoutModal}
-            >
-              <User />
-            </button>
+            <span style={{ display: "flex", gap: "15px" }}>
+              <div className="search-container">
+                <button
+                  className="search-toggle"
+                  onClick={() => dispatch(toggleSearchPanel())}
+                  ref={profileToggleRef}
+                >
+                  {isSearchOpen ? <RiCloseLine /> : <RiSearchLine />}
+                </button>
+                {isSearchOpen && (
+                  <div className="search-panel">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+                      placeholder="Qidirish..."
+                      className="search-input"
+                    />
+                  </div>
+                )}
+              </div>
+              <button
+                className="profile-btn about-log"
+                ref={searchPanelRef}
+                onClick={showLogoutModal}
+              >
+                <User />
+              </button>
+            </span>
           ) : (
             <></>
           )}
@@ -420,7 +458,7 @@ const SacodSalesModule = () => {
                 <div className="sacod-product-stock">
                   <Package className="sacod-icon-xs" />
                   {product.quantity.toLocaleString()}{" "}
-                  {product.category === "Qop" || product.category === "Stakan"
+                  {product.category === "Qop" || product.category === "Stakan" || product.category === "BN-5"
                     ? "kg"
                     : "dona"}
                 </div>

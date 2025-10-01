@@ -29,7 +29,7 @@ const Bn5ProcessDialog = ({
     electricity: "200",
     gasAmount: "200",
     notes: "",
-    extra: "271000",
+    extra: "0",
     kraftPaper: "20",
     sellingPrice: "6500",
     qop: "87",
@@ -89,6 +89,18 @@ const Bn5ProcessDialog = ({
     toast.success("Qadoqlash birligi o‘chirildi!");
   };
 
+  // Calculate percentages for BN-5 and Mel
+  const calculatePercentages = () => {
+    const bn5 = parseFloat(currentBn5Process.bn5Amount) || 0;
+    const mel = parseFloat(currentBn5Process.melAmount) || 0;
+    const total = bn5 + mel;
+
+    const bn5Percent = total > 0 ? ((bn5 / total) * 100).toFixed(1) : 0;
+    const melPercent = total > 0 ? ((mel / total) * 100).toFixed(1) : 0;
+
+    return { bn5Percent, melPercent };
+  };
+
   useEffect(() => {
     const bn5 = parseFloat(currentBn5Process.bn5Amount) || 0;
     const mel = parseFloat(currentBn5Process.melAmount) || 0;
@@ -96,7 +108,7 @@ const Bn5ProcessDialog = ({
     const gas = parseFloat(currentBn5Process.gasAmount) || 0;
     const kraft = parseFloat(currentBn5Process.kraftPaper) || 0;
     const qop = parseFloat(currentBn5Process.qop) || 0;
-    const extra = parseFloat(currentBn5Process.extra) || 271000;
+    const extra = parseFloat(currentBn5Process.extra) || 0;
 
     const bn5Price = material?.find((m) => m.category === "BN-5")?.price || 0;
     const melPrice = material?.find((m) => m.category === "Mel")?.price || 0;
@@ -128,14 +140,14 @@ const Bn5ProcessDialog = ({
     let pricePerKg = 0;
     if (totalWeight > 0) {
       const costPerKg = total / totalWeight;
-      const factor = 4.798178632431936; // Scaling factor to achieve 4105 for default values
+      const factor = 1.17;
       pricePerKg = costPerKg * factor;
     }
 
     setCurrentBn5Process((prev) => ({
       ...prev,
       price: Math.round(pricePerKg - 9),
-      extra: prev.extra || "271000",
+      extra: prev.extra,
     }));
   }, [
     currentBn5Process.bn5Amount,
@@ -168,25 +180,6 @@ const Bn5ProcessDialog = ({
       return false;
     }
 
-    const totalMix = bn5 + mel;
-    const bn5Percent = (bn5 / totalMix) * 100;
-    const melPercent = (mel / totalMix) * 100;
-    const expectedBn5Percent = (5000 / (5000 + 1800)) * 100;
-    const expectedMelPercent = (1800 / (5000 + 1800)) * 100;
-    const tolerance = 0.2;
-
-    if (
-      Math.abs(bn5Percent - expectedBn5Percent) > tolerance ||
-      Math.abs(melPercent - expectedMelPercent) > tolerance
-    ) {
-      toast.error(
-        `Nisbat noto'g'ri! BN-5: ${bn5Percent.toFixed(
-          1
-        )}%, Mel: ${melPercent.toFixed(1)}%`
-      );
-      return false;
-    }
-
     setShowBn5ProcessDialog(true);
     return true;
   };
@@ -203,7 +196,7 @@ const Bn5ProcessDialog = ({
           gasAmount: parseFloat(currentBn5Process.gasAmount) || 0,
           kraftPaper: parseFloat(currentBn5Process.kraftPaper) || 0,
           qop: parseFloat(currentBn5Process.qop) || 0,
-          extra: parseFloat(currentBn5Process.extra) || 271000,
+          extra: parseFloat(currentBn5Process.extra) || 0,
           price: parseFloat(currentBn5Process.price) || 0,
           sellingPrice: parseFloat(currentBn5Process.sellingPrice) || 0,
         },
@@ -228,18 +221,36 @@ const Bn5ProcessDialog = ({
     } catch (error) {
       toast.error(
         error?.data?.message ||
-          "Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring!"
+        "Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring!"
       );
       console.error(error);
     } finally {
       setIsLoading(false);
-    } 
+    }
   };
 
   const renderInputFields = () => {
+    const { bn5Percent, melPercent } = calculatePercentages();
+
     const fields = [
-      { label: "BN-5 miqdori (kg)", key: "bn5Amount", placeholder: "5000" },
-      { label: "Mel miqdori (kg)", key: "melAmount", placeholder: "1800" },
+      {
+        label: (
+          <>
+            BN-5 miqdori (kg) <span className="percent-info">({bn5Percent}%)</span>
+          </>
+        ),
+        key: "bn5Amount",
+        placeholder: "5000",
+      },
+      {
+        label: (
+          <>
+            Mel miqdori (kg) <span className="percent-info">({melPercent}%)</span>
+          </>
+        ),
+        key: "melAmount",
+        placeholder: "1800",
+      },
       {
         label: (
           <>
@@ -262,7 +273,7 @@ const Bn5ProcessDialog = ({
       {
         label: "Boshqa xarajatlar",
         key: "extra",
-        placeholder: "271000",
+        placeholder: "0",
       },
       { label: "Kraf qog‘oz (kg)", key: "kraftPaper", placeholder: "20" },
       { label: "BN-5 Qop (dona)", key: "qop", placeholder: "87" },
@@ -352,9 +363,8 @@ const Bn5ProcessDialog = ({
               {Object.keys(packagingConfig).map((type) => (
                 <button
                   key={type}
-                  className={`bitum-action-button ${
-                    packagingType === type ? "active" : ""
-                  }`}
+                  className={`bitum-action-button ${packagingType === type ? "active" : ""
+                    }`}
                   onClick={() => {
                     setPackagingType(type);
                     setUnitType(type === "bag" ? "dona" : "kilo");

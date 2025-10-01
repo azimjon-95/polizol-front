@@ -27,34 +27,42 @@ const ExpensesSalesTable = ({ setActiveTab }) => {
     const sampleData = reports?.innerData?.expenses || [];
 
     // Ishlab chiqarish ma'lumotlari
-
+    const calcPrice = (prod) => {
+        if (prod?.items?.length) {
+            return prod.items.reduce(
+                (sum, i) => sum + (i.quantityProduced * i.salePrice),
+                0
+            );
+        }
+        return (prod?.quantity || 0) * (prod?.sellingPrice || 0);
+    };
     const productionData = [
         {
             product: reports?.innerData?.productionHistory?.[0]?.name || 'Polizol',
             quantity: reports?.innerData?.productionHistory?.[0]?.quantity || 0,
-            price: (reports?.innerData?.productionHistory?.[0]?.quantity * reports?.innerData?.productionHistory?.[0]?.sellingPrice) || 0,
+            price: calcPrice(reports?.innerData?.productionHistory?.[0]),
             items: reports?.innerData?.productionHistory?.[0]?.items || [],
         },
         {
             product: reports?.innerData?.productionHistory?.[1]?.name || 'Ruberoid',
             quantity: reports?.innerData?.productionHistory?.[1]?.quantity || 0,
-            price: (reports?.innerData?.productionHistory?.[1]?.quantity * reports?.innerData?.productionHistory?.[1]?.sellingPrice) || 0,
+            price: calcPrice(reports?.innerData?.productionHistory?.[1]),
             items: reports?.innerData?.productionHistory?.[1]?.items || [],
         },
         {
             product: `Bitum ${reports?.innerData?.inventory?.[1]?.name || 'BN-5 (20% mel)'}`,
             quantity: reports?.innerData?.inventory?.[1]?.quantity || 0,
-            price: (reports?.innerData?.inventory?.[1]?.quantity * reports?.innerData?.inventory?.[1]?.sellingPrice) || 0,
+            price: calcPrice(reports?.innerData?.inventory?.[1]),
         },
         {
             product: `Bitum ${reports?.innerData?.inventory?.[0]?.name || 'BN-5'}`,
             quantity: reports?.innerData?.inventory?.[0]?.quantity || 0,
-            price: (reports?.innerData?.inventory?.[0]?.quantity * reports?.innerData?.inventory?.[0]?.sellingPrice) || 0,
+            price: calcPrice(reports?.innerData?.inventory?.[0]),
         },
         {
             product: reports?.innerData?.praymer?.[0]?.name || 'Praymer - BIPRO',
             quantity: reports?.innerData?.praymer?.[0]?.quantity || 0,
-            price: (reports?.innerData?.praymer?.[0]?.quantity * reports?.innerData?.praymer?.[0]?.sellingPrice) || 0,
+            price: calcPrice(reports?.innerData?.praymer?.[0]),
         },
     ];
 
@@ -253,7 +261,6 @@ const ExpensesSalesTable = ({ setActiveTab }) => {
             </div>
         );
     }
-
     return (
         <div className="sam-table-container">
             <div className="sam-table-title">

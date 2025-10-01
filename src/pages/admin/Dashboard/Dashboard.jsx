@@ -16,6 +16,9 @@ import {
     PieChart,
     Pie,
     Cell,
+    BarChart,
+    Bar,
+    LabelList,
 } from 'recharts';
 import {
     CircleDollarSign,
@@ -31,9 +34,12 @@ import {
     ShoppingCart,
     BarChart2,
     PieChart as PieChartIcon,
+    ShoppingBag,
 } from 'lucide-react';
+import { useGetTopProductsByMonthQuery } from "../../../context/productionApi";
 import './clinicDashboard.css';
 
+// Skeleton Components
 const SkeletonStatCard = () => (
     <div className="stat-card skeleton-card">
         <div className="stat-content">
@@ -100,8 +106,90 @@ const SkeletonPieChart = () => (
     </div>
 );
 
+// Optimized Top Products Bar Chart Component
+const TopProductsBarChart = ({ date }) => {
+    const { data: TopData, isLoading } = useGetTopProductsByMonthQuery(date);
+
+    // Memoized chart data transformation for optimization
+    const chartData = useMemo(() => {
+        if (!TopData?.innerData) return [];
+        return TopData.innerData.map((p) => {
+            let name = p._id;
+
+            // faqat "Ruberoid " ni olib tashlaymiz
+            if (name.startsWith("Ruberoid ")) {
+                name = name.replace("Ruberoid ", "");
+            }
+
+            return { name, value: p.totalSold };
+        });
+    }, [TopData]);
+
+
+    // Creative title
+    const chartTitle = "Eng Ko'p Sotilgan Mahsulotlar";
+
+    if (isLoading) {
+        return (
+            <div className="card">
+                <h3 className="card-title">
+                    <div className="skeleton skeleton-icon"></div>
+                    <div className="skeleton skeleton-title"></div>
+                </h3>
+                <div className="skeleton skeleton-chart"></div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="card">
+            <h3 className="card-title">
+                <ShoppingBag className="icon" />
+                {chartTitle}
+            </h3>
+            <ResponsiveContainer width="100%" height={350}>
+                <BarChart
+                    data={chartData}
+                    margin={{ top: 20, right: 20, left: 12, bottom: 20 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+                    <XAxis
+                        dataKey="name"
+                        interval={0}
+                        angle={-35}
+                        textAnchor="end"
+                        height={70}
+                        tick={{ fontSize: 12 }}
+                        stroke="#94a3b8"
+                    />
+                    <YAxis
+                        tickFormatter={(value) => value.toLocaleString()}
+                        stroke="#94a3b8"
+                    />
+                    <Tooltip
+                        formatter={(value) => [value.toLocaleString(), "Sotilgan miqdor"]}
+                        contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
+                    />
+                    <Bar
+                        dataKey="value"
+                        name="Sotilgan miqdor"
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                        animationEasing="ease-out"
+                        barSize={70}
+                        radius={[8, 8, 0, 0]}
+                        fill="#3b82f6"
+                    >
+                        <LabelList dataKey="value" position="top" formatter={(value) => value.toLocaleString()} />
+                    </Bar>
+                </BarChart>
+            </ResponsiveContainer>
+
+        </div>
+    );
+};
+
 const Dashboard = () => {
-    // Ensure stable date input
     const date = useSelector((state) => state.month.selectedMonth) || new Date().toISOString().slice(0, 7);
     const { data, isLoading, isError } = useGetMonthlyDashboardQuery(date);
     const isDesktop = useMediaQuery({ query: '(min-width: 769px)' });
@@ -276,7 +364,7 @@ const Dashboard = () => {
                                 />
                             )}
                             <Tooltip
-                                formatter={(value, name) => [formatCurrency(value), name === 'Kirim' ? 'Kirim' : 'Chiqim']}
+                                formatter={(value, name) => [formatCurrency(value), name === 'income' ? 'Kirim' : 'Chiqim']}
                                 labelFormatter={(label) => `${label}-kun`}
                                 contentStyle={{
                                     backgroundColor: '#1e293b',
@@ -291,6 +379,9 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                 </div>
             )}
+
+            {/* Top Products Bar Chart */}
+            <TopProductsBarChart date={date} />
 
             {/* Salesperson Ratings */}
             {isLoading ? (
@@ -315,7 +406,7 @@ const Dashboard = () => {
                         {[...salespeople]
                             .sort((a, b) => b.percent - a.percent)
                             .map((person, index) => (
-                                <div key={person.id} className="salesperson-card">
+                                <div key={index} className="salesperson-card">
                                     <div className="salesperson-header">
                                         <div className="salesperson-info">
                                             <div className="rank-badge">{index === 0 ? <Star /> : `#${index + 1}`}</div>
@@ -395,7 +486,7 @@ const Dashboard = () => {
                 ) : (
                     <>
                         {/* VAT Types */}
-                        <div style={{ display: direktor === "direktor" && "none" }} className="card">
+                        <div style={{ display: direktor === "direktor" ? "none" : "block" }} className="card">
                             <h3 className="card-title">
                                 <MdAdminPanelSettings className="icon" />
                                 QQS Turlari
@@ -477,4 +568,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

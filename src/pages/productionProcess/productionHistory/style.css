@@ -6,8 +6,32 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative;
     height: calc(100vh - 160px);
     overflow-y: auto;
+}
+
+.lib-button-container {
+    position: absolute;
+    top: 3px;
+    display: flex;
+    gap: 8px;
+    right: 3px;
+}
+
+.lib-aggregate-btn {
+    padding: 1px 10px;
+    margin-bottom: 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.lib-aggregate-btn:hover {
+    background-color: #0056b3;
 }
 
 /* .lib-table-container scroll ga style */
