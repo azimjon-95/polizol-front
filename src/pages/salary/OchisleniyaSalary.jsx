@@ -266,8 +266,20 @@ function Salary({ data }) {
   )?.productionCost;
 
   // UTC kunlar
+  // const today = dayjs().utc();
+  // const startOfMonth = today.startOf("month");
+  // const totalDays = startOfMonth.daysInMonth();
+  // const daysOfMonth = Array.from({ length: totalDays }, (_, i) =>
+  //   startOfMonth.add(i, "day").format("YYYY-MM-DD")
+  // );
+
   const today = dayjs().utc();
-  const startOfMonth = today.startOf("month");
+
+  // Data mavjud bo'lsa, birinchi recorddan oyni olamiz
+  const referenceDate =
+    data && data.length > 0 ? dayjs(data[0].date).tz("Asia/Tashkent") : today;
+
+  const startOfMonth = referenceDate.startOf("month");
   const totalDays = startOfMonth.daysInMonth();
   const daysOfMonth = Array.from({ length: totalDays }, (_, i) =>
     startOfMonth.add(i, "day").format("YYYY-MM-DD")
@@ -453,6 +465,24 @@ function Salary({ data }) {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={3}>Jami</th>
+              {daysOfMonth.map((day) => {
+                // Har bir kun uchun barcha ishchilarning summasini hisoblash
+                const dayTotal = Object.values(employeeMap).reduce(
+                  (sum, empObj) => sum + (empObj.days[day] || 0),
+                  0
+                );
+                return (
+                  <th key={`total-${day}`}>
+                    {dayTotal ? dayTotal.toLocaleString() : ""}
+                  </th>
+                );
+              })}
+              <th>{totalSum.toLocaleString()}</th>
+            </tr>
+          </tfoot>
         </table>
         <div
           className="salary_header"

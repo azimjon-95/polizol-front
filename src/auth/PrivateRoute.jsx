@@ -11,6 +11,7 @@ const PrivateRoute = ({ children, role }) => {
   }
 
   if (role && !role.includes(authRole)) {
+    localStorage.clear();
     return <Navigate to="/login" />;
   }
 
