@@ -258,7 +258,7 @@ const ProductionSystem = () => {
             tab={
               <span style={{ display: "flex", alignItems: "center" }}>
                 <GiOilDrum size={20} style={{ marginRight: 8 }} />
-                Praymer ishlab chiqarish
+                Praymer va Mastika ishlab chiqarish
               </span>
             }
             key="bipro"

@@ -7,6 +7,7 @@ import ruberoid from "../../assets/ruberoid.jpg";
 import folgizol from "../../assets/folgizol.jpg";
 import polizol from "../../assets/polizol.jpg";
 import praymer from "../../assets/praymer.png";
+import mastika from "../../assets/mastika.jpg";
 import betumImg from "../../assets/betum.png";
 import stakanBNI from "../../assets/stakanBN.png";
 import bn5 from "../../assets/bn5.png";
@@ -220,6 +221,7 @@ const StockInventory = () => {
                             ruberoid: { img: ruberoid, className: "product-imagepolizol" },
                             polizol: { img: polizol, className: "product-imagepolizol" },
                             Praymer: { img: praymer, className: "product-imageBIPRO", extra: `${NumberFormat(product.quantity * 18)} kg` },
+                            Mastika: { img: mastika, className: "product-imageMastika", extra: `${NumberFormat(product.quantity * 18)} kg` },
                             Stakan: { img: stakanBNI, className: "product-imagebnStak" },
                             Qop: { img: betumImg, className: "product-imagebn" },
                             default: { img: folgizol, className: "product-image" },
@@ -271,7 +273,7 @@ const StockInventory = () => {
                                 </p>
 
                                 <div className="product-quantity-block">
-                                    {product.category === "Praymer" ? (
+                                    {product.category === "Praymer" || "mastika" ? (
                                         <span className="product-quantity">
                                             {NumberFormat(product.quantity)} <GiEmptyMetalBucketHandle />
                                         </span>

@@ -2,7 +2,6 @@ import React, { useMemo, useCallback, useEffect } from "react";
 import { useGetAllMaterialsQuery } from "../../../context/materialApi";
 import { toast } from "react-toastify";
 import { Button } from "antd";
-import { NumberFormat } from "../../../hook/NumberFormat";
 import { useCreateProductionMutation } from "../../../context/praymerApi";
 import "./css/praymer.css";
 
@@ -19,22 +18,41 @@ const parseNum = (v) => {
   return Number.isFinite(parseFloat(normalized)) ? parseFloat(normalized) : 0;
 };
 
-// Constants
-const DEFAULT_SALE_PRICE = 215000;
-const TRANSPORT_COST = 6250;
-const LABOR_COST = 400;
-const LABOR_COUNT = 1;
-const PREP_WEIGHT = 18;
-const PREP_COST = 9464;
-
 const BiproPraymer = () => {
   const [qtyProduced, setQtyProduced] = React.useState(1);
-  const [salePricePerBucket, setSalePricePerBucket] = React.useState(DEFAULT_SALE_PRICE);
+  const [salePricePerBucket, setSalePricePerBucket] = React.useState(215000);
   const [items, setItems] = React.useState([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
+  const [activeBtn, setActiveBtn] = React.useState("praymer"); // default active
   const { data: materials, isLoading: materialsLoading } = useGetAllMaterialsQuery();
   const [createProduction, { isLoading: createProductionLoading }] = useCreateProductionMutation();
+
+  // Constants for Praymer
+  const praymerConstants = {
+    DEFAULT_SALE_PRICE: 215000,
+    TRANSPORT_COST: 6250,
+    LABOR_COST: 400,
+    LABOR_COUNT: 1,
+    PREP_WEIGHT: 18,
+    PREP_COST: 9464,
+    BN3_QTY: 8.1,
+    RAZ_QTY: 9.756,
+  };
+
+  // Constants for Mastika (values reduced approximately by 20% for demonstration; adjust as needed)
+  const mastikaConstants = {
+    DEFAULT_SALE_PRICE: 215000,
+    TRANSPORT_COST: 5000,
+    LABOR_COST: 320,
+    LABOR_COUNT: 1,
+    PREP_WEIGHT: 14.4,
+    PREP_COST: 7571,
+    BN3_QTY: 6.48,
+    RAZ_QTY: 7.805,
+  };
+
+  // Select constants based on activeBtn
+  const constants = activeBtn === "mastika" ? mastikaConstants : praymerConstants;
 
   // Material map for quick lookup
   const materialMap = useMemo(() => {
@@ -60,6 +78,7 @@ const BiproPraymer = () => {
           baseQty: 1,
           baseQiymat: nakleyka.price,
           isMaterial: true,
+          removable: false,
         }]
         : []),
       ...(chelak
@@ -73,6 +92,7 @@ const BiproPraymer = () => {
           baseQty: 1,
           baseQiymat: chelak.price,
           isMaterial: true,
+          removable: false,
         }]
         : []),
       {
@@ -80,18 +100,20 @@ const BiproPraymer = () => {
         name: "Transport xarajati",
         unit: "-",
         qty: 1,
-        qiymat: TRANSPORT_COST,
+        qiymat: constants.TRANSPORT_COST,
         baseQty: 1,
-        baseQiymat: TRANSPORT_COST,
+        baseQiymat: constants.TRANSPORT_COST,
+        removable: false,
       },
       {
         _id: "labor",
         name: "Ish haqi (Yuklash)",
         unit: "dona",
-        qty: LABOR_COUNT,
-        qiymat: LABOR_COST * LABOR_COUNT,
-        baseQty: LABOR_COUNT,
-        baseQiymat: LABOR_COST,
+        qty: constants.LABOR_COUNT,
+        qiymat: constants.LABOR_COST * constants.LABOR_COUNT,
+        baseQty: constants.LABOR_COUNT,
+        baseQiymat: constants.LABOR_COST,
+        removable: false,
       },
       ...(BN3
         ? [{
@@ -99,11 +121,12 @@ const BiproPraymer = () => {
           name: BN3.name,
           category: "BN-3",
           unit: BN3.unit,
-          qty: 8.1,
-          qiymat: BN3.price * 8.1,
-          baseQty: 8.1,
+          qty: constants.BN3_QTY,
+          qiymat: BN3.price * constants.BN3_QTY,
+          baseQty: constants.BN3_QTY,
           baseQiymat: BN3.price,
           isMaterial: true,
+          removable: false,
         }]
         : []),
       ...(razbavitel
@@ -112,29 +135,37 @@ const BiproPraymer = () => {
           name: razbavitel.name,
           category: "razbavitel",
           unit: razbavitel.unit,
-          qty: 9.756,
-          qiymat: razbavitel.price * 9.756,
-          baseQty: 9.756,
+          qty: constants.RAZ_QTY,
+          qiymat: razbavitel.price * constants.RAZ_QTY,
+          baseQty: constants.RAZ_QTY,
           baseQiymat: razbavitel.price,
           isMaterial: true,
+          removable: false,
         }]
         : []),
       {
         _id: "prep",
         name: "Tayyorlash",
         unit: "kg",
-        qty: PREP_WEIGHT,
-        qiymat: PREP_COST,
-        baseQty: PREP_WEIGHT,
-        baseQiymat: PREP_COST / PREP_WEIGHT,
+        qty: constants.PREP_WEIGHT,
+        qiymat: constants.PREP_COST,
+        baseQty: constants.PREP_WEIGHT,
+        baseQiymat: constants.PREP_COST / constants.PREP_WEIGHT,
+        removable: false,
       },
     ];
-  }, [materialMap]);
+  }, [materialMap, constants]);
 
   // Initialize items
   useEffect(() => {
     setItems(DEFAULT_ITEMS);
   }, [DEFAULT_ITEMS]);
+
+  // Reset sale price when constants change (i.e., activeBtn changes)
+  useEffect(() => {
+    setSalePricePerBucket(constants.DEFAULT_SALE_PRICE);
+    setQtyProduced(1); // Reset quantity to 1 on switch
+  }, [constants.DEFAULT_SALE_PRICE]);
 
   // 🔹 Helper: Tayyorlash qiymatini qayta hisoblash
   const recalcPrep = (items) => {
@@ -146,8 +177,8 @@ const BiproPraymer = () => {
       it._id === "prep"
         ? {
           ...it,
-          qiymat: PREP_COST + otherCosts,
-          baseQiymat: (PREP_COST + otherCosts) / it.baseQty
+          qiymat: constants.PREP_COST + otherCosts,
+          baseQiymat: (constants.PREP_COST + otherCosts) / it.baseQty
         }
         : it
     );
@@ -190,10 +221,10 @@ const BiproPraymer = () => {
       marginPerBucket: Math.round(parseNum(salePricePerBucket) - totalCostPerBucket),
     };
   }, [qtyProduced, totalCostPerBucket, profitMetrics, salePricePerBucket]);
-
+  // activeBtn === "mastika"
   // Prepare server data
   const prepareDataForServer = useCallback(() => ({
-    productionName: "Praymer - BIPRO",
+    productionName: activeBtn === "mastika" ? "Mastika" : "Praymer - BIPRO",
     productionQuantity: parseNum(qtyProduced),
     profitPercent: parseNum(profitMetrics.profitPercent),
     salePricePerBucket: parseNum(salePricePerBucket),
@@ -214,7 +245,7 @@ const BiproPraymer = () => {
       saleAll: totals.saleAll,
       marginPerBucket: totals.marginPerBucket,
     },
-  }), [qtyProduced, profitMetrics.profitPercent, salePricePerBucket, items, totals]);
+  }), [qtyProduced, profitMetrics.profitPercent, salePricePerBucket, items, totals, activeBtn]);
 
   // Submit to server
   const submitToServer = useCallback(async () => {
@@ -307,7 +338,7 @@ const BiproPraymer = () => {
         return recalcPrep(updated);
       });
     },
-    [qtyProduced, materials?.innerData]
+    [qtyProduced, materials?.innerData, constants.PREP_COST]
   );
 
   // Remove item
@@ -322,8 +353,8 @@ const BiproPraymer = () => {
   const resetDefaults = useCallback(() => {
     setItems(DEFAULT_ITEMS);
     setQtyProduced(1);
-    setSalePricePerBucket(DEFAULT_SALE_PRICE);
-  }, [DEFAULT_ITEMS]);
+    setSalePricePerBucket(constants.DEFAULT_SALE_PRICE);
+  }, [DEFAULT_ITEMS, constants.DEFAULT_SALE_PRICE]);
 
   // Input handlers
   const handleQtyChange = useCallback((e) => setQtyProduced(parseNum(e.target.value)), []);
@@ -336,7 +367,21 @@ const BiproPraymer = () => {
     <div className="quy-container">
       <header className="quy-header">
         <div>
-          <h1 className="quy-title">PRAYMER – BIPRO</h1>
+          <div className="quy-box-header">
+            <button
+              className={activeBtn === "praymer" ? "active" : ""}
+              onClick={() => setActiveBtn("praymer")}
+            >
+              BIPRO – PRAYMER
+            </button>
+
+            <button
+              className={activeBtn === "mastika" ? "active" : ""}
+              onClick={() => setActiveBtn("mastika")}
+            >
+              Mastika
+            </button>
+          </div>
           <p className="quy-subtitle">
             Qiymatlar 1 chelak uchun kiritilgan. Miqdorni o'zgartirsangiz jami summalar mos ravishda ko'payadi.
           </p>
