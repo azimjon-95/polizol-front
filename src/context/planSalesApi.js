@@ -10,8 +10,11 @@ export const planSaleApi = api.injectEndpoints({
 
         // Rejalarni olish
         getAllPlans: builder.query({
-            query: () => "/plans",
-            providesTags: ["Plans"],
+            query: ({ start, end }) => ({
+                url: '/plans', // Your endpoint path
+                params: { start, end }, // Pass start/end as query params
+            }),
+            providesTags: ['Plans'],
         }),
 
         // Bitta reja (ID orqali) olish

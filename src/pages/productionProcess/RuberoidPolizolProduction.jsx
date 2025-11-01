@@ -7,7 +7,6 @@ import { useGetAllNormaQuery } from "../../context/normaApi";
 import { useGetAllMaterialsQuery } from "../../context/materialApi";
 import { useStartProductionProcessMutation } from "../../context/productionApi";
 
-
 const RuberoidPolizolProduction = () => {
     const [quantityToProduce, setQuantityToProduce] = useState({});
     const [selectedCategory, setSelectedCategory] = useState("polizol");
@@ -16,6 +15,7 @@ const RuberoidPolizolProduction = () => {
     const [consumedQuantities, setConsumedQuantities] = useState({});
     const [gasConsumption, setGasConsumption] = useState("");
     const [electricityConsumption, setElectricityConsumption] = useState("");
+    const [periodExpense, setPeriodExpense] = useState(""); // String for empty detection
 
     const { data: materials = { innerData: [] }, refetch, isLoading: materialsLoading, error: materialsError } = useGetAllMaterialsQuery();
     const { data: normas = { innerData: [] }, isLoading: normasLoading, error: normasError } = useGetAllNormaQuery();
@@ -44,6 +44,14 @@ const RuberoidPolizolProduction = () => {
         setElectricityConsumption(parsedValue);
     };
 
+    const handlePeriodExpenseChange = (value) => {
+        setPeriodExpense(value); // Keep as string to detect empty
+    };
+
+    const handleSetPeriodToZero = () => {
+        setPeriodExpense("0"); // Set to "0" string
+    };
+
     const handleQuantityChange = (normaId, value) => {
         const parsedValue = parseInt(value, 10);
         setQuantityToProduce((prev) => ({
@@ -70,7 +78,6 @@ const RuberoidPolizolProduction = () => {
             .filter(Boolean);
     }, [quantityToProduce, filteredNormas, selectedCategory]);
 
-
     const handleProduce = async () => {
         if (selectedProducts.length === 0) {
             return toast.warning("Iltimos, kamida bitta mahsulot miqdorini kiriting");
@@ -80,7 +87,12 @@ const RuberoidPolizolProduction = () => {
             return toast.warning("Iltimos, gas va elektr energiya sarfini kiriting");
         }
 
+        if (periodExpense.trim() === "") {
+            return toast.error("Iltimos, davr harajatlari ni kiriting yoki 0 ga o'rnating");
+        }
+
         try {
+            const parsedPeriodExpense = parseFloat(periodExpense) || 0;
             const payload = {
                 products: selectedProducts,
                 consumedMaterials: Object.entries(consumedQuantities)
@@ -92,6 +104,7 @@ const RuberoidPolizolProduction = () => {
                 utilities: {
                     gasConsumption: gasConsumption || 0,
                     electricityConsumption: electricityConsumption || 0,
+                    periodExpense: parsedPeriodExpense
                 },
             };
 
@@ -105,6 +118,7 @@ const RuberoidPolizolProduction = () => {
             setQuantityToProduce({});
             setConsumedQuantities({});
             setGasConsumption("");
+            setPeriodExpense(""); // Reset to empty string
             setElectricityConsumption("");
             setIsDefective(false);
             form.resetFields();
@@ -151,6 +165,7 @@ const RuberoidPolizolProduction = () => {
                             step="0.1"
                         />
                     </div>
+
                     <div className="energy-input-group">
                         <label className="form-label">Elektr energiyasi sarfi (kWh)</label>
                         <input
@@ -163,7 +178,41 @@ const RuberoidPolizolProduction = () => {
                             step="0.1"
                         />
                     </div>
+
+                    <div className="energy-input-group">
+                        <label className="form-label">Davr harajatlari (so'm)</label>
+                        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                            <input
+                                type="number"
+                                placeholder="Davr harajatlarini kiriting (so'm)"
+                                value={periodExpense}
+                                onChange={(e) => handlePeriodExpenseChange(e.target.value)}
+                                className="material-consumed-input"
+                                min="0"
+                                step="1000"
+                                style={{ flex: 1 }}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleSetPeriodToZero}
+                                className="set-zero-button"
+                                style={{
+                                    padding: "8px 12px",
+                                    backgroundColor: "#f0f0f0",
+                                    border: "1px solid #d9d9d9",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontSize: "14px",
+                                    minWidth: "40px",
+                                    height: "fit-content"
+                                }}
+                            >
+                                0
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="production-form-box">
                     <div className="production-form-grid">
                         <div>
