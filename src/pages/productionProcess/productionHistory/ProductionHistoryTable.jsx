@@ -292,20 +292,26 @@ const ProductionHistoryTable = ({ startDate, endDate }) => {
                                 <td colSpan={4}></td>
                             </tr>
 
-                            <tr>
+                            <tr className='lib-total-row'>
                                 <td className="lib-cell-left">Ishchi xarajatlari</td>
                                 <td colSpan={2}></td>
                                 <td className="lib-cell-right">{formatNumber(batch.workerExpenses)}</td>
                                 <td colSpan={4}></td>
                             </tr>
 
-                            <tr>
+                            <tr className='lib-total-row'>
+
                                 <td className="lib-cell-left">Boshqa xarajatlari</td>
                                 <td colSpan={2}></td>
                                 <td className="lib-cell-right">{formatNumber(batch.otherExpenses)}</td>
                                 <td colSpan={4}></td>
                             </tr>
-
+                            <tr className='lib-total-row'>
+                                <td className="lib-cell-left">Davr harajatlari</td>
+                                <td colSpan={2}></td>
+                                <td className="lib-cell-right">{formatNumber(batch.periodExpense)}</td>
+                                <td colSpan={5}></td>
+                            </tr>
                             <tr className="lib-total-row">
                                 <td className="lib-cell-left">Ishlab chiqarish xarajatlari</td>
                                 <td></td><td></td>

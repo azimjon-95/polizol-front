@@ -11,6 +11,7 @@ import betumImg from '../../../assets/betum.png';
 import folygoizolImg from '../../../assets/folgizol.jpg';
 import polizolImg from '../../../assets/polizol.jpg';
 import praymerImg from '../../../assets/praymer.png';
+import mastika from '../../../assets/mastika.jpg';
 import stakanImg from '../../../assets/stakanBN.png';
 import bn5 from '../../../assets/bn5.png';
 import {
@@ -293,6 +294,7 @@ const SacodSalesModule = () => {
     polizol: { src: polizolImg, className: "icon-polizol" },
     ruberoid: { src: ruberoidImg, className: "icon-ruberoid" },
     Praymer: { src: praymerImg, className: "icon-praymer" },
+    Mastika: { src: mastika, className: "icon-mastika" },
     Qop: { src: betumImg, className: "icon-qop" },
     "BN-5": { src: bn5, className: "icon-bn5" },
   };
