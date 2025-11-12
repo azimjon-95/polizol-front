@@ -192,7 +192,6 @@ const RuberoidFactoryHR = () => {
       setShowAddModal(false);
       toast.success("Ishchi muvaffaqiyatli qo'shildi!");
     } catch (err) {
-      console.error("Add employee error:", err);
       toast.error(
         `Ishchi qo'shishda xatolik: ${err.data?.message || err.message}`
       );
@@ -406,8 +405,8 @@ const RuberoidFactoryHR = () => {
               <Shield className="stat-icon" />
               <div className="stat-details">
                 <span className="stat-number">
-                  {employees?.innerData?.filter((e) => e.isOfficeWorker).length ||
-                    0}
+                  {employees?.innerData?.filter((e) => e.isOfficeWorker)
+                    .length || 0}
                 </span>
                 <span className="stat-label">Ofis xodimlari</span>
               </div>
@@ -506,8 +505,12 @@ const RuberoidFactoryHR = () => {
                       </td>
                       <td>
                         <span
-                          className={`date-of-birth-cell ${todayBirthdays.has(employee._id) ? "birthday-today" : ""
-                            }`}>
+                          className={`date-of-birth-cell ${
+                            todayBirthdays.has(employee._id)
+                              ? "birthday-today"
+                              : ""
+                          }`}
+                        >
                           <Cake className="date-of-birth-icon" />
                           {formatDateOfBirth(employee.dateOfBirth)}
                         </span>
@@ -563,7 +566,10 @@ const RuberoidFactoryHR = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={role !== "direktor" ? 10 : 9} className="no-data">
+                  <td
+                    colSpan={role !== "direktor" ? 10 : 9}
+                    className="no-data"
+                  >
                     Ma'lumot topilmadi
                   </td>
                 </tr>
