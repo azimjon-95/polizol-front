@@ -51,9 +51,12 @@ export const cartSaleApi = api.injectEndpoints({
     }),
 
     getFilteredSales: builder.query({
-      query: () => ({
-        url: "/filtered",
-      }),
+      query: ({ page = 1, limit = 15 } = {}) => {
+        return {
+          url: "/filtered",
+          params: { page, limit },
+        };
+      },
       providesTags: ["Sale"],
     }),
 
@@ -109,22 +112,28 @@ export const cartSaleApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Sale", "CustomerSales", "Salary"],
     }),
+
+    getUndeliveredItemsByCustomer: builder.query({
+      query: (customerId) => `/sales/undelivered-items/${customerId}`, // Your endpoint path
+      providesTags: ['UndeliveredItems'],
+    }),
   }),
 });
 
 // Export hooks for usage in components
 export const {
-    useCreateCartSaleMutation,
-    useGetSaleCartByIdQuery,
-    useUpdateCartSaleMutation,
-    useDeleteCartSaleMutation,
-    usePayDebtMutation,
-    useGetFilteredSalesQuery,
-    useReturnProductsMutation,
-    useGetCustomerSalesQuery,
-    useGetCustomerCompletedSalesQuery,
-    useGetCustomerActiveSalesQuery,
-    useGetCompanysQuery,
-    useGetTransportQuery,
-    useDeliverProductMutation
+  useCreateCartSaleMutation,
+  useGetSaleCartByIdQuery,
+  useUpdateCartSaleMutation,
+  useDeleteCartSaleMutation,
+  usePayDebtMutation,
+  useGetFilteredSalesQuery,
+  useGetUndeliveredItemsByCustomerQuery,
+  useReturnProductsMutation,
+  useGetCustomerSalesQuery,
+  useGetCustomerCompletedSalesQuery,
+  useGetCustomerActiveSalesQuery,
+  useGetCompanysQuery,
+  useGetTransportQuery,
+  useDeliverProductMutation
 } = cartSaleApi;

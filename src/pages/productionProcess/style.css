@@ -5,6 +5,17 @@
     background: linear-gradient(to bottom right, #f9fafb, #e0f2fe);
 }
 
+.date-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.current-date {
+    user-select: none;
+}
+
 /* Header */
 .header-container {
     background: white;
@@ -1906,6 +1917,7 @@
 
 .energy-consumption-section {
     display: flex;
+    align-items: flex-end;
     gap: 20px;
     margin-bottom: 15px;
 }

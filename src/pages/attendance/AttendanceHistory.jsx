@@ -35,13 +35,12 @@ function AttendanceHistory() {
   const { data, isLoading } = useGetAllAttendanceQuery(
     validRange
       ? {
-          startDate: dateRange[0].format("YYYY-MM-DD"),
-          endDate: dateRange[1].format("YYYY-MM-DD"),
-        }
+        startDate: dateRange[0].format("YYYY-MM-DD"),
+        endDate: dateRange[1].format("YYYY-MM-DD"),
+      }
       : skipToken
   );
 
-  console.log("attendance data", data);
 
   const mergedData = useMemo(() => {
     if (!data || !employees) return [];
@@ -58,7 +57,6 @@ function AttendanceHistory() {
     });
   }, [data, employees]);
 
-  console.log("mergedData", mergedData);
 
   useEffect(() => {
     if (employeesData) {
@@ -180,21 +178,21 @@ function AttendanceHistory() {
   const modalData =
     selectedEmployee && selectedDate
       ? [
-          { label: "Ism", value: selectedEmployee.firstName },
-          { label: "Familiya", value: selectedEmployee.lastName },
-          { label: "Bo'lim", value: selectedEmployee.unit },
-          { label: "Sana", value: selectedDate },
-          {
-            label: "Davomat",
-            value: selectedEmployee.attendance[selectedDate]
-              ? `${selectedEmployee.attendance[selectedDate].percentage}%`
-              : "Ma'lumot yo'q",
-          },
-          {
-            label: "Jami smena",
-            value: selectedEmployee.totalShifts.toFixed(2),
-          },
-        ]
+        { label: "Ism", value: selectedEmployee.firstName },
+        { label: "Familiya", value: selectedEmployee.lastName },
+        { label: "Bo'lim", value: selectedEmployee.unit },
+        { label: "Sana", value: selectedDate },
+        {
+          label: "Davomat",
+          value: selectedEmployee.attendance[selectedDate]
+            ? `${selectedEmployee.attendance[selectedDate].percentage}%`
+            : "Ma'lumot yo'q",
+        },
+        {
+          label: "Jami smena",
+          value: selectedEmployee.totalShifts.toFixed(2),
+        },
+      ]
       : [];
 
   const uzbekMonths = [
@@ -219,9 +217,8 @@ function AttendanceHistory() {
     for (let year = startYear; year <= endYear; year++) {
       uzbekMonths.forEach((month, index) => {
         const monthIndex = index + 1;
-        const value = `${year}-${
-          monthIndex < 10 ? `0${monthIndex}` : monthIndex
-        }`;
+        const value = `${year}-${monthIndex < 10 ? `0${monthIndex}` : monthIndex
+          }`;
         options.push({
           value,
           label: `${month} ${year}`,
@@ -300,10 +297,10 @@ function AttendanceHistory() {
     sigPad.current.clear();
   };
 
-  const save = () => {
-    const dataURL = sigPad.current.getTrimmedCanvas().toDataURL("image/png");
-    console.log("Imzo PNG:", dataURL); // serverga yuborish mumkin
-  };
+  // const save = () => {
+  //   const dataURL = sigPad.current.getTrimmedCanvas().toDataURL("image/png");
+  //   console.log("Imzo PNG:", dataURL); // serverga yuborish mumkin
+  // };
 
   return (
     <div className="xsd-attendance-history-container">
@@ -375,10 +372,9 @@ function AttendanceHistory() {
             {selectedUnit && `${selectedUnit} bo'limi - `}
             {monthValue} - Davomat ro'yxati
             {dateFilter !== "full" &&
-              ` (${
-                dateFilter === "firstHalf"
-                  ? "1-15"
-                  : "16-" + moment(dateRange[1]).format("DD")
+              ` (${dateFilter === "firstHalf"
+                ? "1-15"
+                : "16-" + moment(dateRange[1]).format("DD")
               })`}
           </h2>
         </div>
