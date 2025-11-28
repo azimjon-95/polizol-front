@@ -18,7 +18,7 @@ import {
   Popconfirm,
   Checkbox,
 } from "antd";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import AttendanceHistory from "./AttendanceHistory";
@@ -146,10 +146,7 @@ function Attendance() {
         toast.success("Davomat saqlandi", { autoClose: 3000 });
         setMarkedToday((prev) => ({ ...prev, [key]: true }));
       } catch (err) {
-        console.error(err);
-        toast.error(err?.data?.message || "Xatolik yuz berdi", {
-          autoClose: 3000,
-        });
+        toast.error(err?.data?.message || "Xatolik yuz berdi");
       } finally {
         setLoadingStates((prev) => {
           const { [`save_${key}`]: _, ...rest } = prev;
@@ -238,8 +235,8 @@ function Attendance() {
             allowClear
             size="small"
           >
-            {PERCENTAGE_OPTIONS.default.map((opt) => (
-              <Option key={opt.value} value={opt.value}>
+            {PERCENTAGE_OPTIONS.default.map((opt, i) => (
+              <Option key={i} value={opt.value}>
                 {opt.label}
               </Option>
             ))}
@@ -370,8 +367,8 @@ function Attendance() {
               allowClear
               size="small"
             >
-              {options.map((opt) => (
-                <Option key={opt.value} value={opt.value}>
+              {options.map((opt, index) => (
+                <Option key={index} value={opt.value}>
                   {opt.label}
                 </Option>
               ))}
@@ -423,7 +420,6 @@ function Attendance() {
                   loading={loadingStates[`save_${record._id}`]}
                   disabled={isDisabled}
                   size="small"
-                  gambar
                 >
                   Saqlash
                 </Button>
@@ -504,8 +500,8 @@ function Attendance() {
         if (record.unit?.toLowerCase() === "avto kara") {
           return (
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              {DEPARTMENT_OPTIONS.map((dept) => (
-                <span key={dept.value} style={{ color: "gray" }}>
+              {DEPARTMENT_OPTIONS.map((dept, index) => (
+                <span key={index} style={{ color: "gray" }}>
                   {dept.label}
                 </span>
               ))}
@@ -540,8 +536,8 @@ function Attendance() {
             allowClear
             size="small"
           >
-            {DEPARTMENT_OPTIONS.map((opt) => (
-              <Option key={opt.value} value={opt.value}>
+            {DEPARTMENT_OPTIONS.map((opt, i) => (
+              <Option key={i} value={opt.value}>
                 {opt.label}
               </Option>
             ))}
@@ -593,6 +589,7 @@ function Attendance() {
 
   return (
     <div style={{ padding: "0rem 1rem" }} className="atend-boxx">
+      <ToastContainer />
       <Tabs
         defaultActiveKey="1"
         tabBarExtraContent={
@@ -648,8 +645,8 @@ function Attendance() {
                 onChange={setFilterUnit}
               >
                 <Option value="all">Barchasi</Option>
-                {DEPARTMENT_OPTIONS.map((opt) => (
-                  <Option key={opt.value} value={opt.value}>
+                {DEPARTMENT_OPTIONS.map((opt, i) => (
+                  <Option key={i} value={opt.value}>
                     {opt.label}
                   </Option>
                 ))}
@@ -658,7 +655,7 @@ function Attendance() {
           </div>
           <div className="att-boxin">
             <Table
-              rowKey="_id"
+              rowKey={(record, index) => record._id || index}
               dataSource={filteredWorkers}
               columns={columns}
               pagination={false}
