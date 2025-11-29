@@ -63,9 +63,8 @@ export const materialApi = api.injectEndpoints({
 
     // Kirimlar ro‘yxatini olish
     getIncomes: builder.query({
-      query: (selectedMonth) => ({
+      query: () => ({
         url: "/material/getincomes",
-        params: { month: selectedMonth },
       }),
       providesTags: ["Incomes"],
     }),

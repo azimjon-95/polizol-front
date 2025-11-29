@@ -148,6 +148,7 @@ div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea,
 .nns-stat-number-bal,
 .nns-stat-number {
     font-size: 14px;
+    text-wrap: nowrap;
     font-weight: 600;
     color: #1a1a1a;
 }
@@ -162,13 +163,13 @@ div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea,
     background: #ffffff;
     border-radius: 8px;
     overflow: hidden;
-    height: calc(100vh - 190px);
-    overflow-y: auto;
+    height: calc(100vh - 190px) !important;
+    overflow-y: auto !important;
 }
 
 /* Chrome, Edge, Safari */
 .nns-income-container::-webkit-scrollbar {
-    width: 8px;
+    width: 8px !important;
 }
 
 .nns-income-container::-webkit-scrollbar-track {
