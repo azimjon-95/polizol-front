@@ -20,7 +20,7 @@ const IsPaymentModal = ({
     const [payDebt, { isLoading }] = usePayDebtMutation();
     const [paymentDescription, setPaymentDescription] = useState('');
     const paidBy = localStorage.getItem("admin_fullname");
-    console.log(typeof paymentAmount);
+
     const processPayment = useCallback(async () => {
         const amount = paymentAmount;
         if (!amount || amount <= 0) {

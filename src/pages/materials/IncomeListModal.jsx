@@ -1,18 +1,20 @@
 import React, { useState, useMemo } from 'react';
-import { Card, Typography, Divider, Input, Tag, Table, Modal, Button, Select, Form } from 'antd';
+import { Card, Typography, Divider, Input, Tag, Table, Button, Select } from 'antd';
 import { useSelector } from "react-redux";
 import { MdOutlineConfirmationNumber } from "react-icons/md";
 import {
-    LuPackagePlus, LuBuilding2, LuPhone, LuCalendar, LuDollarSign, LuCreditCard, LuTruck,
-    LuUsers, LuFileText, LuChevronRight, LuChevronDown, LuPackage, LuWeight, LuBanknote, LuFilter, LuWallet
+    LuPackagePlus, LuBuilding2, LuPhone, LuCalendar, LuDollarSign, LuCreditCard, LuTruck, LuMapPin,
+    LuUsers, LuFileText, LuChevronRight, LuChevronDown, LuPackage, LuWeight, LuBanknote, LuFilter
 } from 'react-icons/lu';
 import { MdAccountBalance } from "react-icons/md";
 import { useGetIncomesQuery } from "../../context/materialApi";
 import { useGetBalanceQuery } from "../../context/expenseApi";
 import { numberFormat } from '../../utils/numberFormat';
 import { PhoneNumberFormat } from '../../hook/NumberFormat';
+// LuMapPin
+
 import './style/incom.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
@@ -25,41 +27,40 @@ const IncomeListModal = () => {
         return `${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
     });
     const [selectedFirm, setSelectedFirm] = useState('all');
-    const [debtPaymentsModal, setDebtPaymentsModal] = useState({ visible: false, debtPayments: [], incomeData: null });
-    const { data: balanceData, refetch: balanceRefetch, isLoading: balanceIsLoading } = useGetBalanceQuery();
     const [debtFilter, setDebtFilter] = useState('all');
-    const { data: incomesData, isLoading: incomesIsLoading, refetch } = useGetIncomesQuery(selectedMonth, {
-        skip: !selectedMonth,
-    });
+    const { data: balanceData } = useGetBalanceQuery();
+    const { data: incomesData, isLoading: incomesIsLoading } = useGetIncomesQuery();
 
-    const incomesDataList = incomesData?.innerData || [];
+    const firmsDataList = useMemo(() => incomesData?.innerData || [], [incomesData]);
+
     const searchTextValue = useSelector((s) => s.search.searchQuery);
 
     const uniqueFirms = useMemo(() => {
-        const firms = incomesDataList
-            .map((income) => income.firm?.name || "Noma'lum firma")
+        const firms = firmsDataList
+            .map((firm) => firm.name || "Noma'lum firma")
             .filter((value, index, self) => self.indexOf(value) === index);
         return ['all', ...firms.sort()];
-    }, [incomesDataList]);
+    }, [firmsDataList]);
 
-    const filteredIncomes = useMemo(() => {
-        return incomesDataList.filter((income) => {
-            const firmName = income.firm?.name?.toLowerCase() || "noma'lum firma";
-            const materialNames = income.materials?.map((m) => m.name?.toLowerCase()).join(" ") || "";
-            const searchLower = searchTextValue.toLowerCase();
-            const matchesSearch = firmName.includes(searchLower) || materialNames.includes(searchLower);
+    const filteredFirms = firmsDataList;
 
-            let matchesDebtFilter = true;
-            if (debtFilter === 'debt') {
-                matchesDebtFilter = income.debt?.remainingAmount > 0;
-            } else if (debtFilter === 'paid') {
-                matchesDebtFilter = income.debt?.remainingAmount === 0;
-            }
-
-            const matchesFirmFilter = selectedFirm === 'all' || firmName === selectedFirm.toLowerCase();
-            return matchesSearch && matchesDebtFilter && matchesFirmFilter;
-        });
-    }, [incomesDataList, searchTextValue, debtFilter, selectedFirm]);
+    const { totalIncomes, totalAmount, totalPaid, totalDebt, vatAmount } = useMemo(() => {
+        return filteredFirms.reduce(
+            (acc, firm) => {
+                const firmTotal = firm.history?.reduce((s, h) => s + (h.totalWithVat || 0), 0) || 0;
+                const firmWithoutVat = firm.history?.reduce((s, h) => s + (h.totalWithoutVat || 0), 0) || 0;
+                const firmVat = firmTotal - firmWithoutVat;
+                return {
+                    totalIncomes: acc.totalIncomes + (firm.history?.length || 0),
+                    totalAmount: acc.totalAmount + firmTotal,
+                    totalPaid: acc.totalPaid + (firm.totalPaid || 0),
+                    totalDebt: acc.totalDebt + (firm.totalDebt || 0),
+                    vatAmount: acc.vatAmount + firmVat
+                };
+            },
+            { totalIncomes: 0, totalAmount: 0, totalPaid: 0, totalDebt: 0, vatAmount: 0 }
+        );
+    }, [filteredFirms]);
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -74,53 +75,16 @@ const IncomeListModal = () => {
         }
     };
 
-    const handleDebtPaymentsClick = (income) => {
-        setDebtPaymentsModal({
-            visible: true,
-            debtPayments: income.debt?.debtPayments || [],
-            incomeData: {
-                firmName: income.firm?.name || "Noma'lum firma",
-                createdAt: income.createdAt
-            }
-        });
-    };
-
-    const handleDebtPaymentsCancel = () => {
-        setDebtPaymentsModal({
-            visible: false,
-            debtPayments: [],
-            incomeData: null
-        });
-    };
-
-    const { totalIncomes, totalAmount, totalPaid, totalDebt, vatAmount } = useMemo(() => {
-        return filteredIncomes.reduce(
-            (acc, income) => {
-                const debtAmount = income.debt?.remainingAmount || 0;
-                const total = income.debt?.initialAmount || income.totalWithVat || 0;
-                const paid = total - debtAmount;
-                return {
-                    totalIncomes: acc.totalIncomes + 1,
-                    totalAmount: acc.totalAmount + total,
-                    totalPaid: acc.totalPaid + paid,
-                    totalDebt: acc.totalDebt + debtAmount,
-                    vatAmount: acc.vatAmount + (income.vatAmount || 0)
-                };
-            },
-            { totalIncomes: 0, totalAmount: 0, totalPaid: 0, totalDebt: 0, vatAmount: 0 }
-        );
-    }, [filteredIncomes]);
-
     const materialColumns = [
         {
             title: <span className="nns-table-header"><LuPackage className="nns-icon" /> Material</span>,
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => (
+            render: (text) => (
                 <div className="nns-material-name">
                     <LuPackagePlus className="nns-material-icon" />
-                    <Text strong>{text}</Text>
-                    <Tag className="nns-category-tag">{record.category}</Tag>
+                    <Text strong>{text || 'Noma\'lum'}</Text>
+                    <Tag className="nns-category-tag">Noma'lum</Tag>
                 </div>
             )
         },
@@ -128,9 +92,9 @@ const IncomeListModal = () => {
             title: <span className="nns-table-header"><LuWeight className="nns-icon" /> Miqdor</span>,
             dataIndex: 'quantity',
             key: 'quantity',
-            render: (quantity, record) => (
+            render: (quantity) => (
                 <Tag className="nns-quantity-tag">
-                    {numberFormat(quantity)} {record.unit}
+                    {numberFormat(quantity || 0)} dona
                 </Tag>
             )
         },
@@ -138,9 +102,9 @@ const IncomeListModal = () => {
             title: <span className="nns-table-header"><LuDollarSign className="nns-icon" /> Narx</span>,
             dataIndex: 'price',
             key: 'price',
-            render: (price, record) => (
-                <Tag className={`nns-price-tag nns-price-${record.currency}`}>
-                    {numberFormat(Math.floor(price))} {record.currency === 'sum' ? "so'm" : '$'}
+            render: (price) => (
+                <Tag className="nns-price-tag nns-price-sum">
+                    {numberFormat(Math.floor(price || 0))} so'm
                 </Tag>
             )
         },
@@ -149,27 +113,25 @@ const IncomeListModal = () => {
             key: 'total',
             render: (_, record) => (
                 <Tag className="nns-total-tag">
-                    {numberFormat(record.price * record.quantity)} {record.currency === 'sum' ? "so'm" : '$'}
+                    {numberFormat((record.price || 0) * (record.quantity || 0))} so'm
                 </Tag>
             )
         },
         {
             title: <span className="nns-table-header"><LuTruck className="nns-icon" /> Transport</span>,
-            dataIndex: 'transportCostPerUnit',
             key: 'transport',
-            render: (cost) => (
+            render: () => (
                 <Tag className="nns-transport-tag">
-                    {numberFormat(cost)} so'm
+                    0 so'm
                 </Tag>
             )
         },
         {
             title: <span className="nns-table-header"><LuUsers className="nns-icon" /> Ishchi</span>,
-            dataIndex: 'workerCostPerUnit',
             key: 'worker',
-            render: (cost) => (
+            render: () => (
                 <Tag className="nns-worker-tag">
-                    {numberFormat(cost)} so'm
+                    0 so'm
                 </Tag>
             )
         }
@@ -178,12 +140,11 @@ const IncomeListModal = () => {
     const workerColumns = [
         {
             title: <span className="nns-table-header"><LuUsers className="nns-icon" /> Ishchi</span>,
-            dataIndex: ['workerId', 'firstName'],
             key: 'worker',
-            render: (firstName, record) => (
+            render: (_, record) => (
                 <div className="nns-worker-info">
-                    <Text strong>{firstName} {record.workerId?.lastName}</Text>
-                    <Text className="nns-worker-position">{record.workerId?.position}</Text>
+                    <Text strong>{record.workerId?.firstName || 'Noma\'lum'} {record.workerId?.lastName || ''}</Text>
+                    <Text className="nns-worker-position">{record.workerId?.position || 'Noma\'lum'}</Text>
                 </div>
             )
         },
@@ -193,130 +154,243 @@ const IncomeListModal = () => {
             key: 'payment',
             render: (payment) => (
                 <Tag className="nns-payment-tag">
-                    {numberFormat(payment)} so'm
+                    {numberFormat(payment || 0)} so'm
                 </Tag>
             )
         }
     ];
 
-    const debtPaymentColumns = [
+    const historyColumns = [
         {
             title: <span className="nns-table-header"><LuCalendar className="nns-icon" /> Sana</span>,
-            dataIndex: 'paymentDate',
-            key: 'paymentDate',
+            dataIndex: 'date',
+            key: 'date',
             render: (date) => new Date(date).toLocaleDateString('uz-UZ')
         },
         {
-            title: <span className="nns-table-header"><LuDollarSign className="nns-icon" /> Miqdor</span>,
-            dataIndex: 'amount',
-            key: 'amount',
-            render: (amount) => (
-                <Tag className="nns-payment-tag">{numberFormat(amount)} so'm</Tag>
+            title: <span className="nns-table-header"><LuDollarSign className="nns-icon" /> Umumiy summa</span>,
+            dataIndex: 'totalWithVat',
+            key: 'total',
+            render: (total) => (
+                <Tag className="nns-amount-tag">
+                    {numberFormat(total || 0)} so'm
+                </Tag>
             )
         },
         {
-            title: <span className="nns-table-header"><LuCreditCard className="nns-icon" /> To'lov turi</span>,
-            dataIndex: 'paymentMethod',
-            key: 'paymentMethod',
+            title: <span className="nns-table-header"><LuBanknote className="nns-icon" /> Qarz holati</span>,
+            dataIndex: 'debtStatus',
+            key: 'status',
+            render: (status) => (
+                <Tag className="nns-debt-tag">
+                    {status === 'fully_paid' ? 'To\'liq to\'langan' :
+                        status === 'partially_paid' ? 'Qisman to\'langan' : 'To\'lanmagan'}
+                </Tag>
+            )
+        },
+        {
+            title: <span className="nns-table-header"><LuCreditCard className="nns-icon" /> To\'lov turi</span>,
+            dataIndex: 'paymentType',
+            key: 'paymentType',
             render: (method) => (
-                <Tag className={`nns-payment-type-tag nns-payment-${method}`}>
+                <Tag className={`nns-payment-type-tag nns-payment-${method || 'naqt'}`}>
                     {method === 'naqt' ? 'Naqt' : 'Bank'}
                 </Tag>
             )
-        },
-        {
-            title: <span className="nns-table-header"><LuFileText className="nns-icon" /> Izoh</span>,
-            dataIndex: 'note',
-            key: 'note',
-            render: (note) => note || '-'
         }
     ];
 
-    const incomeColumns = [
+    const firmColumns = [
         {
             title: <span className="nns-table-header"><LuBuilding2 className="nns-icon" /> Firma</span>,
             key: 'firm',
-            render: (_, record) => (
+            render: (_, firm) => (
                 <div className="nns-firm-info">
                     <LuBuilding2 className="nns-firm-icon" />
                     <div className="nns-firm-details">
-                        <Text strong className="nns-firm-name">{record.firm?.name || "Noma'lum firma"}</Text>
+                        <Text strong className="nns-firm-name">{firm.name || "Noma'lum firma"}</Text>
                         <Text className="nns-firm-phone">
                             <LuPhone className="nns-phone-icon" />
-                            {PhoneNumberFormat(record.firm?.phone) || "Telefon yo'q"}
+                            {PhoneNumberFormat(firm.phone) || "Telefon yo'q"}
                         </Text>
                     </div>
                 </div>
-            ),
+            )
         },
         {
-            title: <span className="nns-table-header"><LuCalendar className="nns-icon" /> Sana</span>,
-            key: 'date',
-            render: (_, record) => (
+            title: <span className="nns-table-header">
+                <LuMapPin className="nns-icon" /> Manzil</span>,
+            key: 'address',
+            render: (_, firm) => (
+                <Text className="nns-address">{firm.address || "Noma'lum manzil"}</Text>
+            )
+        },
+        {
+            title: <span className="nns-table-header"><LuFileText className="nns-icon" /> Kirimlar soni</span>,
+            key: 'count',
+            render: (_, firm) => (
                 <Tag className="nns-date-tag">
-                    <LuCalendar className="nns-tag-icon" />
-                    {new Date(record.createdAt).toLocaleDateString('uz-UZ')}
+                    <LuFileText className="nns-tag-icon" />
+                    {firm.history?.length || 0}
                 </Tag>
-            ),
-        },
-        {
-            title: <span className="nns-table-header"><LuDollarSign className="nns-icon" /> Umumiy summa</span>,
-            key: 'totalAmount',
-            render: (_, record) => (
-                <Tag className="nns-amount-tag">
-                    <LuDollarSign className="nns-tag-icon" />
-                    {numberFormat(record.debt?.initialAmount || record.totalWithVat || 0)} so'm
-                </Tag>
-            ),
+            )
         },
         {
             title: <span className="nns-table-header"><LuCreditCard className="nns-icon" /> To'langan</span>,
             key: 'paidAmount',
-            render: (_, record) => {
-                const total = record.debt?.initialAmount || record.totalWithVat || 0;
-                const debt = record.debt?.remainingAmount || 0;
-                const paid = total - debt;
+            render: (_, firm) => {
+                const paid = firm.totalPaid || 0;
                 return (
                     <Tag className="nns-payment-tag nns-paid-amount">
                         <LuCreditCard className="nns-tag-icon" />
                         {numberFormat(paid)} so'm
                     </Tag>
                 );
-            },
+            }
         },
         {
             title: <span className="nns-table-header"><LuBanknote className="nns-icon" /> Qarz</span>,
             key: 'debtAmount',
-            render: (_, record) => {
-                const debt = record.debt?.remainingAmount || 0;
+            render: (_, firm) => {
+                const debt = firm.totalDebt || 0;
                 return (
                     <Tag className={`nns-debt-tag ${debt > 0 ? 'nns-debt-amount' : 'nns-no-debt'}`}>
                         <LuBanknote className="nns-tag-icon" />
                         {numberFormat(debt)} so'm
                     </Tag>
                 );
-            },
-        },
-        {
-            title: <span className="nns-table-header"><LuFileText className="nns-icon" /> To'lov tarixi</span>,
-            key: 'debtPayments',
-            render: (_, record) => (
-                record.debt?.debtPayments?.length > 0 ? (
-                    <Button
-                        type="default"
-                        size="small"
-                        icon={<LuBanknote />}
-                        onClick={() => handleDebtPaymentsClick(record)}
-                        className="nns-debt-payments-button"
-                    >
-                        To'lov tarixi
-                    </Button>
-                ) : (
-                    <Text>-</Text>
-                )
-            ),
-        },
+            }
+        }
     ];
+
+    const expandedFirmRowRender = (firm) => {
+        const sumWithoutVat = firm.history?.reduce((s, h) => s + (h.totalWithoutVat || 0), 0) || 0;
+        const sumTotal = firm.history?.reduce((s, h) => s + (h.totalWithVat || 0), 0) || 0;
+        const sumVatAmount = sumTotal - sumWithoutVat;
+        const firmPaid = firm.totalPaid || 0;
+        const firmDebt = firm.totalDebt || 0;
+        const vatPercentage = firm.history?.[0]?.vatPercentage || 0;
+        const debtStatus = firmDebt === 0 ? 'To\'liq to\'langan' :
+            (firmPaid > 0 ? 'Qisman to\'langan' : 'To\'lanmagan');
+
+        return (
+            <div className="nns-income-details">
+                <div className="nns-financial-summary">
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">QQSsiz summa:</Text>
+                        <Text strong className="nns-summary-value">
+                            {numberFormat(sumWithoutVat)} so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">QQS ({vatPercentage}%):</Text>
+                        <Text strong className="nns-summary-value">
+                            {numberFormat(sumVatAmount)} so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">QQSli summa:</Text>
+                        <Text strong className="nns-summary-value nns-total-amount">
+                            {numberFormat(sumTotal)} so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">To'langan:</Text>
+                        <Text strong className="nns-summary-value nns-paid-amount">
+                            {numberFormat(firmPaid)} so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">Qarz:</Text>
+                        <Text strong className={`nns-summary-value ${firmDebt > 0 ? 'nns-debt-amount' : 'nns-no-debt'}`}>
+                            {numberFormat(firmDebt)} so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">Qarz holati:</Text>
+                        <Text strong className="nns-summary-value">
+                            {debtStatus}
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">Transport xarajati:</Text>
+                        <Text strong className="nns-summary-value">
+                            0 so'm
+                        </Text>
+                    </div>
+                    <div className="nns-summary-item">
+                        <Text className="nns-summary-label">Ishchi xarajati:</Text>
+                        <Text strong className="nns-summary-value">
+                            0 so'm
+                        </Text>
+                    </div>
+                </div>
+
+                <Divider className="nns-section-divider" />
+
+                <div className="nns-history-section">
+                    <Title level={5} className="nns-section-title">
+                        <LuFileText className="nns-section-icon" />
+                        Tarix (Kirimlar)
+                    </Title>
+                    <Table
+                        dataSource={firm.history || []}
+                        columns={historyColumns}
+                        pagination={false}
+                        size="small"
+                        className="nns-history-table"
+                        rowKey="incomeId"
+                        expandable={{
+                            expandedRowRender: (historyItem) => (
+                                <div>
+                                    <Divider className="nns-section-divider" />
+                                    <div className="nns-materials-section">
+                                        <Title level={5} className="nns-section-title">
+                                            <LuPackage className="nns-section-icon" />
+                                            Materiallar
+                                        </Title>
+                                        <Table
+                                            dataSource={historyItem.materials || []}
+                                            columns={materialColumns}
+                                            pagination={false}
+                                            size="small"
+                                            className="nns-materials-table"
+                                            rowKey="_id"
+                                        />
+                                    </div>
+                                    {historyItem.workerPayments && historyItem.workerPayments.length > 0 && (
+                                        <>
+                                            <Divider className="nns-section-divider" />
+                                            <div className="nns-workers-section">
+                                                <Title level={5} className="nns-section-title">
+                                                    <LuUsers className="nns-section-icon" />
+                                                    Ishchi to'lovlari
+                                                </Title>
+                                                <Table
+                                                    dataSource={historyItem.workerPayments}
+                                                    columns={workerColumns}
+                                                    pagination={false}
+                                                    size="small"
+                                                    className="nns-workers-table"
+                                                    rowKey="_id"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            ),
+                            expandIcon: ({ expanded, onExpand, record }) =>
+                                expanded ? (
+                                    <LuChevronDown onClick={(e) => onExpand(record, e)} />
+                                ) : (
+                                    <LuChevronRight onClick={(e) => onExpand(record, e)} />
+                                )
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="nns-warehouse-modal nns-income-list-modal">
@@ -327,15 +401,7 @@ const IncomeListModal = () => {
                     Kirimlar ro'yxati
                 </Title>
                 <div className="nns-filter-group">
-                    <Input
-                        className="nns-month-input"
-                        value={selectedMonth}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="MM.YYYY"
-                        maxLength={7}
-                        prefix={<LuCalendar className="nns-input-icon" />}
-                    />
+
                     <Select
                         className="nns-firm-filter"
                         value={selectedFirm}
@@ -369,7 +435,6 @@ const IncomeListModal = () => {
                         padding: '6px 5px 0px 5px',
                         borderRadius: '6px',
                         cursor: 'pointer'
-
                     }} to="/firm">
                         <MdOutlineConfirmationNumber />
                     </Link>
@@ -381,9 +446,8 @@ const IncomeListModal = () => {
                     <div className="nns-stat-content">
                         <div className="nns-stat-icon"><MdAccountBalance /></div>
                         <div className="nns-stat-info">
-                            <Text className="nns-stat-number-bal">Naqt: {numberFormat(balanceData?.innerData?.naqt)}</Text>
-                            <Text className="nns-stat-number-bal">Bank: {numberFormat(balanceData?.innerData?.bank)}</Text>
-                            {/* <Text className="nns-stat-label">Balans</Text> */}
+                            <Text className="nns-stat-number-bal">Naqt: {numberFormat(balanceData?.innerData?.naqt || 0)}</Text>
+                            <Text className="nns-stat-number-bal">Bank: {numberFormat(balanceData?.innerData?.bank || 0)}</Text>
                         </div>
                     </div>
                 </Card>
@@ -440,7 +504,7 @@ const IncomeListModal = () => {
                         <div className="nns-loading-spinner"></div>
                         <Text>Kirimlar yuklanmoqda...</Text>
                     </div>
-                ) : filteredIncomes.length === 0 ? (
+                ) : filteredFirms.length === 0 ? (
                     <div className="nns-empty-state">
                         <div className="nns-empty-icon">📋</div>
                         <Title level={4} className="nns-empty-title">
@@ -452,154 +516,24 @@ const IncomeListModal = () => {
                     </div>
                 ) : (
                     <Table
-                        columns={incomeColumns}
-                        dataSource={filteredIncomes}
-                        rowKey="_id"
+                        columns={firmColumns}
+                        dataSource={filteredFirms}
+                        rowKey="firmId"
                         pagination={false}
+                        size="small"
                         expandable={{
-                            expandedRowRender: (record) => (
-                                <div className="nns-income-details">
-                                    <div className="nns-financial-summary">
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">QQSsiz summa:</Text>
-                                            <Text strong className="nns-summary-value">
-                                                {numberFormat(Math.floor(record.totalWithoutVat))} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">QQS ({record.vatPercentage}%):</Text>
-                                            <Text strong className="nns-summary-value">
-                                                {numberFormat(Math.floor(record.vatAmount))} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">QQSli summa:</Text>
-                                            <Text strong className="nns-summary-value nns-total-amount">
-                                                {numberFormat(record.debt?.initialAmount || record.totalWithVat || 0)} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">To'langan:</Text>
-                                            <Text strong className="nns-summary-value nns-paid-amount">
-                                                {numberFormat((record.debt?.initialAmount || record.totalWithVat || 0) - (record.debt?.remainingAmount || 0))} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">Qarz:</Text>
-                                            <Text strong className={`nns-summary-value ${record.debt?.remainingAmount > 0 ? 'nns-debt-amount' : 'nns-no-debt'}`}>
-                                                {numberFormat(record.debt?.remainingAmount || 0)} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">Qarz holati:</Text>
-                                            <Text strong className="nns-summary-value">
-                                                {record.debt?.status === 'partially_paid' ? 'Qisman to\'langan' :
-                                                    record.debt?.status === 'fully_paid' ? 'To\'liq to\'langan' : 'To\'lanmagan'}
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">Transport xarajati:</Text>
-                                            <Text strong className="nns-summary-value">
-                                                {numberFormat(Math.floor(record.totalTransportCost))} so'm
-                                            </Text>
-                                        </div>
-                                        <div className="nns-summary-item">
-                                            <Text className="nns-summary-label">Ishchi xarajati:</Text>
-                                            <Text strong className="nns-summary-value">
-                                                {numberFormat(record.totalWorkerCost)} so'm
-                                            </Text>
-                                        </div>
-                                    </div>
-
-                                    <Divider className="nns-section-divider" />
-
-                                    <div className="nns-materials-section">
-                                        <Title level={5} className="nns-section-title">
-                                            <LuPackage className="nns-section-icon" />
-                                            Materiallar
-                                        </Title>
-                                        <Table
-                                            dataSource={record.materials}
-                                            columns={materialColumns}
-                                            pagination={false}
-                                            size="small"
-                                            className="nns-materials-table"
-                                            rowKey="_id"
-                                        />
-                                    </div>
-
-                                    {record.workerPayments && record.workerPayments.length > 0 && (
-                                        <>
-                                            <Divider className="nns-section-divider" />
-                                            <div className="nns-workers-section">
-                                                <Title level={5} className="nns-section-title">
-                                                    <LuUsers className="nns-section-icon" />
-                                                    Ishchi to'lovlari
-                                                </Title>
-                                                <Table
-                                                    dataSource={record.workerPayments}
-                                                    columns={workerColumns}
-                                                    pagination={false}
-                                                    size="small"
-                                                    className="nns-workers-table"
-                                                    rowKey="_id"
-                                                />
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ),
+                            expandedRowRender: expandedFirmRowRender,
                             expandIcon: ({ expanded, onExpand, record }) =>
                                 expanded ? (
                                     <LuChevronDown onClick={(e) => onExpand(record, e)} />
                                 ) : (
                                     <LuChevronRight onClick={(e) => onExpand(record, e)} />
-                                ),
+                                )
                         }}
-                        className="nns-income-table"
+                        className="nns-firms-table"
                     />
                 )}
             </div>
-
-            <Modal
-                title={
-                    <div className="nns-debt-payments-modal-title">
-                        <LuBanknote className="nns-modal-icon" />
-                        Qarz to'lovlari
-                    </div>
-                }
-                open={debtPaymentsModal.visible}
-                onCancel={handleDebtPaymentsCancel}
-                footer={null}
-                width={600}
-                className="nns-debt-payments-modal"
-            >
-                {debtPaymentsModal.incomeData && (
-                    <div className="nns-debt-payments-modal-content">
-                        <div className="nns-debt-payments-info">
-                            <Text strong>{debtPaymentsModal.incomeData.firmName}</Text>
-                            <Text className="nns-payment-date">
-                                {new Date(debtPaymentsModal.incomeData.createdAt).toLocaleDateString('uz-UZ')}
-                            </Text>
-                        </div>
-                        <Divider />
-                        {debtPaymentsModal.debtPayments.length > 0 ? (
-                            <Table
-                                dataSource={debtPaymentsModal.debtPayments}
-                                columns={debtPaymentColumns}
-                                pagination={false}
-                                size="small"
-                                className="nns-debt-payments-table"
-                                rowKey="_id"
-                            />
-                        ) : (
-                            <div className="nns-empty-state">
-                                <Text>Hozircha qarz to'lovlari yo'q</Text>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </Modal>
         </div>
     );
 };

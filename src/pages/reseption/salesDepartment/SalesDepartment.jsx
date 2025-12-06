@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Package,
   FileText,
@@ -46,9 +46,11 @@ const SacodSalesModule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const role = localStorage.getItem("role");
-  const [activeTab, setActiveTab] = useState(
-    role === "direktor" ? "sales" : "products"
-  );
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem("activeTab");
+    const validTabs = ["products", "cart", "sales", "salespeople"];
+    return savedTab && validTabs.includes(savedTab) ? savedTab : (role === "direktor" ? "sales" : "products");
+  });
   const [paymentInfo, setPaymentInfo] = useState({
     totalAmount: 0,
     paidAmount: 0,
@@ -86,6 +88,11 @@ const SacodSalesModule = () => {
   );
 
   const searchPanelRef = useRef(null);
+
+  // Persist activeTab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
 
   const showLogoutModal = () => {
     setIsModalOpen(true);
@@ -331,6 +338,7 @@ const SacodSalesModule = () => {
       />
       {role !== "direktor" && (
         <div className="sacod-navigation">
+
           <div className="sacod-filter-controls">
             <button
               className={`sacod-nav-btn ${activeTab === "products" ? "sacod-nav-btn-active" : ""
@@ -378,6 +386,7 @@ const SacodSalesModule = () => {
             }
 
           </div>
+
           {role === "sotuvchi menejir" ||
             role === "sotuvchi" ||
             role === "sotuvchi eksport" ? (
@@ -871,5 +880,3 @@ const SacodSalesModule = () => {
 };
 
 export default SacodSalesModule;
-
-

@@ -241,7 +241,6 @@ function Salary({ data }) {
 
   data?.forEach((record) => {
     const dateKey = dayjs(record.date).tz("Asia/Tashkent").format("YYYY-MM-DD");
-    console.log(">>>", dateKey);
 
     if (!productionMap[dateKey]) {
       productionMap[dateKey] = { produced: 0, loaded: 0, loadedKg: 0 };
@@ -351,7 +350,6 @@ function Salary({ data }) {
                 (sum, day) => sum + (empObj.days[day] || 0),
                 0
               );
-              console.log(empObj);
 
               return (
                 <tr key={fio}>

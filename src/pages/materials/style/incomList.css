@@ -1,0 +1,842 @@
+/* Main Container */
+.dui-warehouse-modal {
+    padding: 24px;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+.dui-income-list-modal {
+    max-width: 100%;
+}
+
+/* Header Section */
+.dui-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.dui-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 !important;
+    color: #1a1a1a;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.dui-title-icon {
+    font-size: 28px;
+    color: #1890ff;
+}
+
+.dui-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dui-month-input {
+    width: 150px;
+    border-radius: 8px;
+}
+
+.dui-firm-filter,
+.dui-debt-filter {
+    border-radius: 8px;
+}
+
+.dui-firm-link {
+    color: #002bac;
+    font-size: 20px;
+    border: 1px solid #002bac;
+    padding: 6px 5px 0px 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dui-firm-link:hover {
+    background: #002bac;
+    color: white;
+}
+
+.dui-input-icon,
+.dui-filter-icon {
+    margin-right: 4px;
+}
+
+/* Statistics Cards */
+.dui-header-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dui-stat-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.dui-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dui-stat-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px;
+}
+
+.dui-stat-icon {
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.dui-stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dui-stat-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.dui-stat-number-bal {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+.dui-stat-label {
+    font-size: 13px;
+    color: #8c8c8c;
+    font-weight: 500;
+}
+
+/* Card Color Variants */
+.dui-stat-card-balance .dui-stat-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.dui-stat-card-incomes .dui-stat-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.dui-stat-card-amount .dui-stat-icon {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.dui-stat-card-paid .dui-stat-icon {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+}
+
+.dui-stat-card-debt .dui-stat-icon {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+}
+
+.dui-stat-card-vat .dui-stat-icon {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    color: white;
+}
+
+/* Main Income Container */
+.dui-income-container {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Tables */
+.dui-firms-table,
+.dui-history-table,
+.dui-materials-detail-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dui-firms-table .ant-table,
+.dui-history-table .ant-table,
+.dui-materials-detail-table .ant-table {
+    border-radius: 8px;
+}
+
+.dui-firms-table .ant-table-thead>tr>th,
+.dui-history-table .ant-table-thead>tr>th,
+.dui-materials-detail-table .ant-table-thead>tr>th {
+    background: #fafafa;
+    color: #262626;
+    font-weight: 600;
+    border-bottom: 2px solid #e8e8e8;
+    padding: 14px 16px;
+}
+
+.dui-firms-table .ant-table-tbody>tr,
+.dui-history-table .ant-table-tbody>tr,
+.dui-materials-detail-table .ant-table-tbody>tr {
+    transition: all 0.2s ease;
+}
+
+.dui-firms-table .ant-table-tbody>tr:hover,
+.dui-history-table .ant-table-tbody>tr:hover,
+.dui-materials-detail-table .ant-table-tbody>tr:hover {
+    background: #f5f9ff;
+}
+
+.dui-table-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.dui-icon {
+    font-size: 16px;
+    color: #1890ff;
+}
+
+/* Expand Icons */
+.dui-expand-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #1890ff;
+    transition: all 0.2s ease;
+}
+
+.dui-expand-icon:hover {
+    color: #40a9ff;
+    transform: scale(1.1);
+}
+
+/* Firm Info */
+.dui-firm-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dui-firm-icon {
+    font-size: 24px;
+    color: #1890ff;
+    flex-shrink: 0;
+}
+
+.dui-firm-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dui-firm-name {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.dui-firm-phone {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #8c8c8c;
+}
+
+.dui-phone-icon {
+    font-size: 12px;
+}
+
+/* Tags */
+.dui-date-tag,
+.dui-amount-tag,
+.dui-paid-tag,
+.dui-debt-amount-tag,
+.dui-no-debt-tag,
+.dui-history-count-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+}
+
+.dui-tag-icon {
+    font-size: 14px;
+}
+
+.dui-date-tag {
+    background: #e6f7ff;
+    color: #0958d9;
+}
+
+.dui-amount-tag {
+    background: #f0f5ff;
+    color: #1677ff;
+    font-weight: 600;
+}
+
+.dui-paid-tag {
+    background: #f6ffed;
+    color: #52c41a;
+    font-weight: 600;
+}
+
+.dui-debt-amount-tag {
+    background: #fff1f0;
+    color: #ff4d4f;
+    font-weight: 600;
+}
+
+.dui-no-debt-tag {
+    background: #f0f0f0;
+    color: #8c8c8c;
+    font-weight: 500;
+}
+
+.dui-history-count-tag {
+    background: #f9f0ff;
+    color: #722ed1;
+}
+
+/* Firm Details Wrapper */
+.dui-firm-details-wrapper {
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 8px;
+    margin: 16px 0;
+}
+
+/* Financial Summary */
+.dui-financial-summary {
+    margin-bottom: 24px;
+}
+
+.dui-summary-card {
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.dui-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 8px;
+}
+
+.dui-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.dui-summary-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #8c8c8c;
+    font-weight: 500;
+}
+
+.dui-summary-icon {
+    font-size: 14px;
+    color: #1890ff;
+}
+
+.dui-summary-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.dui-summary-value.dui-highlight {
+    color: #1890ff;
+    font-size: 20px;
+}
+
+.dui-summary-value.dui-paid-color {
+    color: #52c41a;
+}
+
+.dui-summary-value.dui-debt-color {
+    color: #ff4d4f;
+}
+
+.dui-summary-value.dui-no-debt-color {
+    color: #8c8c8c;
+}
+
+/* Section Divider */
+.dui-section-divider {
+    margin: 24px 0;
+    border-color: #e8e8e8;
+}
+
+/* History Section */
+.dui-history-section {
+    margin-top: 24px;
+}
+
+.dui-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px !important;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.dui-section-icon {
+    font-size: 20px;
+    color: #1890ff;
+}
+
+/* History Table Cells */
+.dui-date-cell,
+.dui-materials-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dui-cell-icon {
+    font-size: 16px;
+    color: #1890ff;
+}
+
+.dui-unit-tag {
+    background: #fff7e6;
+    color: #d48806;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 500;
+}
+
+.dui-quantity-tag {
+    background: #e6f7ff;
+    color: #0958d9;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-price-tag {
+    background: #f0f5ff;
+    color: #1677ff;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-value-tag,
+.dui-total-tag {
+    background: #fff0f6;
+    color: #c41d7f;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-payment-tag {
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-payment-green {
+    background: #f6ffed;
+    color: #52c41a;
+}
+
+.dui-payment-value-tag {
+    background: #e6fffb;
+    color: #13c2c2;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-remainder-tag {
+    background: #f5f5f5;
+    color: #8c8c8c;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 500;
+}
+
+.dui-debt-tag {
+    background: #fff1f0;
+    color: #ff4d4f;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 600;
+}
+
+.dui-no-debt-tag {
+    background: #f6ffed;
+    color: #52c41a;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 500;
+}
+
+.dui-note-cell,
+.dui-note-text {
+    font-size: 13px;
+    color: #595959;
+}
+
+/* History Materials Wrapper */
+.dui-history-materials-wrapper {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    margin: 12px 0;
+    border: 1px solid #e8e8e8;
+}
+
+.dui-materials-section {
+    margin-bottom: 20px;
+}
+
+/* Material Details */
+.dui-material-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dui-material-icon {
+    font-size: 18px;
+    color: #52c41a;
+}
+
+/* History Summary */
+.dui-history-summary {
+    margin-top: 20px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.dui-payment-method-tag {
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-weight: 500;
+    border: none;
+}
+
+.dui-payment-naqt {
+    background: #e6f7ff;
+    color: #0958d9;
+}
+
+.dui-payment-bank {
+    background: #f9f0ff;
+    color: #722ed1;
+}
+
+/* Loading State */
+.dui-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 16px;
+}
+
+.dui-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f0f0f0;
+    border-top-color: #1890ff;
+    border-radius: 50%;
+    animation: dui-spin 0.8s linear infinite;
+}
+
+@keyframes dui-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty State */
+.dui-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.dui-empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.dui-empty-title {
+    color: #262626;
+    margin-bottom: 8px !important;
+}
+
+.dui-empty-text {
+    color: #8c8c8c;
+    font-size: 14px;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 1200px) {
+    .dui-header-cards {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .dui-summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .dui-modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dui-filter-group {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .dui-header-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dui-summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dui-warehouse-modal {
+        padding: 16px;
+    }
+
+    .dui-modal-header {
+        padding: 16px;
+    }
+
+    .dui-modal-title {
+        font-size: 20px;
+    }
+
+    .dui-title-icon {
+        font-size: 24px;
+    }
+
+    .dui-header-cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .dui-stat-content {
+        padding: 12px;
+    }
+
+    .dui-stat-icon {
+        font-size: 32px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .dui-stat-number {
+        font-size: 18px;
+    }
+
+    .dui-income-container {
+        padding: 16px;
+    }
+
+    .dui-filter-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .dui-month-input,
+    .dui-firm-filter,
+    .dui-debt-filter {
+        width: 100% !important;
+    }
+
+    .dui-firm-details-wrapper {
+        padding: 16px;
+    }
+
+    .dui-summary-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .dui-history-materials-wrapper {
+        padding: 12px;
+    }
+
+    .dui-firms-table .ant-table-thead>tr>th,
+    .dui-history-table .ant-table-thead>tr>th,
+    .dui-materials-detail-table .ant-table-thead>tr>th {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .dui-firms-table .ant-table-tbody>tr>td,
+    .dui-history-table .ant-table-tbody>tr>td,
+    .dui-materials-detail-table .ant-table-tbody>tr>td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .dui-firm-name {
+        font-size: 14px;
+    }
+
+    .dui-firm-phone {
+        font-size: 12px;
+    }
+
+    .dui-section-title {
+        font-size: 16px;
+    }
+
+    .dui-summary-value {
+        font-size: 16px;
+    }
+
+    .dui-summary-value.dui-highlight {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .dui-warehouse-modal {
+        padding: 12px;
+    }
+
+    .dui-modal-header {
+        padding: 12px;
+    }
+
+    .dui-modal-title {
+        font-size: 18px;
+    }
+
+    .dui-income-container {
+        padding: 12px;
+    }
+
+    .dui-stat-number {
+        font-size: 16px;
+    }
+
+    .dui-stat-number-bal {
+        font-size: 12px;
+    }
+
+    .dui-stat-label {
+        font-size: 11px;
+    }
+
+    .dui-firm-details-wrapper,
+    .dui-history-materials-wrapper {
+        padding: 12px;
+    }
+
+    .dui-summary-item {
+        padding: 10px;
+    }
+
+    .dui-summary-label {
+        font-size: 12px;
+    }
+
+    .dui-summary-value {
+        font-size: 14px;
+    }
+
+    .dui-summary-value.dui-highlight {
+        font-size: 16px;
+    }
+}
+
+/* Print Styles */
+@media print {
+
+    .dui-filter-group,
+    .dui-expand-icon {
+        display: none !important;
+    }
+
+    .dui-firms-table .ant-table-tbody>tr,
+    .dui-history-table .ant-table-tbody>tr {
+        page-break-inside: avoid;
+    }
+
+    .dui-warehouse-modal {
+        background: white;
+    }
+
+    .dui-stat-card {
+        box-shadow: none;
+        border: 1px solid #e8e8e8;
+    }
+}

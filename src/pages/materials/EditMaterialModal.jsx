@@ -225,7 +225,7 @@ const EditMaterialModal = ({ refetch, setIsIncomeModalOpen, isIncomeModalOpen })
                     workerCostPerUnit: Number(material.workerCostPerUnit),
                 })),
                 price: Number(paidAmount) || 0,
-                paymentType,
+                paymentType: paymentType || "naqt",
                 vatPercentage: paymentType === "bank" ? Number(vatPercentage) : 0,
                 totalWithVat: Number(baseTotal),
                 totalWithoutVat: Number(totalWithoutVat),

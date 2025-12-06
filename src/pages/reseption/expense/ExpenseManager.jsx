@@ -20,7 +20,7 @@ const ExpenseTracker = () => {
     const [transactionType, setTransactionType] = useState('chiqim');
     const [paymentMethod, setPaymentMethod] = useState('naqt');
     const [category, setCategory] = useState('');
-    const [selectFirma, setSelectFirma] = useState('');
+    const [selectFirmaId, setSelectFirmaId] = useState(''); // O'zgartirildi: ID ni saqlash uchun string
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [formattedAmount, setFormattedAmount] = useState('');
@@ -41,6 +41,9 @@ const ExpenseTracker = () => {
     const { data: balance = { innerData: { naqt: 0, bank: 0 } }, refetch } = useGetBalanceQuery();
     const [createExpense] = useCreateExpenseMutation();
     const [makePayment] = useMakePaymentMutation();
+
+    // Firma obyektini ID bo'yicha topish yordamchi funksiyasi (optimizatsiya uchun)
+    const getFirmaById = (id) => firms?.innerData?.find(firma => firma._id === id) || null;
 
     const categories = {
         kirim: [
@@ -133,13 +136,16 @@ const ExpenseTracker = () => {
         if (parsedAmount <= 0) return toast.error("Summa 0 dan katta bo'lishi kerak!");
 
         try {
+            // --- Firma ma'lumotlarini olish (optimizatsiya) ---
+            const selectedFirma = getFirmaById(selectFirmaId);
+
             // --- Yangi transaction obyektini tayyorlash ---
             const newTransaction = {
                 type: transactionType,
                 paymentMethod,
-                category,
+                category: category === "Firmaga pul o'tqazish" ? selectedFirma?.name || category : category, // Optimizatsiya: null-safe va fallback
                 amount: parsedAmount,
-                description,
+                description: category === "Firmaga pul o'tqazish" ? category : description,
                 date: new Date().toISOString()
             };
 
@@ -148,10 +154,10 @@ const ExpenseTracker = () => {
 
             // --- Qo‘shimcha amallar kategoriyaga qarab ---
             if (category === "Firmaga pul o'tqazish") {
-                if (!selectFirma) return toast.error("Iltimos, firma tanlang");
+                if (!selectedFirma?._id) return toast.error("Iltimos, firma tanlang");
 
                 await processCompanyPayment({
-                    firmId: selectFirma,
+                    firmId: selectedFirma._id,
                     paymentAmount: parsedAmount,
                     paymentMethod,
                     note: description
@@ -169,7 +175,7 @@ const ExpenseTracker = () => {
             // --- Formani tozalash ---
             refetch();
             setAmount('');
-            setSelectFirma('');
+            setSelectFirmaId(''); // Tozalash
             setSelectTransport('');
             setDescription('');
             setCategory('');
@@ -245,13 +251,15 @@ const ExpenseTracker = () => {
                             <div className="ruberoid-form-group">
                                 <label className="ruberoid-form-label">Firmani tanlang</label>
                                 <select
-                                    value={selectFirma}
-                                    onChange={(e) => setSelectFirma(e.target.value)}
+                                    value={selectFirmaId} // O'zgartirildi: ID ni ishlatish
+                                    onChange={(e) => setSelectFirmaId(e.target.value)} // O'zgartirildi: ID saqlash
                                     className="ruberoid-form-select"
                                 >
                                     <option value="">Firma tanlang</option>
                                     {firms?.innerData?.map((cat, inx) => (
-                                        <option key={inx} value={cat?._id}>{cat.name} | {NumberFormat(Math.abs(cat.debt))} so'm  | {cat.debt < 0 ? "Haqdorlik" : "Qarzdorlik"}</option>
+                                        <option key={cat._id || inx} value={cat._id}> {/* O'zgartirildi: value=_id */}
+                                            {cat.name} | {NumberFormat(Math.abs(cat.debt))} so'm  | {cat.debt < 0 ? "Haqdorlik" : "Qarzdorlik"}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -531,6 +539,3 @@ const ExpenseTracker = () => {
 };
 
 export default ExpenseTracker;
-
-
-
