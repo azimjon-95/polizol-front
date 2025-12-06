@@ -513,7 +513,8 @@ function Salary({ data }) {
               BT-5 sotuv uchun:{" "}
               <b>
                 {totalbtm5forSale} kg -{" "}
-                {(totalbtm5forSale * btm_5_mel_price)?.toLocaleString()} so'm{" "}
+                {(totalbtm5forSale * (btm_5_mel_price || 0))?.toLocaleString()}{" "}
+                so'm{" "}
               </b>{" "}
             </p>
             <p>
