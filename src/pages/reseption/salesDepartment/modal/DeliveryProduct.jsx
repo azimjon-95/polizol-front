@@ -1,4 +1,10 @@
-import React, { useCallback, useRef, useState, useMemo, useEffect } from "react";
+import React, {
+  useCallback,
+  useRef,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { useDeliverProductMutation } from "../../../../context/cartSaleApi";
 import { useGetUndeliveredItemsByCustomerQuery } from "../../../../context/cartSaleApi"; // New import: Add this query to your API slice
 import { toast } from "react-toastify";
@@ -19,9 +25,12 @@ const DeliveryProduct = ({
   modalState,
 }) => {
   const [deliverProduct, { isLoading }] = useDeliverProductMutation();
-  const { data: undeliveredData } = useGetUndeliveredItemsByCustomerQuery(modalState.activeSaleId, {
-    skip: !modalState.activeSaleId // Skip if no ID
-  }); // New: Fetch undelivered items via API
+  const { data: undeliveredData } = useGetUndeliveredItemsByCustomerQuery(
+    modalState.activeSaleId,
+    {
+      skip: !modalState.activeSaleId, // Skip if no ID
+    }
+  ); // New: Fetch undelivered items via API
   const role = localStorage.getItem("role");
   const inputRef = useRef(null);
   const contentRef = useRef();
@@ -54,16 +63,18 @@ const DeliveryProduct = ({
 
   // Local handleDeliveryItemChange
   const handleDeliveryItemChange = useCallback((index, field, value) => {
-    setDeliveryItems(prev => prev.map((item, i) => {
-      if (i === index) {
-        const updatedItem = { ...item, [field]: value };
-        if (field === 'selected' && !value) {
-          updatedItem.deliveryQuantity = 0;
+    setDeliveryItems((prev) =>
+      prev.map((item, i) => {
+        if (i === index) {
+          const updatedItem = { ...item, [field]: value };
+          if (field === "selected" && !value) {
+            updatedItem.deliveryQuantity = 0;
+          }
+          return updatedItem;
         }
-        return updatedItem;
-      }
-      return item;
-    }));
+        return item;
+      })
+    );
   }, []);
 
   // Format number function
@@ -218,7 +229,9 @@ const DeliveryProduct = ({
       toast.success(updatedSale.message || "Mahsulotlar yuborildi!");
       closeModal();
     } catch (error) {
-      toast.error(error.data.message || "Mahsulotlarni yuborishda xatolik yuz berdi!");
+      toast.error(
+        error.data.message || "Mahsulotlarni yuborishda xatolik yuz berdi!"
+      );
     }
   }, [
     validItems,
@@ -360,7 +373,9 @@ const DeliveryProduct = ({
                   <Button
                     className="delivery-form-radio-box-button"
                     key={group}
-                    type={deliveredGroups.includes(group) ? "primary" : "default"}
+                    type={
+                      deliveredGroups.includes(group) ? "primary" : "default"
+                    }
                     onClick={() => handleGroupChange(group)}
                   >
                     {capitalizeFirstLetter(group)}
@@ -397,7 +412,7 @@ const DeliveryProduct = ({
             return (
               <div key={docIndex} className="card-doc-page">
                 <h2 className="card-doc-title">
-                  Yuk Xati (Sotuv №{doc.saleId?.slice(-4) || 'N/A'})
+                  Yuk Xati (Sotuv №{doc.saleId?.slice(-4) || "N/A"})
                 </h2>
                 <p className="card-doc-date">{formatDate(doc.createdAt)}</p>
 
@@ -429,7 +444,8 @@ const DeliveryProduct = ({
                   </thead>
                   <tbody>
                     {doc.items.map((item, index) => {
-                      const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
+                      const price =
+                        item.discountedPrice ?? item.pricePerUnit ?? 0;
                       const total = calculateItemTotal(item);
                       return (
                         <tr key={index}>
@@ -443,8 +459,12 @@ const DeliveryProduct = ({
                       );
                     })}
                     <tr className="card-doc-total">
-                      <td colSpan="5"><strong>Jami:</strong></td>
-                      <td><strong>{NumberFormat(totalAmount)}</strong></td>
+                      <td colSpan="5">
+                        <strong>Jami:</strong>
+                      </td>
+                      <td>
+                        <strong>{NumberFormat(totalAmount)}</strong>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
