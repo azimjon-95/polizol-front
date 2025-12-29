@@ -3,9 +3,13 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BsCaretUpFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
+import { Clock } from 'lucide-react';
 import { notification } from "antd";
 import { Calendar } from "lucide-react";
 import { BsCaretDownFill } from "react-icons/bs";
+import {
+  useGetActiveBoilingProcessQuery,
+} from '../../context/productionApi';
 import {
   RiLogoutCircleRLine,
   RiUser3Line,
@@ -35,6 +39,39 @@ function Header() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const searchPanelRef = useRef(null);
   const profileToggleRef = useRef(null);
+  const isProduction = location.pathname === "/production";
+
+  const {
+    data: activeProcess
+  } = useGetActiveBoilingProcessQuery(undefined, {
+    pollingInterval: 10000,
+    refetchOnMountOrArgChange: true,
+  });
+  const stage = activeProcess?.message === "Hozirda faol qaynatish jarayoni yo‘q" ? false : true;
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  useEffect(() => {
+    if (!activeProcess?.innerData?.boilingStartTime
+    ) return;
+
+    const interval = setInterval(() => {
+      const diff =
+        Math.floor(
+          (Date.now() - new Date(activeProcess?.innerData?.boilingStartTime
+          )) / 1000
+        );
+      setElapsedSeconds(diff);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeProcess?.innerData?.boilingStartTime]);
+
+  const formatElapsed = (sec) => {
+    const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  };
+
 
   const [dollarRate, setDollarRate] = useState(null);
   const [isDollarOpen, setIsDollarOpen] = useState(false);
@@ -193,19 +230,6 @@ function Header() {
         )}
       </div>
       <div className="header-right">
-        {isDirectorPath && (
-          <div className="complex-header-flex">
-            <Calendar className="complex-calendar-icon" />
-            <DatePicker
-              selected={selectedDate}
-              onChange={handleMonthChange}
-              dateFormat="yyyy-MM"
-              showMonthYearPicker
-              className="complex-month-selector"
-              placeholderText="Yil-Oy tanlang"
-            />
-          </div>
-        )}
 
         <div className="search-container">
           <button
@@ -263,3 +287,46 @@ function Header() {
 }
 
 export default Header;
+
+
+
+// {isDirectorPath && (
+//   <div className="complex-header-flex">
+//     <Calendar className="complex-calendar-icon" />
+//     <DatePicker
+//       selected={selectedDate}
+//       onChange={handleMonthChange}
+//       dateFormat="yyyy-MM"
+//       showMonthYearPicker
+//       className="complex-month-selector"
+//       placeholderText="Yil-Oy tanlang"
+//     />
+//   </div>
+// )}
+// {
+//   stage && !isProduction && (
+//     <div style={{
+//       border: "1px solid #ffd591aa",
+//       background: "#fccb623d",
+//       borderRadius: "5px",
+//       padding: "3px 8px",
+//       color: "#fecb9b",
+//       fontSize: "12px",
+//       cursor: "pointer"
+//     }}
+//       onClick={() => {
+//         navigate("/production")
+//       }}
+//     >
+//       <p style={{ marginBottom: "2px" }}>Bitum qozonda</p>
+//       <div style={{
+//         display: "flex",
+//         gap: "5px",
+//         alignItems: "center",
+//       }}>
+//         <Clock size={16} />
+//         <p >{formatElapsed(elapsedSeconds)}</p>
+//       </div>
+//     </div>
+//   )
+// }

@@ -6,9 +6,12 @@ import { useCreateProductionMutation } from "../../../context/praymerApi";
 import "./css/praymer.css";
 
 // Utility functions
-const formatNumber = (n) =>
+const formatNumber = (n, decimals = 3) =>
   Number.isFinite(n)
-    ? new Intl.NumberFormat("uz-UZ", { maximumFractionDigits: 0 }).format(Math.round(n))
+    ? new Intl.NumberFormat("uz-UZ", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: decimals
+    }).format(n)
     : "0";
 
 const parseNum = (v) => {
@@ -23,7 +26,7 @@ const BiproPraymer = () => {
   const [salePricePerBucket, setSalePricePerBucket] = React.useState(215000);
   const [items, setItems] = React.useState([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [activeBtn, setActiveBtn] = React.useState("praymer"); // default active
+  const [activeBtn, setActiveBtn] = React.useState("praymer");
   const { data: materials, isLoading: materialsLoading } = useGetAllMaterialsQuery();
   const [createProduction, { isLoading: createProductionLoading }] = useCreateProductionMutation();
 
@@ -39,7 +42,7 @@ const BiproPraymer = () => {
     RAZ_QTY: 9.756,
   };
 
-  // Constants for Mastika (values reduced approximately by 20% for demonstration; adjust as needed)
+  // Constants for Mastika
   const mastikaConstants = {
     DEFAULT_SALE_PRICE: 215000,
     TRANSPORT_COST: 5000,
@@ -51,7 +54,6 @@ const BiproPraymer = () => {
     RAZ_QTY: 7.805,
   };
 
-  // Select constants based on activeBtn
   const constants = activeBtn === "mastika" ? mastikaConstants : praymerConstants;
 
   // Material map for quick lookup
@@ -74,7 +76,7 @@ const BiproPraymer = () => {
           category: "nakleyka",
           unit: nakleyka.unit,
           qty: 1,
-          qiymat: Math.floor(nakleyka.price),
+          qiymat: nakleyka.price,
           baseQty: 1,
           baseQiymat: nakleyka.price,
           isMaterial: true,
@@ -156,19 +158,17 @@ const BiproPraymer = () => {
     ];
   }, [materialMap, constants]);
 
-  // Initialize items
   useEffect(() => {
     setItems(DEFAULT_ITEMS);
-  }, [DEFAULT_ITEMS]);
+  }, [JSON.stringify(DEFAULT_ITEMS)]);
 
-  // Reset sale price when constants change (i.e., activeBtn changes)
   useEffect(() => {
     setSalePricePerBucket(constants.DEFAULT_SALE_PRICE);
-    setQtyProduced(1); // Reset quantity to 1 on switch
+    setQtyProduced(1);
   }, [constants.DEFAULT_SALE_PRICE]);
 
-  // 🔹 Helper: Tayyorlash qiymatini qayta hisoblash
-  const recalcPrep = (items) => {
+  // Helper: Tayyorlash qiymatini qayta hisoblash
+  const recalcPrep = useCallback((items) => {
     const otherCosts = items
       .filter((it) => it.removable)
       .reduce((sum, it) => sum + parseNum(it.qiymat), 0);
@@ -178,26 +178,23 @@ const BiproPraymer = () => {
         ? {
           ...it,
           qiymat: constants.PREP_COST + otherCosts,
-          baseQiymat: (constants.PREP_COST + otherCosts) / it.baseQty
+          baseQiymat: (constants.PREP_COST + otherCosts) / it.qty
         }
         : it
     );
-  };
+  }, [constants.PREP_COST]);
 
   // Scaled items
   const scaledItems = useMemo(() => {
-    const scaleFactor = parseNum(qtyProduced) || 1;
-    return items.map((item) => ({
-      ...item,
-      qty: parseNum(item.baseQty) * scaleFactor,
-      qiymat: parseNum(item.baseQiymat) * parseNum(item.baseQty) * scaleFactor,
-    }));
-  }, [items, qtyProduced]);
+    return items;
+  }, [items]);
 
   // Total cost per bucket
   const totalCostPerBucket = useMemo(
-    () => items.reduce((acc, it) => acc + (it.removable ? 0 : parseNum(it.baseQiymat) * parseNum(it.baseQty)), 0),
-    [items]
+    () => items
+      .filter((it) => !it.removable)
+      .reduce((acc, it) => acc + parseNum(it.qiymat), 0) / (parseNum(qtyProduced) || 1),
+    [items, qtyProduced]
   );
 
   // Profit calculations
@@ -213,41 +210,55 @@ const BiproPraymer = () => {
   const totals = useMemo(() => {
     const q = parseNum(qtyProduced);
     const { profitPerBucket } = profitMetrics;
-    return {
-      costAll: Math.round(totalCostPerBucket * q),
-      profitAll: Math.round(profitPerBucket * q),
-      tannarxAll: Math.round(totalCostPerBucket * q),
-      saleAll: Math.round(parseNum(salePricePerBucket) * q),
-      marginPerBucket: Math.round(parseNum(salePricePerBucket) - totalCostPerBucket),
-    };
-  }, [qtyProduced, totalCostPerBucket, profitMetrics, salePricePerBucket]);
-  // activeBtn === "mastika"
-  // Prepare server data
-  const prepareDataForServer = useCallback(() => ({
-    productionName: activeBtn === "mastika" ? "Mastika" : "Praymer - BIPRO",
-    productionQuantity: parseNum(qtyProduced),
-    profitPercent: parseNum(profitMetrics.profitPercent),
-    salePricePerBucket: parseNum(salePricePerBucket),
-    items: items.map((item) => ({
-      _id: item._id,
-      name: item.name,
-      unit: item.unit,
-      baseQty: parseNum(item.baseQty) * (parseNum(qtyProduced)),
-      baseQiymat: parseNum(item.baseQiymat),
-      isMaterial: !!item.isMaterial,
-      removable: !!item.removable,
-      materialId: item.isMaterial ? item._id || null : null,
-    })),
-    totals: {
-      costAll: totals.tannarxAll / qtyProduced,
-      profitAll: totals.profitAll,
-      tannarxAll: totals.tannarxAll,
-      saleAll: totals.saleAll,
-      marginPerBucket: totals.marginPerBucket,
-    },
-  }), [qtyProduced, profitMetrics.profitPercent, salePricePerBucket, items, totals, activeBtn]);
+    const totalCost = items
+      .filter((it) => !it.removable)
+      .reduce((acc, it) => acc + parseNum(it.qiymat), 0);
 
-  // Submit to server
+    return {
+      costAll: totalCost,
+      profitAll: profitPerBucket * q,
+      tannarxAll: totalCost,
+      saleAll: parseNum(salePricePerBucket) * q,
+      marginPerBucket: parseNum(salePricePerBucket) - totalCostPerBucket,
+    };
+  }, [qtyProduced, totalCostPerBucket, profitMetrics, salePricePerBucket, items]);
+
+  // Prepare server data
+  const prepareDataForServer = useCallback(() => {
+    const excludedCategories = ["BN-3", "razbavitel"];
+
+    return {
+      productionName: activeBtn === "mastika" ? "Mastika" : "Praymer - BIPRO",
+      productionQuantity: parseNum(qtyProduced),
+      profitPercent: parseNum(profitMetrics.profitPercent),
+      salePricePerBucket: parseNum(salePricePerBucket),
+      items: items
+        .filter((item) => {
+          if (item.isMaterial && excludedCategories.includes(item.category)) {
+            return false;
+          }
+          return true;
+        })
+        .map((item) => ({
+          _id: item._id,
+          name: item.name,
+          unit: item.unit,
+          baseQty: parseNum(item.qty),
+          baseQiymat: parseNum(item.qiymat) / parseNum(item.qty),
+          isMaterial: !!item.isMaterial,
+          removable: !!item.removable,
+          materialId: item.isMaterial ? item._id || null : null,
+        })),
+      totals: {
+        costAll: totals.tannarxAll / qtyProduced,
+        profitAll: totals.profitAll,
+        tannarxAll: totals.tannarxAll,
+        saleAll: totals.saleAll,
+        marginPerBucket: totals.marginPerBucket,
+      },
+    };
+  }, [qtyProduced, profitMetrics.profitPercent, salePricePerBucket, items, totals, activeBtn]);
+
   const submitToServer = useCallback(async () => {
     if (isSubmitting || createProductionLoading) return;
     setIsSubmitting(true);
@@ -283,7 +294,7 @@ const BiproPraymer = () => {
       ];
       return recalcPrep(newItems);
     });
-  }, []);
+  }, [recalcPrep]);
 
   // Add raw material row
   const addRawMaterialRow = useCallback(() => {
@@ -304,7 +315,7 @@ const BiproPraymer = () => {
       ];
       return recalcPrep(newItems);
     });
-  }, []);
+  }, [recalcPrep]);
 
   // Update item
   const updateItem = useCallback(
@@ -312,25 +323,28 @@ const BiproPraymer = () => {
       setItems((prev) => {
         const updated = prev.map((it) => {
           if (it._id !== _id) return it;
-          const scaleFactor = parseNum(qtyProduced) || 1;
-          const updatedItem = { ...it, [field]: value };
+          const updatedItem = { ...it };
 
           if (field === "qty") {
             const newQty = parseNum(value);
-            updatedItem.baseQty = newQty / scaleFactor;
-            updatedItem.qiymat = updatedItem.baseQiymat * updatedItem.baseQty;
+            updatedItem.qty = newQty;
+            updatedItem.baseQty = newQty;
+            updatedItem.qiymat = updatedItem.baseQiymat * newQty;
           } else if (field === "qiymat") {
             const newQiymat = parseNum(value);
-            updatedItem.baseQiymat = newQiymat / (parseNum(it.baseQty) * scaleFactor);
-            updatedItem.qiymat = updatedItem.baseQiymat * updatedItem.baseQty;
+            updatedItem.qiymat = newQiymat;
+            updatedItem.baseQiymat = newQiymat / (parseNum(it.qty) || 1);
           } else if (field === "name" && it.isMaterial) {
             const selectedMaterial = materials?.innerData?.find((mat) => mat.name === value);
             if (selectedMaterial) {
               updatedItem._id = selectedMaterial._id;
+              updatedItem.name = selectedMaterial.name;
               updatedItem.unit = selectedMaterial.unit;
               updatedItem.baseQiymat = parseNum(selectedMaterial.price);
-              updatedItem.qiymat = parseNum(selectedMaterial.price) * updatedItem.baseQty;
+              updatedItem.qiymat = parseNum(selectedMaterial.price) * updatedItem.qty;
             }
+          } else {
+            updatedItem[field] = value;
           }
           return updatedItem;
         });
@@ -338,7 +352,7 @@ const BiproPraymer = () => {
         return recalcPrep(updated);
       });
     },
-    [qtyProduced, materials?.innerData, constants.PREP_COST]
+    [materials?.innerData, recalcPrep]
   );
 
   // Remove item
@@ -347,7 +361,7 @@ const BiproPraymer = () => {
       const newItems = prev.filter((it) => it._id !== _id);
       return recalcPrep(newItems);
     });
-  }, []);
+  }, [recalcPrep]);
 
   // Reset to defaults
   const resetDefaults = useCallback(() => {
@@ -357,10 +371,17 @@ const BiproPraymer = () => {
   }, [DEFAULT_ITEMS, constants.DEFAULT_SALE_PRICE]);
 
   // Input handlers
-  const handleQtyChange = useCallback((e) => setQtyProduced(parseNum(e.target.value)), []);
-  const handleSalePriceChange = useCallback((e) => setSalePricePerBucket(parseNum(e.target.value)), []);
+  const handleQtyChange = useCallback((e) => {
+    const newQty = parseNum(e.target.value);
+    setQtyProduced(newQty);
+  }, []);
+
+  const handleSalePriceChange = useCallback((e) => {
+    setSalePricePerBucket(parseNum(e.target.value));
+  }, []);
 
   const valueKg = scaledItems?.find((i) => i.name === "Tayyorlash")?.qty;
+
   if (materialsLoading) return <div className="quy-container">Yuklanmoqda...</div>;
 
   return (
@@ -401,6 +422,7 @@ const BiproPraymer = () => {
               <input
                 className="quy-param-input"
                 type="number"
+                step="0.001"
                 min={0}
                 value={qtyProduced}
                 onChange={handleQtyChange}
@@ -411,7 +433,7 @@ const BiproPraymer = () => {
               <input
                 className="quy-param-input quy-param-input-readonly"
                 type="text"
-                value={`${Math.floor(profitMetrics.profitPercent)}%`}
+                value={`${formatNumber(profitMetrics.profitPercent)}%`}
                 disabled
               />
             </div>
@@ -419,15 +441,16 @@ const BiproPraymer = () => {
               <label className="quy-param-label">Sotuv narxi (1 chelak, so'm)</label>
               <input
                 className="quy-param-input"
-                type="text"
-                value={formatNumber(salePricePerBucket)}
+                type="number"
+                step="1"
+                value={salePricePerBucket}
                 onChange={handleSalePriceChange}
               />
             </div>
           </section>
 
           <section className="quy-table-section">
-            <h2 className="quy-table-title">Xarajatlar ({qtyProduced} chelak)</h2>
+            <h2 className="quy-table-title">Xarajatlar ({formatNumber(qtyProduced)} chelak)</h2>
             <div className="quy-table-wrapper">
               <table className="quy-table">
                 <thead>
@@ -476,16 +499,18 @@ const BiproPraymer = () => {
                         <input
                           type="number"
                           className="quy-input-qty"
+                          step="0.001"
                           value={it.qty}
-                          onChange={(e) => updateItem(it._id, "qty", parseNum(e.target.value))}
+                          onChange={(e) => updateItem(it._id, "qty", e.target.value)}
                         />
                       </td>
                       <td className="quy-table-cell">
                         <input
-                          type="text"
+                          type="number"
                           className="quy-input-price"
-                          value={formatNumber(it.qiymat)}
-                          onChange={(e) => updateItem(it._id, "qiymat", parseNum(e.target.value))}
+                          step="0.01"
+                          value={it.qiymat}
+                          onChange={(e) => updateItem(it._id, "qiymat", e.target.value)}
                           disabled={it.isMaterial}
                         />
                       </td>

@@ -98,6 +98,43 @@ export const ProductionSystemApi = api.injectEndpoints({
       },
       providesTags: ["TopProducts"],
     }),
+
+
+
+
+
+    //=================================
+
+    // 🔥 Qozonga tashlash (jarayonni boshlash)
+    startBn5Boiling: builder.mutation({
+      query: (body) => ({
+        url: '/bn5/start-boiling',
+        method: 'POST',
+        body,
+      }),
+      // Muvaffaqiyatdan keyin materiallarni yangilash
+      invalidatesTags: ['Materials', 'Inventory'],
+    }),
+
+    // 📦 Qozondan olish (jarayonni tugatish)
+    finishBn5Boiling: builder.mutation({
+      query: (body) => ({
+        url: '/bn5/finish-boiling',
+        method: 'POST',
+        body, // { inventoryId, finalBn5Amount, forSale, forMel }
+      }),
+      invalidatesTags: ['Materials', 'Inventory', 'ActiveBoiling'],
+    }),
+
+    // Joriy faol qaynatish jarayonini olish (real-time timer uchun)
+    getActiveBoilingProcess: builder.query({
+      query: () => '/bn5/active-process',
+      providesTags: ['ActiveBoiling'],
+      // Har 10 sekundda yangilanish (real-time hisoblagich uchun yetarli)
+      pollingInterval: 10000,
+      // Yoki websocket bo‘lsa polling o‘chiriladi
+    }),
+
   }),
 });
 
@@ -111,5 +148,9 @@ export const {
   useProductionForSalesBN5Mutation,
   useUpdateFinishedMutation,
   useDeleteFinishedMutation,
-  useGetTopProductsByMonthQuery
+  useGetTopProductsByMonthQuery,
+
+  useStartBn5BoilingMutation,
+  useFinishBn5BoilingMutation,
+  useGetActiveBoilingProcessQuery
 } = ProductionSystemApi;
