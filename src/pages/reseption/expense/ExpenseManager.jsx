@@ -31,16 +31,16 @@ const ExpenseTracker = () => {
     const [startDate, setStartDate] = useState(today.toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState(tomorrow.toISOString().split('T')[0]);
     // useGetFirmsQuery
-    const { data: firms = [] } = useGetFirmsQuery();
+    const { data: firms = [], refetch: firmsRefetch } = useGetFirmsQuery();
     //useProcessCompanyPaymentMutation
-    const [processCompanyPayment] = useProcessCompanyPaymentMutation();
-    const { data: transports = [], isLoading: transLoading, error } = useGetTransportsQuery();
+    const [processCompanyPayment, { isLoading: paymentFirmLoading }] = useProcessCompanyPaymentMutation();
+    const { data: transports = [], isLoading: transLoading, error, refetch: transportRefetch } = useGetTransportsQuery();
     const [selectTransport, setSelectTransport] = useState('');
 
     const { data: transactions = { innerData: [] }, isLoading } = useGetExpensesQuery({ startDate, endDate });
     const { data: balance = { innerData: { naqt: 0, bank: 0 } }, refetch } = useGetBalanceQuery();
     const [createExpense, { isLoading: expenseLoading }] = useCreateExpenseMutation();
-    const [makePayment] = useMakePaymentMutation();
+    const [makePayment, { isLoading: paymentLoading }] = useMakePaymentMutation();
 
     // Firma obyektini ID bo'yicha topish yordamchi funksiyasi (optimizatsiya uchun)
     const getFirmaById = (id) => firms?.innerData?.find(firma => firma._id === id) || null;
@@ -174,6 +174,8 @@ const ExpenseTracker = () => {
 
             // --- Formani tozalash ---
             refetch();
+            transportRefetch();
+            firmsRefetch();
             setAmount('');
             setSelectFirmaId(''); // Tozalash
             setSelectTransport('');
@@ -308,7 +310,7 @@ const ExpenseTracker = () => {
                             />
                         </div>
 
-                        <button type="submit" disabled={expenseLoading} onClick={handleSubmit} className="ruberoid-submit-btn">
+                        <button type="submit" disabled={expenseLoading || paymentLoading || paymentFirmLoading} onClick={handleSubmit} className="ruberoid-submit-btn">
                             <Plus className="ruberoid-btn-icon" />
                             {transactionType === 'kirim' ? 'Kirim qo\'shish' : 'Chiqim qo\'shish'}
                         </button>
