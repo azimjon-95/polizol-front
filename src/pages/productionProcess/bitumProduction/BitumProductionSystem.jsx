@@ -39,7 +39,7 @@ const BitumProductionSystem = () => {
 
   const electricityPrice = 1000;
   const gasPrice = 1800;
-  const workers = [{ fullName: 'Akmal Qurbonov', salary: 750000 }];
+  const workers = [{ fullName: 'Akmal Qurbonov', salary: 0 }];
 
   // Memoized material object for efficient lookup
   const materialObj = useMemo(

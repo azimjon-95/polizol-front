@@ -332,7 +332,7 @@ const RuberoidPolizolProduction = () => {
                             <div key={index} className="material-item">
                                 <span>{req.name}</span>
                                 <span className="material-quantity">
-                                    Narxi: {NumberFormat(req.price)} so'm
+                                    Narxi: {NumberFormat(Math.floor(req.price))} so'm
                                 </span>
                                 <span className="material-quantity">
                                     Mavjud: {NumberFormat(req.quantity)} {req?.unit}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import './style/style.css';
 import IsPaymentModal from './modal/IsPaymentModal';
 import { NumberFormat } from '../../../hook/NumberFormat';
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import {
     useDeleteCartSaleMutation,
     useGetFilteredSalesQuery,
-    cartSaleApi // Import the API instance for manual dispatch
+    cartSaleApi
 } from '../../../context/cartSaleApi';
 import ReturnProduct from './modal/ReturnProduct';
 import { VscHistory } from "react-icons/vsc";
@@ -79,7 +79,12 @@ const SalesInvoiceDashboard = () => {
             setOldPage(1);
         }
     }, [data]);
-
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, 100);
     // Load more bottom: append next page using RTK dispatch
     const loadMoreBottom = useCallback(async () => {
         if (isLoadingMore || oldSales.length >= totalOldCount) return;
@@ -89,9 +94,18 @@ const SalesInvoiceDashboard = () => {
             const result = await dispatch(
                 cartSaleApi.endpoints.getFilteredSales.initiate({ page: nextPage, limit: 15 })
             ).unwrap();
+
             if (result.innerData) {
                 setOldSales(prev => [...prev, ...result.innerData.oldSales]);
                 setOldPage(nextPage);
+
+                // Yangi ma'lumotlar qo'shilgandan keyin pastga yumshoq scroll
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }, 100);
             }
         } catch (error) {
             toast.error("Keyingi ma'lumotlarni yuklashda xatolik!");
@@ -99,7 +113,6 @@ const SalesInvoiceDashboard = () => {
             setIsLoadingMore(false);
         }
     }, [oldPage, oldSales.length, totalOldCount, isLoadingMore, dispatch]);
-
     // Load more top: replace with previous page using RTK dispatch
     const loadMoreTop = useCallback(async () => {
         if (isLoadingMore || oldPage <= 1) return;
@@ -335,27 +348,37 @@ const SalesInvoiceDashboard = () => {
             justifyContent: 'center',
             alignItems: 'center',
             gap: '10px',
-            // margin: '20px 0',
-            padding: '10px'
+            padding: '10px',
+            margin: '20px 0' // ixtiyoriy: joy ajratish uchun
         }}>
             <Button
-                type="default"
+                type="text" // Muhim: "default" o'rniga "text" — fokus scroll qilmaydi
                 icon={<ChevronLeft size={16} />}
-                onClick={loadMoreTop}
+                onClick={(e) => {
+                    e.preventDefault(); // Scroll tepaga chiqmasin
+                    loadMoreTop();
+                }}
                 disabled={oldPage <= 1 || isLoadingMore}
                 loading={isLoadingMore && oldPage > 1}
+                style={{ display: 'flex', alignItems: 'center' }}
             >
                 Oldinga
             </Button>
+
             <span style={{ fontSize: '14px', color: '#666' }}>
                 Sahifa {oldPage} / {Math.ceil(totalOldCount / 15)}
             </span>
+
             <Button
-                type="default"
+                type="text" // Muhim: "default" → "text"
                 icon={<ChevronRight size={16} />}
-                onClick={loadMoreBottom}
+                onClick={(e) => {
+                    e.preventDefault(); // Scroll tepaga chiqmasin
+                    loadMoreBottom();
+                }}
                 disabled={oldSales.length >= totalOldCount || isLoadingMore}
                 loading={isLoadingMore && oldPage < Math.ceil(totalOldCount / 15)}
+                style={{ display: 'flex', alignItems: 'center' }}
             >
                 Keyingiga
             </Button>
@@ -654,14 +677,14 @@ const SalesInvoiceDashboard = () => {
                                                                             <span className="hip-label">Jami:</span>
                                                                             <span className="hip-value">{formatCurrency(historyItem.payment.totalAmount)}</span>
                                                                         </div>
-                                                                        <div className="hip-payment-item">
+                                                                        {/* <div className="hip-payment-item">
                                                                             <span className="hip-label">To'langan:</span>
                                                                             <span className="hip-value hip-text-green">{formatCurrency(historyItem.payment.paidAmount)}</span>
                                                                         </div>
                                                                         <div className="hip-payment-item">
                                                                             <span className="hip-label">Qarz:</span>
                                                                             <span className="hip-value hip-text-red">{formatCurrency(historyItem.payment.debt)}</span>
-                                                                        </div>
+                                                                        </div>*/}
                                                                         <div className="hip-payment-item">
                                                                             <span className="hip-label">NDS (12%):</span>
                                                                             <span className="hip-value">{formatCurrency(historyItem.payment.ndsTotal)}</span>

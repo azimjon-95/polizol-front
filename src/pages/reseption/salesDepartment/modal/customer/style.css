@@ -1,0 +1,111 @@
+.th-container {
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.th-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.th-subtitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.contact-info {
+    background-color: #ffb3b3;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    text-align: right;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.jadval {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.jadval thead {
+    background-color: #f0f0f0;
+}
+
+.jadval th {
+    border: 1px solid #ccc;
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    text-wrap: nowrap;
+    font-size: 12px;
+}
+
+.jadval td {
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    text-align: center;
+    text-wrap: nowrap;
+    font-size: 12px;
+}
+
+.th-narrow {
+    width: 40px;
+}
+
+.th-medium {
+    width: 100px;
+}
+
+.th-wide {
+    width: 200px;
+}
+
+.row-highlight {
+    background-color: #ffeb99;
+}
+
+.cell-highlight {
+    background-color: #ffeb99;
+    font-weight: 600;
+}
+
+.row-jami {
+    background-color: #e6e6e6;
+    font-weight: bold;
+}
+
+.cell-jami-label {
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+}
+
+.cell-jami-value {
+    background-color: #e6e6e6;
+    font-weight: bold;
+}
+
+.cell-jami-qoldiq {
+    background-color: #cc7a7a;
+    color: white;
+    font-weight: bold;
+}
+
+.jadval tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.row-highlight:hover {
+    background-color: #ffe066;
+}
