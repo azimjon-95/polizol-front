@@ -39,7 +39,7 @@ const ExpenseTracker = () => {
 
     const { data: transactions = { innerData: [] }, isLoading } = useGetExpensesQuery({ startDate, endDate });
     const { data: balance = { innerData: { naqt: 0, bank: 0 } }, refetch } = useGetBalanceQuery();
-    const [createExpense] = useCreateExpenseMutation();
+    const [createExpense, { isLoading: expenseLoading }] = useCreateExpenseMutation();
     const [makePayment] = useMakePaymentMutation();
 
     // Firma obyektini ID bo'yicha topish yordamchi funksiyasi (optimizatsiya uchun)
@@ -308,7 +308,7 @@ const ExpenseTracker = () => {
                             />
                         </div>
 
-                        <button onClick={handleSubmit} className="ruberoid-submit-btn">
+                        <button type="submit" disabled={expenseLoading} onClick={handleSubmit} className="ruberoid-submit-btn">
                             <Plus className="ruberoid-btn-icon" />
                             {transactionType === 'kirim' ? 'Kirim qo\'shish' : 'Chiqim qo\'shish'}
                         </button>
