@@ -279,13 +279,13 @@ const IncomeListModal = () => {
                     <div className="nns-summary-item">
                         <Text className="nns-summary-label">QQSsiz summa:</Text>
                         <Text strong className="nns-summary-value">
-                            {numberFormat(sumWithoutVat)} so'm
+                            {numberFormat(Math.floor(sumWithoutVat))} so'm
                         </Text>
                     </div>
                     <div className="nns-summary-item">
                         <Text className="nns-summary-label">QQS ({vatPercentage}%):</Text>
                         <Text strong className="nns-summary-value">
-                            {numberFormat(sumVatAmount)} so'm
+                            {numberFormat(Math.floor(sumVatAmount))} so'm
                         </Text>
                     </div>
                     <div className="nns-summary-item">
