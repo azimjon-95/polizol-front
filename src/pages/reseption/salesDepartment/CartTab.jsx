@@ -45,7 +45,7 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
     const [middlemanPayment, setMiddlemanPayment] = useState(0);
     const [focusedPrices, setFocusedPrices] = useState({});
     const [editingPrices, setEditingPrices] = useState({});
-
+    const [middlemanPaymentInput, setMiddlemanPaymentInput] = useState('0');
     // Customer information state
     const [customerInfo, setCustomerInfo] = useState({
         name: '',
@@ -55,7 +55,6 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
 
     // Memoized formatted values
     const formattedPhone = useMemo(() => formatPhone(rawPhone), [rawPhone]);
-    const formattedMiddlemanPayment = useMemo(() => formatNumber(middlemanPayment), [middlemanPayment]);
     const customerTypeOptions = [
         { value: 'internal', label: 'Ichki Bozor' },
         { value: 'export', label: 'Eksport' },
@@ -251,20 +250,50 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
     const handleDiscountReasonChange = useCallback((e) => {
         setDiscountReason(e.target.value);
     }, []);
-
     const handleMiddlemanPaymentChange = useCallback((e) => {
-        let raw = e.target.value.replace(/,/g, '');
-        const cleaned = raw.replace(/[^0-9.]/g, '');
-        const parts = cleaned.split('.');
-        let finalRaw = cleaned;
-        if (parts.length > 1) {
-            parts[1] = parts[1].slice(0, 2);
-            finalRaw = parts[0] + (parts[1] ? '.' + parts[1] : '');
+        let v = e.target.value;
+
+        // Allow empty (user can delete all)
+        if (v === '') {
+            setMiddlemanPaymentInput('');
+            setMiddlemanPayment(0);
+            setContractInfo((prev) => ({ ...prev, middlemanPayment: 0 }));
+            return;
         }
-        const numberValue = parseFloat(finalRaw) || 0;
+
+        // Keep only digits and dots
+        v = v.replace(/,/g, '').replace(/[^0-9.]/g, '');
+
+        // Allow only one dot
+        const firstDot = v.indexOf('.');
+        if (firstDot !== -1) {
+            const before = v.slice(0, firstDot);
+            const after = v.slice(firstDot + 1).replace(/\./g, ''); // remove extra dots
+            v = before + '.' + after;
+        }
+
+        // Limit to 2 decimals
+        const parts = v.split('.');
+        if (parts.length === 2) {
+            parts[1] = parts[1].slice(0, 2);
+            v = parts[0] + '.' + parts[1];
+        }
+
+        // Remove leading zeros like 00012 -> 12 (but keep "0" and "0.x")
+        if (v.length > 1 && v[0] === '0' && v[1] !== '.') {
+            v = v.replace(/^0+/, '');
+            if (v === '') v = '0';
+        }
+
+        setMiddlemanPaymentInput(v);
+
+        const num = parseFloat(v);
+        const numberValue = Number.isFinite(num) ? num : 0;
+
         setMiddlemanPayment(numberValue);
         setContractInfo((prev) => ({ ...prev, middlemanPayment: numberValue }));
     }, []);
+
 
     const calculateItemTotal = useCallback(
         (item) => {
@@ -609,13 +638,15 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
                                     <span>
                                         <input
                                             type="text"
-                                            value={formattedMiddlemanPayment}
+                                            inputMode="decimal"
+                                            value={middlemanPaymentInput}
                                             onChange={handleMiddlemanPaymentChange}
                                             className="card-price-input"
                                             style={{ width: '170px', textAlign: 'right', border: '1px solid #d9d9d9' }}
                                             aria-label="Middleman payment"
                                             placeholder="0"
                                         />
+
                                         so'm
                                     </span>
                                 </div>
@@ -750,3 +781,9 @@ const CartTab = ({ cart = [], setCart, setActiveTab, onUpdateCart, onRemoveFromC
 };
 
 export default CartTab;
+
+
+
+
+
+

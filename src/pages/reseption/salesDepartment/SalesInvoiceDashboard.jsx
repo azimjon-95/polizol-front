@@ -677,18 +677,21 @@ const SalesInvoiceDashboard = () => {
                                                                             <span className="hip-label">Jami:</span>
                                                                             <span className="hip-value">{formatCurrency(historyItem.payment.totalAmount)}</span>
                                                                         </div>
-                                                                        {/* <div className="hip-payment-item">
-                                                                            <span className="hip-label">To'langan:</span>
-                                                                            <span className="hip-value hip-text-green">{formatCurrency(historyItem.payment.paidAmount)}</span>
-                                                                        </div>
-                                                                        <div className="hip-payment-item">
+                                                                        {/*   <div className="hip-payment-item">
                                                                             <span className="hip-label">Qarz:</span>
                                                                             <span className="hip-value hip-text-red">{formatCurrency(historyItem.payment.debt)}</span>
-                                                                        </div>*/}
+                                                                            </div>*/}
                                                                         <div className="hip-payment-item">
                                                                             <span className="hip-label">NDS (12%):</span>
                                                                             <span className="hip-value">{formatCurrency(historyItem.payment.ndsTotal)}</span>
                                                                         </div>
+                                                                        {
+                                                                            historyItem.payment.middlemanPayment > 0 &&
+                                                                            <div className="hip-payment-item">
+                                                                                <span className="hip-label">Broker hizmati:</span>
+                                                                                <span className="hip-value  hip-text-red">{formatCurrency(historyItem.payment.middlemanPayment)}</span>
+                                                                            </div>
+                                                                        }
                                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                             <Popover
                                                                                 content={renderPopoverContent(historyItem._id)}
