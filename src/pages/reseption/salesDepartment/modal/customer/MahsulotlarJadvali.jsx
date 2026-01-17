@@ -3,20 +3,48 @@ import './style.css';
 
 const MahsulotlarJadvali = ({ allData, customer, tableRef }) => {
     const data = allData?.innerData?.sales || [];
-    const stats = allData?.innerData?.stats || [];
+
+    const allPaymentHistory = (data || [])
+        .flatMap(sale => sale?.payment?.paymentHistory || []);
 
 
     // Jami qiymatlarni hisoblash
-    const jamiQiymat = data.reduce((total, chesloGuruhi) => {
-        if (chesloGuruhi.items) {
-            return total + chesloGuruhi.items.reduce((sum, item) => {
-                return sum + (item.sellingPrice * item.quantity);
-            }, 0);
-        }
-        return total;
+    const jamiQiymat = data.reduce((grandTotal, item) => {
+        const deliveredSum = (item.deliveredItems || []).reduce(
+            (sum, d) => sum + (Number(d?.totalAmount) || 0),
+            0
+        );
+        return grandTotal + deliveredSum;
     }, 0);
 
-    const jamiTolov = stats.reduce((total, chesloGuruhi) => total + chesloGuruhi.amount, 0);
+    const formatDateDMY = (isoDate) => {
+        if (!isoDate) return '';
+        const d = new Date(isoDate);
+
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+
+        return `${day}/${month}/${year}`;
+    };
+
+
+    const getUnitByProductName = (productName = "") => {
+        const name = productName.toLowerCase();
+
+        // kg bo'ladigan mahsulotlar (productName ichida uchrasa)
+        const kgKeywords = [
+            "bn-5 qop",
+            "stakan kichik",
+            "stakan katta",
+            "bitum (5/m)",
+            "melsiz",
+        ];
+
+        const isKg = kgKeywords.some(k => name.includes(k));
+        return isKg ? "kg" : "dona";
+    };
+    const jamiTolov = allPaymentHistory?.reduce((total, chesloGuruhi) => total + chesloGuruhi.amount, 0);
 
     const qoldiq = jamiQiymat - jamiTolov;
 
@@ -44,28 +72,26 @@ const MahsulotlarJadvali = ({ allData, customer, tableRef }) => {
                 <tbody>
                     {data.map((chesloGuruhi, grupIndex) => (
                         <React.Fragment key={grupIndex}>
-                            {chesloGuruhi.items ? (
+                            {chesloGuruhi.deliveredItems ? (
                                 <>
-                                    {chesloGuruhi.items.map((row, rowIndex) => (
+                                    {chesloGuruhi.deliveredItems.map((row, rowIndex) => (
                                         <tr key={rowIndex} className={row.highlight ? 'row-highlight' : ''}>
                                             <td></td>
                                             <td></td>
                                             <td>{rowIndex === 0 ? chesloGuruhi.date : ''}</td>
                                             <td className={row.highlight ? 'cell-highlight' : ''}>{row.productName}</td>
-                                            <td>{row.size}</td>
-                                            <td className={row.highlight ? 'cell-highlight' : ''}>{row.quantity}</td>
+                                            <td>{getUnitByProductName(row.productName)}</td>
+                                            <td className={row.highlight ? 'cell-highlight' : ''}>{row.deliveredQuantity}</td>
                                             <td className={row.highlight ? 'cell-highlight' : ''}>
-                                                {row.sellingPrice ? row.sellingPrice.toLocaleString() : ''}
+                                                {(row.totalAmount / row.deliveredQuantity).toLocaleString()}
                                             </td>
-                                            <td className={row.highlight ? 'cell-highlight' : ''}>
-                                                {(row.sellingPrice * row.quantity).toLocaleString()}
-                                            </td>
+                                            <td className={row.highlight ? 'cell-highlight' : ''}>  {row.totalAmount ? row.totalAmount.toLocaleString() : ''} </td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                     ))}
-                                    {stats && stats?.map((tolovItem, tolovIndex) => (
+                                    {allPaymentHistory && allPaymentHistory?.map((tolovItem, tolovIndex) => (
                                         <tr key={tolovIndex}>
                                             <td></td>
                                             <td></td>
@@ -85,7 +111,7 @@ const MahsulotlarJadvali = ({ allData, customer, tableRef }) => {
                                 <tr key={grupIndex}>
                                     <td></td>
                                     <td></td>
-                                    <td>{chesloGuruhi.date}</td>
+                                    <td>{formatDateDMY(chesloGuruhi.date)}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

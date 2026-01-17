@@ -16,6 +16,7 @@ const IsPaymentModal = ({
     setPaymentAmount,
     salesData,
     setSalesData,
+    refetch,
 }) => {
     const [payDebt, { isLoading }] = usePayDebtMutation();
     const [paymentDescription, setPaymentDescription] = useState('');
@@ -53,6 +54,7 @@ const IsPaymentModal = ({
                     return sale;
                 })
             );
+            refetch();
             closeModal();
             toast.success("To'lov muvaffaqiyatli amalga oshirildi!");
         } catch (err) {

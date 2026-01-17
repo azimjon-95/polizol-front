@@ -133,18 +133,26 @@ const ExpenseTracker = () => {
         if (!amount) return toast.error("Summa maydoni to'ldirilmagan!");
         const parsedAmount = parseFloat(amount);
         if (parsedAmount <= 0) return toast.error("Summa 0 dan katta bo'lishi kerak!");
+        const transportNumber = transports?.find(t => t._id === selectTransport);
 
         try {
-            // --- Firma ma'lumotlarini olish (optimizatsiya) ---
             const selectedFirma = getFirmaById(selectFirmaId);
 
             // --- Yangi transaction obyektini tayyorlash ---
             const newTransaction = {
                 type: transactionType,
                 paymentMethod,
-                category: category === "Firmaga pul o'tqazish" ? selectedFirma?.name || category : category, // Optimizatsiya: null-safe va fallback
+                category:
+                    category === "Firmaga pul o'tqazish"
+                        ? selectedFirma?.name || category
+                        : category === "Transport xarajatlari"
+                            ? `${category} | ${transportNumber?.transport}`
+                            : category,
                 amount: parsedAmount,
-                description: category === "Firmaga pul o'tqazish" ? category : description,
+                description:
+                    category === "Firmaga pul o'tqazish"
+                        ? category
+                        : description,
                 date: new Date().toISOString()
             };
 
@@ -275,12 +283,31 @@ const ExpenseTracker = () => {
                                     className="ruberoid-form-select"
                                 >
                                     <option value="">Transportni tanlang</option>
-                                    {transports?.map((cat, inx) => (
-                                        <option key={inx} value={cat?._id}>{cat.transport} | {NumberFormat(Math.abs(cat.balance))} so'm</option>
-                                    ))}
+
+                                    {transports?.map((cat, inx) => {
+                                        const isDebtor = cat.balance < 0;
+                                        const isCreditor = cat.balance > 0;
+
+                                        return (
+                                            <option
+                                                key={inx}
+                                                value={cat?._id}
+                                                style={{
+                                                    color: isDebtor ? "green" : isCreditor ? "red" : "#555",
+                                                    fontWeight: "600"
+                                                }}
+                                            >
+                                                {cat.transport} | {NumberFormat(Math.abs(cat.balance))} so'm
+                                                {isDebtor && " (qarzdor)"}
+                                                {isCreditor && " (haqdor)"}
+                                                {!isDebtor && !isCreditor && " (teng)"}
+                                            </option>
+                                        );
+                                    })}
                                 </select>
                             </div>
                         }
+
 
                         <div className="ruberoid-form-group">
                             <label className="ruberoid-form-label">Summa (so'm)</label>
