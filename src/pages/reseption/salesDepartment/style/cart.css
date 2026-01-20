@@ -298,6 +298,7 @@
     font-size: 14px;
     position: relative;
     color: #64748b;
+    flex: 1;
 }
 
 .isTransportDropdownOpen {

@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { useDeliverProductMutation } from "../../../../context/cartSaleApi";
-import { useGetUndeliveredItemsByCustomerQuery } from "../../../../context/cartSaleApi"; // New import: Add this query to your API slice
+import { useGetUndeliveredItemsByCustomerQuery } from "../../../../context/cartSaleApi";
 import { toast } from "react-toastify";
 import { QRCodeCanvas } from "qrcode.react";
 import { Button, Modal } from "antd";
@@ -19,25 +19,20 @@ import { NumberFormat } from "../../../../hook/NumberFormat";
 import { capitalizeFirstLetter } from "../../../../hook/CapitalizeFirstLitter";
 import "./style.css";
 
-const DeliveryProduct = ({
-  // Removed: deliveryItems, handleDeliveryItemChange props (now local)
-  closeModal,
-  modalState,
-}) => {
+const DeliveryProduct = ({ closeModal, modalState }) => {
   const [deliverProduct, { isLoading }] = useDeliverProductMutation();
   const { data: undeliveredData } = useGetUndeliveredItemsByCustomerQuery(
     modalState.activeSaleId,
     {
-      skip: !modalState.activeSaleId, // Skip if no ID
+      skip: !modalState.activeSaleId,
     }
-  ); // New: Fetch undelivered items via API
-  const role = localStorage.getItem("role");
-  const inputRef = useRef(null);
-  const contentRef = useRef();
-  const dropdownRef = useRef(null);
+  );
 
-  // Local state for delivery items (populated from API)
-  const [deliveryItems, setDeliveryItems] = useState([]);
+  const role = localStorage.getItem("role");
+  const contentRef = useRef();
+  const dropdownRef = useRef();
+  const inputRef = useRef();
+
   const [transportCost, setTransportCost] = useState(0);
   const [printData, setPrintData] = useState(null);
   const [isTransportDropdownOpen, setIsTransportDropdownOpen] = useState(false);
@@ -54,41 +49,30 @@ const DeliveryProduct = ({
 
   const groups = ["polizol", "Okisleniya", "ruberoid"];
 
-  // Effect: Populate deliveryItems from API data when fetched
+  // Mahsulotlarni API dan olib, avtomatik to'liq miqdorda tanlab qo'yamiz
+  const [deliveryItems, setDeliveryItems] = useState([]);
+
   useEffect(() => {
     if (undeliveredData?.innerData?.overallResult) {
-      setDeliveryItems(undeliveredData?.innerData?.overallResult); // Already filtered in backend
+      const items = undeliveredData.innerData.overallResult.map((item) => ({
+        ...item,
+        selected: item.remaining > 0, // Faqat qoldig'i bo'lsa tanlaymiz
+        deliveryQuantity: item.remaining > 0 ? item.remaining : 0, // To'liq qoldiq miqdor
+      }));
+      setDeliveryItems(items);
     }
   }, [undeliveredData]);
 
-  // Local handleDeliveryItemChange
-  const handleDeliveryItemChange = useCallback((index, field, value) => {
-    setDeliveryItems((prev) =>
-      prev.map((item, i) => {
-        if (i === index) {
-          const updatedItem = { ...item, [field]: value };
-          if (field === "selected" && !value) {
-            updatedItem.deliveryQuantity = 0;
-          }
-          return updatedItem;
-        }
-        return item;
-      })
-    );
-  }, []);
-
-  // Format number function
+  // Format funksiyalari
   const formatNumber = (num) =>
     num || num === 0
       ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       : "";
 
-  // Format currency function
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("uz-UZ").format(amount) + " so'm";
   };
 
-  // Format date function
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("uz-UZ", {
@@ -100,20 +84,17 @@ const DeliveryProduct = ({
     });
   };
 
-  // Calculate item total
   const calculateItemTotal = (item) => {
     const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
     return price * item.quantity;
   };
 
-  // Handle group change
   const handleGroupChange = (group) => {
     setDeliveredGroups((prev) =>
       prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group]
     );
   };
 
-  // Handle transport cost change
   const handleTransportCostChange = useCallback((e) => {
     const raw = e.target.value.replace(/\D/g, "");
     const numberValue = Number(raw) || 0;
@@ -121,37 +102,33 @@ const DeliveryProduct = ({
     setCustomerInfo((prev) => ({ ...prev, transportCost: numberValue }));
   }, []);
 
-  // Handle customer info change
   const handleCustomerInfoChange = useCallback((field, value) => {
     setCustomerInfo((prev) => ({ ...prev, [field]: value }));
   }, []);
 
-  // Handle transport select
   const handleTransportSelect = useCallback((transport) => {
     setCustomerInfo((prev) => ({ ...prev, transport }));
     setIsTransportDropdownOpen(false);
   }, []);
 
-  // Toggle transport dropdown
   const toggleTransportDropdown = useCallback(() => {
     setIsTransportDropdownOpen((prev) => !prev);
   }, []);
 
-  // Formatted transport cost
   const formattedTransportCost = useMemo(
     () => formatNumber(transportCost),
     [transportCost]
   );
 
-  // Valid items for delivery (now uses local deliveryItems)
+  // Yuboriladigan mahsulotlar — faqat selected va miqdori > 0 bo'lganlar
   const validItems = useMemo(
     () =>
       deliveryItems
-        .filter((item) => item.selected && item.deliveryQuantity !== "")
+        .filter((item) => item.selected && item.deliveryQuantity > 0)
         .map((item) => ({
           _id: item._id,
           productId: item.productId,
-          quantity: Number(item.deliveryQuantity), // Convert string to number for server
+          quantity: Number(item.deliveryQuantity),
           productName: item.productName,
           size: item.size,
           pricePerUnit: item.discountedPrice,
@@ -160,7 +137,6 @@ const DeliveryProduct = ({
     [deliveryItems]
   );
 
-  // React to print configuration
   const reactToPrintFn = useReactToPrint({
     contentRef,
     pageStyle: `
@@ -175,14 +151,10 @@ const DeliveryProduct = ({
         .card-doc-page { page-break-after: always; }
       }`,
     onPrintError: () => {
-      toast.error("Chop etishda xatolik yuz berdi. Iltimos, qayta urining.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Chop etishda xatolik yuz berdi. Iltimos, qayta urining.");
     },
   });
 
-  // Effect for printing when printData is set
   useEffect(() => {
     if (printData) {
       const timeout = setTimeout(() => {
@@ -193,10 +165,9 @@ const DeliveryProduct = ({
     }
   }, [printData, reactToPrintFn]);
 
-  // Process delivery function (uses local validItems)
   const processDelivery = useCallback(async () => {
     if (validItems.length === 0) {
-      toast.error("Iltimos, yuborish uchun mahsulot va miqdor tanlang");
+      toast.error("Yuborish uchun mahsulot topilmadi");
       return;
     }
     if (!customerInfo.transport) {
@@ -214,8 +185,9 @@ const DeliveryProduct = ({
       };
 
       const updatedSale = await deliverProduct(payload).unwrap();
+      console.log(updatedSale);
 
-      // Set print data for successful delivery
+      toast.success(updatedSale.message || "Mahsulotlar muvaffaqiyatli yuborildi!");
       setPrintData([
         {
           saleId: modalState.activeSaleId,
@@ -226,18 +198,16 @@ const DeliveryProduct = ({
         },
       ]);
 
-      toast.success(updatedSale.message || "Mahsulotlar yuborildi!");
       closeModal();
     } catch (error) {
       toast.error(
-        error.data.message || "Mahsulotlarni yuborishda xatolik yuz berdi!"
+        error.data?.message || "Mahsulotlarni yuborishda xatolik yuz berdi!"
       );
     }
   }, [
     validItems,
     modalState.activeSaleId,
-    customerInfo.transport,
-    customerInfo.transportCost,
+    customerInfo,
     deliveredGroups,
     deliverProduct,
     closeModal,
@@ -245,7 +215,6 @@ const DeliveryProduct = ({
 
   return (
     <div>
-      {/* MODAL */}
       <Modal
         className="modaldiliver-box"
         open={modalState.isDeliveryModalOpen}
@@ -270,7 +239,6 @@ const DeliveryProduct = ({
                   onClick={toggleTransportDropdown}
                   className="card-price-input"
                   style={{ width: "100%", border: "1px solid #d9d9d9" }}
-                  aria-label="Transport details"
                   placeholder="50ZZ500Z Fura..."
                   required
                 />
@@ -298,74 +266,28 @@ const DeliveryProduct = ({
                   onChange={handleTransportCostChange}
                   className="card-price-input"
                   style={{ width: "100%", border: "1px solid #d9d9d9" }}
-                  aria-label="Transport cost"
                   placeholder="0"
                 />
               </div>
             </div>
 
-            {/* Selected Products (now uses local deliveryItems from API) */}
-            <h4>Tanlangan mahsulotlar:</h4>
-            {deliveryItems.map((item, index) => (
-              <div key={index} className="invoice-delivery-item">
-                <label>
-                  {role !== "direktor" && item.remaining > 0 && (
-                    <input
-                      type="checkbox"
-                      checked={item.selected || false}
-                      onChange={(e) =>
-                        handleDeliveryItemChange(
-                          index,
-                          "selected",
-                          e.target.checked
-                        )
-                      }
-                    />
-                  )}
-                  {item.productName || "Noma'lum"}
-                </label>
-                <div>
-                  Buyurtma qilingan: {(item.ordered || 0).toLocaleString()}{" "}
-                  {item.size || "dona"}
+            {/* Mahsulotlar ro'yxati — faqat ko'rsatish uchun */}
+            <h4>Yuboriladigan mahsulotlar:</h4>
+            {deliveryItems
+              .filter((item) => item.remaining > 0)
+              .map((item, index) => (
+                <div key={index} className="invoice-delivery-item">
+                  <div>
+                    <strong>{item.productName || "Noma'lum"}</strong>
+                  </div>
+                  {/* <div>Buyurtma: {item.ordered?.toLocaleString()} {item.size}</div> */}
+                  <div>
+                    <strong>Yuborilmoqda: {item.remaining?.toLocaleString()} {item.size}</strong>
+                  </div>
                 </div>
-                <div>
-                  Yuborilgan: {(item.delivered || 0).toLocaleString()}{" "}
-                  {item.size || "dona"}
-                </div>
-                <div>
-                  Qoldiq: {(item.remaining || 0).toLocaleString()}{" "}
-                  {item.size || "dona"}
-                </div>
-                {item.selected && (
-                  <input
-                    type="text"
-                    value={item.deliveryQuantity || ""}
-                    placeholder={`Yuborish miqdori: ${item.remaining}`}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const numVal = parseInt(val.replace(/\D/g, ""));
-                      if (
-                        val === "" ||
-                        (!isNaN(numVal) &&
-                          numVal >= 1 &&
-                          numVal <= item.remaining)
-                      ) {
-                        handleDeliveryItemChange(
-                          index,
-                          "deliveryQuantity",
-                          val
-                        );
-                      }
-                    }}
-                    className="card-price-input"
-                    style={{ width: "100%", border: "1px solid #d9d9d9" }}
-                    aria-label="Delivery quantity"
-                  />
-                )}
-              </div>
-            ))}
+              ))}
 
-            {/* Worker Groups */}
+            {/* Ishchi guruh */}
             <div className="invoice-delivery-form-radio">
               <span>Ishchi guruh:</span>
               <div className="delivery-form-radio-box">
@@ -373,9 +295,7 @@ const DeliveryProduct = ({
                   <Button
                     className="delivery-form-radio-box-button"
                     key={group}
-                    type={
-                      deliveredGroups.includes(group) ? "primary" : "default"
-                    }
+                    type={deliveredGroups.includes(group) ? "primary" : "default"}
                     onClick={() => handleGroupChange(group)}
                   >
                     {capitalizeFirstLetter(group)}
@@ -384,7 +304,7 @@ const DeliveryProduct = ({
               </div>
             </div>
 
-            {/* Confirm Button */}
+            {/* Tasdiqlash tugmasi */}
             {role !== "direktor" && (
               <Button
                 className="invoice-btn invoice-btn-success"
@@ -400,7 +320,7 @@ const DeliveryProduct = ({
         </div>
       </Modal>
 
-      {/* PRINT SECTION */}
+      {/* Chop etish qismi */}
       {printData && Array.isArray(printData) && (
         <div ref={contentRef} className="card-doc-wrapper">
           {printData.map((doc, docIndex) => {
@@ -408,29 +328,25 @@ const DeliveryProduct = ({
               (sum, item) => sum + calculateItemTotal(item),
               0
             );
-
             return (
               <div key={docIndex} className="card-doc-page">
                 <h2 className="card-doc-title">
                   Yuk Xati (Sotuv №{doc.saleId?.slice(-4) || "N/A"})
                 </h2>
                 <p className="card-doc-date">{formatDate(doc.createdAt)}</p>
-
                 <div className="card-doc-info">
                   <p>
                     <strong>Mijoz:</strong>{" "}
                     {saleCar?.innerData?.customerId?.name || "Noma'lum"}
                   </p>
                   <p>
-                    <strong>Avtotransport:</strong>{" "}
-                    {doc.transport || "Belgilanmagan"}
+                    <strong>Avtotransport:</strong> {doc.transport || "Belgilanmagan"}
                   </p>
                   <p>
                     <strong>Transport xarajati:</strong>{" "}
                     {formatCurrency(doc.transportCost || 0)}
                   </p>
                 </div>
-
                 <table className="card-doc-table">
                   <thead>
                     <tr>
@@ -444,14 +360,13 @@ const DeliveryProduct = ({
                   </thead>
                   <tbody>
                     {doc.items.map((item, index) => {
-                      const price =
-                        item.discountedPrice ?? item.pricePerUnit ?? 0;
-                      const total = calculateItemTotal(item);
+                      const price = item.discountedPrice ?? item.pricePerUnit ?? 0;
+                      const total = price * item.quantity;
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{item.productName || "Noma'lum"}</td>
-                          <td>{(item.quantity || 0).toLocaleString()}</td>
+                          <td>{item.quantity?.toLocaleString()}</td>
                           <td>{item.size || "dona"}</td>
                           <td>{NumberFormat(price)}</td>
                           <td>{NumberFormat(total)}</td>
@@ -468,7 +383,6 @@ const DeliveryProduct = ({
                     </tr>
                   </tbody>
                 </table>
-
                 <div className="card-doc-sign">
                   <div>
                     <strong>Berdi:</strong> _____________________
