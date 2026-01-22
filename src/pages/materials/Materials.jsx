@@ -15,6 +15,7 @@ import FormattedInput from "../../components/FormattedInput";
 import IncomeListModal from "./IncomeListModal";
 import "./Materials.css";
 import EditMaterialModal from "./EditMaterialModal";
+import MaterialIncomeTable from "./style/incomeTable/MaterialIncomeTable";
 
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -54,6 +55,8 @@ const WarehouseManagement = () => {
   const [isIncomeListModalOpen, setIsIncomeListModalOpen] = useState(true);
   const [incomeSearchText, setIncomeSearchText] = useState("");
   const [editingMaterial, setEditingMaterial] = useState(null);
+  const [isIncomeTableModalOpen, setIsIncomeTableModalOpen] = useState(false);
+  const [selectedMaterialName, setSelectedMaterialName] = useState("");
 
   // Handlers
   const handleDeleteMaterial = async (id) => {
@@ -220,6 +223,22 @@ const WarehouseManagement = () => {
         ),
       })
     ].filter(Boolean),
+
+    {
+      title: "Kirimlar",
+      key: "actions",
+      render: (_, record) => (
+        <Space>
+          <Button
+            icon={<BarChartOutlined />}
+            onClick={() => {
+              setSelectedMaterialName(record.name);
+              setIsIncomeTableModalOpen(true);
+            }}
+          />
+        </Space>
+      ),
+    }
   ];
 
   // Filter materials and incomes
@@ -237,6 +256,15 @@ const WarehouseManagement = () => {
 
   return (
     <>
+      <Modal
+        open={isIncomeTableModalOpen}
+        onCancel={() => setIsIncomeTableModalOpen(false)}
+        footer={null}
+        width={1000}
+        title={`${capitalizeFirstLetter(selectedMaterialName)} – kirimlar`}
+      >
+        <MaterialIncomeTable materialName={selectedMaterialName} />
+      </Modal>
       {
         isIncomeListModalOpen === true &&
         <div className="warehouse-container">
@@ -307,7 +335,7 @@ const WarehouseManagement = () => {
 
                     <>
                       <Button
-                        type="primary"
+                        type="primary" Transportni tanlang
                         icon={<PlusOutlined />}
                         className="warehouse-add-btn"
                         onClick={() => setIsIncomeModalOpen(true)}

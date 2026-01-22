@@ -85,6 +85,11 @@ export const materialApi = api.injectEndpoints({
       invalidatesTags: ["Incomes"],
     }),
 
+    // "/material_routes/:materialName",
+    getMaterialByName: builder.query({
+      query: (materialName) => `/material_routes/${materialName}`,
+      providesTags: ["Materials"],
+    }),
   }),
 });
 export const {
@@ -100,5 +105,6 @@ export const {
   useGetFirmsQuery,
   useGetIncomesQuery,
   useGetFilteredMaterialsQuery,
-  usePayDebtIncomeMutation
+  usePayDebtIncomeMutation,
+  useGetMaterialByNameQuery,
 } = materialApi;

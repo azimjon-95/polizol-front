@@ -1,0 +1,81 @@
+/* material-income-table.css */
+
+.excel-wrapper {
+    background: #f5f5f5;
+    padding: 8px;
+    overflow-x: auto;
+}
+
+.excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    font-size: 12px;
+    color: #2b2b2b;
+}
+
+.excel-table thead {
+    background: #eaeaea;
+}
+
+.excel-table th,
+.excel-table td {
+    border: 1px solid #d0d0d0;
+    padding: 6px 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.excel-table th {
+    font-weight: 600;
+    color: #333;
+}
+
+.excel-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.excel-table tbody tr:hover {
+    background: #f0f0f0;
+}
+
+.firm-name {
+    font-weight: 500;
+    color: #111;
+}
+
+.debt {
+    color: #b00020;
+    font-weight: 500;
+}
+
+.paid {
+    color: #2e7d32;
+}
+
+.status {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.partially_paid {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.status.fully_paid {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.table-loading {
+    font-size: 13px;
+    color: #555;
+}

@@ -442,15 +442,7 @@ const IncomeListModal = () => {
             </div>
 
             <div className="nns-header-cards">
-                <Card className="nns-stat-card nns-stat-card-incomes">
-                    <div className="nns-stat-content">
-                        <div className="nns-stat-icon"><MdAccountBalance /></div>
-                        <div className="nns-stat-info">
-                            <Text className="nns-stat-number-bal">Naqt: {numberFormat(balanceData?.innerData?.naqt || 0)}</Text>
-                            <Text className="nns-stat-number-bal">Bank: {numberFormat(balanceData?.innerData?.bank || 0)}</Text>
-                        </div>
-                    </div>
-                </Card>
+
                 <Card className="nns-stat-card nns-stat-card-incomes">
                     <div className="nns-stat-content">
                         <div className="nns-stat-icon"><LuFileText /></div>

@@ -564,6 +564,15 @@ div:where(.css-dev-only-do-not-override-mc1tut).ant-typography-h3>textarea,
     cursor: pointer;
 }
 
+
+
+.nns-income-container .nns-income-details {
+    padding: 12px;
+    background: #c6c6c6 !important;
+    border-radius: 8px;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nns-warehouse-modal {
