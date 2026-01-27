@@ -434,11 +434,18 @@ const WarehouseManagement = () => {
                   >
                     <Select placeholder="Kategoriyani tanlang" className="warehouse-select">
                       <Option value="BN-3">BN-3</Option>
+                      <Option value="razbavitel">Razbavitel</Option>
                       <Option value="BN-5">BN-5</Option>
                       <Option value="Mel">Mel</Option>
                       <Option value="ip">Ip</Option>
                       <Option value="kraf">Kraf qog'oz</Option>
                       <Option value="qop">Qop</Option>
+                      <Option value="chelak">Temir Chelak</Option>
+                      <Option value="kaustik">Kaustik</Option>
+                      <Option value="lesitin">Lesitin</Option>
+                      <Option value="nafta">Nafta</Option>
+                      <Option value="nefras">Nefras</Option>
+                      <Option value="nakleyka">Nakleyka</Option>
                       <Option value="Others">Boshqalar</Option>
                     </Select>
                   </Form.Item>

@@ -454,6 +454,10 @@ const EditMaterialModal = ({ refetch, setIsIncomeModalOpen, isIncomeModalOpen })
                                                 <Option value="kraf">Kraf qog'oz</Option>
                                                 <Option value="qop">Qop</Option>
                                                 <Option value="chelak">Temir Chelak</Option>
+                                                <Option value="kaustik">Kaustik</Option>
+                                                <Option value="lesitin">Lesitin</Option>
+                                                <Option value="nafta">Nafta</Option>
+                                                <Option value="nefras">Nefras</Option>
                                                 <Option value="nakleyka">Nakleyka</Option>
                                                 <Option value="Others">Boshqalar</Option>
                                             </Select>

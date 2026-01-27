@@ -12,6 +12,10 @@
     width: 100%;
 }
 
+.neg-row td {
+    color: #d32f2f;
+}
+
 @media (min-width: 768px) {
     .quy-container {
         padding: 24px 32px;
@@ -52,6 +56,7 @@
     border-radius: 16px;
     border: none;
     padding: 8px 16px;
+    text-wrap: nowrap;
     font-size: 14px;
     font-weight: 600;
     color: #111827;
@@ -433,6 +438,7 @@
     color: #374151;
     padding: 8px 16px;
     text-align: left;
+    text-wrap: nowrap;
     font-weight: 500;
 }
 
@@ -451,6 +457,7 @@
 
 .quy-result-table td {
     padding: 8px 16px;
+    text-wrap: nowrap;
 }
 
 .quy-result-table .quy-table-value {
