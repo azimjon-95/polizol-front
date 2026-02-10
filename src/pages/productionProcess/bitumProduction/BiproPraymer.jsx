@@ -9,9 +9,9 @@ import "./css/praymer.css";
 const formatNumber = (n, decimals = 3) =>
   Number.isFinite(n)
     ? new Intl.NumberFormat("uz-UZ", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: decimals,
-    }).format(n)
+        minimumFractionDigits: 0,
+        maximumFractionDigits: decimals,
+      }).format(n)
     : "0";
 
 const parseNum = (v) => {
@@ -27,7 +27,6 @@ const parseNum = (v) => {
 
   return Number.isFinite(x) ? x : 0;
 };
-
 
 const uid = () => `row_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
@@ -45,7 +44,6 @@ const formatKgG = (kg) => {
    O‘zingdagi texkarta bo‘yicha shu joyga raqamlarni qo‘yasan.
 */
 
-
 export default function BiproPraymer() {
   const [activeBtn, setActiveBtn] = useState("praymer"); // "praymer" | "mastika"
   const [qtyProduced, setQtyProduced] = useState(1);
@@ -53,8 +51,10 @@ export default function BiproPraymer() {
   const [items, setItems] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data: materials, isLoading: materialsLoading } = useGetAllMaterialsQuery();
-  const [createProduction, { isLoading: createProductionLoading }] = useCreateProductionMutation();
+  const { data: materials, isLoading: materialsLoading } =
+    useGetAllMaterialsQuery();
+  const [createProduction, { isLoading: createProductionLoading }] =
+    useCreateProductionMutation();
 
   /* ================= Constants ================= */
   const constants = useMemo(() => {
@@ -93,7 +93,10 @@ export default function BiproPraymer() {
   }, [activeBtn]);
 
   /* ================= Material Map (category -> material) ================= */
-  const norm = (s) => String(s ?? "").trim().toLowerCase();
+  const norm = (s) =>
+    String(s ?? "")
+      .trim()
+      .toLowerCase();
 
   const materialMap = useMemo(() => {
     const list = materials?.innerData || [];
@@ -101,7 +104,6 @@ export default function BiproPraymer() {
     for (const m of list) map[norm(m.category)] = m; // ✅ normalize
     return map;
   }, [materials?.innerData]);
-
 
   /* ================= Default Items Builder ================= */
   const buildDefaultItems = useCallback(() => {
@@ -160,7 +162,7 @@ export default function BiproPraymer() {
       removable: false,
     });
 
-    const recipeCats = ["BN-5", "nafta", "nefras", "lesitin", "kaustik"];
+    const recipeCats = ["BN-5", "nafta", "nefras", "lesitin", "kaustik", "mel"];
     for (const cat of recipeCats) {
       const mat = materialMap[norm(cat)]; // ✅ normalize
       if (!mat) continue;
@@ -186,7 +188,6 @@ export default function BiproPraymer() {
       });
     }
 
-
     // Tayyorlash (kg): bazaviy qiymat + custom xarajatlar qo'shiladi
     rows.push({
       rowId: "prep",
@@ -194,7 +195,39 @@ export default function BiproPraymer() {
       name: "Tayyorlash",
       unit: "kg",
       qty: parseNum(constants.BUCKET_WEIGHT_KG),
-      basePrice: parseNum(constants.PREP_BASE_COST) / (parseNum(constants.BUCKET_WEIGHT_KG) || 1),
+      basePrice:
+        parseNum(constants.PREP_BASE_COST) /
+        (parseNum(constants.BUCKET_WEIGHT_KG) || 1),
+      removable: false,
+    });
+
+    rows.push({
+      rowId: "gaz",
+      type: "gaz",
+      name: "Tabiiy Gaz",
+      unit: "kub",
+      qty: parseNum(300),
+      basePrice: 1800,
+      removable: false,
+    });
+
+    rows.push({
+      rowId: "elektr",
+      type: "elektr",
+      name: "Elektr energiyasi",
+      unit: "kWh",
+      qty: parseNum(200),
+      basePrice: 1000,
+      removable: false,
+    });
+
+    rows.push({
+      rowId: "extra",
+      type: "extra",
+      name: "Boshqa xarajatlar",
+      unit: "som",
+      qty: parseNum(1),
+      basePrice: 1,
       removable: false,
     });
 
@@ -210,10 +243,11 @@ export default function BiproPraymer() {
   /* ================= Calculations ================= */
   const calcRowTotal = (it) => parseNum(it.qty) * parseNum(it.basePrice);
 
-
   const recalcPrep = useCallback(
     (list) => {
-      const extra = list.filter((x) => x.removable).reduce((sum, x) => sum + calcRowTotal(x), 0);
+      const extra = list
+        .filter((x) => x.removable)
+        .reduce((sum, x) => sum + calcRowTotal(x), 0);
       return list.map((x) => {
         if (x.rowId !== "prep") return x;
         const kg = parseNum(x.qty) || 1;
@@ -221,17 +255,19 @@ export default function BiproPraymer() {
         return { ...x, basePrice: newTotal / kg };
       });
     },
-    [constants.PREP_BASE_COST]
+    [constants.PREP_BASE_COST],
   );
+
+  console.log(items);
 
   const rowsWithTotals = useMemo(
     () => items.map((it) => ({ ...it, total: calcRowTotal(it) })),
-    [items]
+    [items],
   );
 
   const totalCostAll = useMemo(
     () => rowsWithTotals.reduce((sum, it) => sum + parseNum(it.total), 0),
-    [rowsWithTotals]
+    [rowsWithTotals],
   );
 
   const totalCostPerBucket = useMemo(() => {
@@ -241,11 +277,13 @@ export default function BiproPraymer() {
 
   const profitPerBucket = useMemo(
     () => parseNum(salePricePerBucket) - totalCostPerBucket,
-    [salePricePerBucket, totalCostPerBucket]
+    [salePricePerBucket, totalCostPerBucket],
   );
 
   const profitPercent = useMemo(() => {
-    return totalCostPerBucket > 0 ? (profitPerBucket / totalCostPerBucket) * 100 : 0;
+    return totalCostPerBucket > 0
+      ? (profitPerBucket / totalCostPerBucket) * 100
+      : 0;
   }, [profitPerBucket, totalCostPerBucket]);
 
   const totals = useMemo(() => {
@@ -257,7 +295,13 @@ export default function BiproPraymer() {
       profitAll: profitPerBucket * q,
       marginPerBucket: profitPerBucket,
     };
-  }, [qtyProduced, totalCostAll, totalCostPerBucket, salePricePerBucket, profitPerBucket]);
+  }, [
+    qtyProduced,
+    totalCostAll,
+    totalCostPerBucket,
+    salePricePerBucket,
+    profitPerBucket,
+  ]);
 
   const prepKg = useMemo(() => {
     const prep = items.find((x) => x.rowId === "prep");
@@ -291,7 +335,7 @@ export default function BiproPraymer() {
           basePrice: 0,
           removable: true,
         },
-      ])
+      ]),
     );
   }, [recalcPrep]);
 
@@ -310,7 +354,7 @@ export default function BiproPraymer() {
           basePrice: 0,
           removable: true,
         },
-      ])
+      ]),
     );
   }, [recalcPrep]);
 
@@ -324,7 +368,9 @@ export default function BiproPraymer() {
           if (field === "qty") next.qty = parseNum(value);
           else if (field === "basePrice") next.basePrice = parseNum(value);
           else if (field === "name" && it.type.includes("material")) {
-            const selected = materials?.innerData?.find((m) => m.name === value);
+            const selected = materials?.innerData?.find(
+              (m) => m.name === value,
+            );
             if (selected) {
               next.materialId = selected._id;
               next.name = selected.name;
@@ -343,14 +389,14 @@ export default function BiproPraymer() {
         return recalcPrep(updated);
       });
     },
-    [materials?.innerData, recalcPrep]
+    [materials?.innerData, recalcPrep],
   );
 
   const removeItem = useCallback(
     (rowId) => {
       setItems((prev) => recalcPrep(prev.filter((x) => x.rowId !== rowId)));
     },
-    [recalcPrep]
+    [recalcPrep],
   );
 
   const resetDefaults = useCallback(() => {
@@ -397,7 +443,8 @@ export default function BiproPraymer() {
 
   const submitToServer = useCallback(async () => {
     if (isSubmitting || createProductionLoading) return;
-    if (parseNum(qtyProduced) <= 0) return toast.error("Miqdor 0 dan katta bo‘lishi kerak");
+    if (parseNum(qtyProduced) <= 0)
+      return toast.error("Miqdor 0 dan katta bo‘lishi kerak");
 
     setIsSubmitting(true);
     try {
@@ -405,12 +452,18 @@ export default function BiproPraymer() {
       console.log(payload);
       const res = await createProduction(payload).unwrap();
 
-      toast.success("Ma'lumotlar muvaffaqiyatli saqlandi!", { position: "top-right", autoClose: 3000 });
-    } catch (error) {
-      toast.error(`Saqlashda xato: ${error?.data?.message || "Noma'lum xato"}`, {
+      toast.success("Ma'lumotlar muvaffaqiyatli saqlandi!", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
       });
+    } catch (error) {
+      toast.error(
+        `Saqlashda xato: ${error?.data?.message || "Noma'lum xato"}`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+        },
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -426,32 +479,44 @@ export default function BiproPraymer() {
 
   console.log(rowsWithTotals);
 
-  if (materialsLoading) return <div className="quy-container">Yuklanmoqda...</div>;
+  if (materialsLoading)
+    return <div className="quy-container">Yuklanmoqda...</div>;
 
   return (
     <div className="quy-container">
       <header className="quy-header">
         <div>
           <div className="quy-box-header">
-            <button className={activeBtn === "praymer" ? "active" : ""} onClick={() => setActiveBtn("praymer")}>
+            <button
+              className={activeBtn === "praymer" ? "active" : ""}
+              onClick={() => setActiveBtn("praymer")}
+            >
               BITUM PRAYMER
             </button>
-            <button className={activeBtn === "mastika" ? "active" : ""} onClick={() => setActiveBtn("mastika")}>
+            <button
+              className={activeBtn === "mastika" ? "active" : ""}
+              onClick={() => setActiveBtn("mastika")}
+            >
               BITUM MASTIKA
             </button>
           </div>
 
           <p className="quy-subtitle">
-            Retsept 1 chelak (18 kg) uchun. Miqdorni o‘zgartirsangiz jami summalar mos ravishda o‘zgaradi.
+            Retsept 1 chelak (18 kg) uchun. Miqdorni o‘zgartirsangiz jami
+            summalar mos ravishda o‘zgaradi.
           </p>
-
-
         </div>
 
         <div className="quy-buttons">
-          <button onClick={resetDefaults} className="quy-btn-reset">Reset</button>
-          <button onClick={addExpenseRow} className="quy-btn-add">+ Xarajat</button>
-          <button onClick={addRawMaterialRow} className="quy-btn-add">+ Xom ashyo</button>
+          <button onClick={resetDefaults} className="quy-btn-reset">
+            Reset
+          </button>
+          <button onClick={addExpenseRow} className="quy-btn-add">
+            + Xarajat
+          </button>
+          <button onClick={addRawMaterialRow} className="quy-btn-add">
+            + Xom ashyo
+          </button>
         </div>
       </header>
 
@@ -459,15 +524,18 @@ export default function BiproPraymer() {
         <div className="quy-wrapper">
           <section className="quy-params-grid">
             <div className="quy-param-card">
-              <label className="quy-param-label">Ishlab chiqarilgan miqdor (chelak)</label>
+              <label className="quy-param-label">
+                Ishlab chiqarilgan miqdor (chelak)
+              </label>
               <input
                 className="quy-param-input"
                 type="number"
                 step="0.001"
                 min={0}
                 value={qtyProduced}
-                onChange={(e) => setQtyProduced(Math.max(0, parseNum(e.target.value)))}
-
+                onChange={(e) =>
+                  setQtyProduced(Math.max(0, parseNum(e.target.value)))
+                }
               />
             </div>
 
@@ -482,19 +550,25 @@ export default function BiproPraymer() {
             </div>
 
             <div className="quy-param-card">
-              <label className="quy-param-label">Sotuv narxi (1 chelak, so'm)</label>
+              <label className="quy-param-label">
+                Sotuv narxi (1 chelak, so'm)
+              </label>
               <input
                 className="quy-param-input"
                 type="number"
                 step="1"
                 value={salePricePerBucket}
-                onChange={(e) => setSalePricePerBucket(parseNum(e.target.value))}
+                onChange={(e) =>
+                  setSalePricePerBucket(parseNum(e.target.value))
+                }
               />
             </div>
           </section>
 
           <section className="quy-table-section">
-            <h2 className="quy-table-title">Xarajatlar ({formatNumber(qtyProduced)} chelak)</h2>
+            <h2 className="quy-table-title">
+              Xarajatlar ({formatNumber(qtyProduced)} chelak)
+            </h2>
 
             <div className="quy-table-wrapper">
               <table className="quy-table">
@@ -513,14 +587,18 @@ export default function BiproPraymer() {
                   {rowsWithTotals
                     .filter((r) => r.rowId !== "prep")
                     .map((it) => (
-                      <tr key={it.rowId} className={`quy-table-row ${parseNum(it.qty) < 0 ? "neg-row" : ""}`}>
-
+                      <tr
+                        key={it.rowId}
+                        className={`quy-table-row ${parseNum(it.qty) < 0 ? "neg-row" : ""}`}
+                      >
                         <td className="quy-table-cell">
                           {it.type.includes("material") ? (
                             <select
                               className="quy-input-name"
                               value={it.name}
-                              onChange={(e) => updateItem(it.rowId, "name", e.target.value)}
+                              onChange={(e) =>
+                                updateItem(it.rowId, "name", e.target.value)
+                              }
                             >
                               <option value="">Xom ashyo tanlang</option>
                               {materials?.innerData?.map((mat) => (
@@ -533,7 +611,9 @@ export default function BiproPraymer() {
                             <input
                               className="quy-input-name"
                               value={it.name}
-                              onChange={(e) => updateItem(it.rowId, "name", e.target.value)}
+                              onChange={(e) =>
+                                updateItem(it.rowId, "name", e.target.value)
+                              }
                             />
                           )}
                         </td>
@@ -542,7 +622,9 @@ export default function BiproPraymer() {
                           <input
                             className="quy-input-unit"
                             value={it.unit}
-                            onChange={(e) => updateItem(it.rowId, "unit", e.target.value)}
+                            onChange={(e) =>
+                              updateItem(it.rowId, "unit", e.target.value)
+                            }
                             disabled={it.type.includes("material")}
                           />
                         </td>
@@ -553,11 +635,19 @@ export default function BiproPraymer() {
                             className="quy-input-qty"
                             step="0.001"
                             value={it.qty}
-                            onChange={(e) => updateItem(it.rowId, "qty", e.target.value)}
+                            onChange={(e) =>
+                              updateItem(it.rowId, "qty", e.target.value)
+                            }
                           />
                           {/* kg/gram ko‘rsatish (unit kg bo‘lsa) */}
                           {String(it.unit).toLowerCase().includes("kg") && (
-                            <div style={{ fontSize: 12, opacity: 0.75, marginTop: 2 }}>
+                            <div
+                              style={{
+                                fontSize: 12,
+                                opacity: 0.75,
+                                marginTop: 2,
+                              }}
+                            >
                               {formatKgG(it.qty)}
                             </div>
                           )}
@@ -569,16 +659,30 @@ export default function BiproPraymer() {
                             className="quy-input-price"
                             step="0.01"
                             value={Math.floor(it.basePrice)}
-                            onChange={(e) => updateItem(it.rowId, "basePrice", e.target.value)}
-                            disabled={it.type === "material" || it.type === "fixed" || it.type === "prep"}
+                            onChange={(e) =>
+                              updateItem(it.rowId, "basePrice", e.target.value)
+                            }
+                            disabled={
+                              it.type === "material" ||
+                              it.type === "fixed" ||
+                              it.type === "prep"
+                            }
                           />
                         </td>
 
-                        <td className="quy-table-cell">{formatNumber(it.total)} so'm</td>
+                        <td className="quy-table-cell">
+                          {formatNumber(it.total)} so'm
+                        </td>
 
-                        <td className="quy-table-cell" style={{ textAlign: "right" }}>
+                        <td
+                          className="quy-table-cell"
+                          style={{ textAlign: "right" }}
+                        >
                           {it.removable && (
-                            <button onClick={() => removeItem(it.rowId)} className="quy-btn-remove">
+                            <button
+                              onClick={() => removeItem(it.rowId)}
+                              className="quy-btn-remove"
+                            >
                               O'chirish
                             </button>
                           )}
@@ -610,7 +714,9 @@ export default function BiproPraymer() {
                   <td>{formatNumber(qtyProduced)} dona</td>
                   <td>{formatNumber(prepKg)} kg</td>
                   <td>{formatNumber(totals.tannarxPer)} so'm</td>
-                  <td className="quy-table-value">{formatNumber(totals.tannarxAll)} so'm</td>
+                  <td className="quy-table-value">
+                    {formatNumber(totals.tannarxAll)} so'm
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -621,24 +727,32 @@ export default function BiproPraymer() {
             <div className="quy-sales-grid">
               <div className="quy-sales-card">
                 <div className="quy-sales-label">Sotuv narxi (1 chelak)</div>
-                <div className="quy-sales-value">{formatNumber(salePricePerBucket)} so'm</div>
+                <div className="quy-sales-value">
+                  {formatNumber(salePricePerBucket)} so'm
+                </div>
               </div>
 
               <div className="quy-sales-card">
                 <div className="quy-sales-label">Daromad (1 chelak)</div>
-                <div className={`quy-sales-value ${totals.marginPerBucket >= 0 ? "quy-total-value-green" : "quy-total-value-red"}`}>
+                <div
+                  className={`quy-sales-value ${totals.marginPerBucket >= 0 ? "quy-total-value-green" : "quy-total-value-red"}`}
+                >
                   {formatNumber(totals.marginPerBucket)} so'm
                 </div>
               </div>
 
               <div className="quy-sales-card">
                 <div className="quy-sales-label">Jami sotuv</div>
-                <div className="quy-sales-value">{formatNumber(totals.saleAll)} so'm</div>
+                <div className="quy-sales-value">
+                  {formatNumber(totals.saleAll)} so'm
+                </div>
               </div>
 
               <div className="quy-sales-card">
                 <div className="quy-sales-label">Jami daromad</div>
-                <div className={`quy-sales-value ${(totals.saleAll - totals.tannarxAll) >= 0 ? "quy-total-value-green" : "quy-total-value-red"}`}>
+                <div
+                  className={`quy-sales-value ${totals.saleAll - totals.tannarxAll >= 0 ? "quy-total-value-green" : "quy-total-value-red"}`}
+                >
                   {formatNumber(totals.saleAll - totals.tannarxAll)} so'm
                 </div>
               </div>
@@ -647,24 +761,23 @@ export default function BiproPraymer() {
 
           <Button
             onClick={submitToServer}
-            disabled={isSubmitting || createProductionLoading || parseNum(qtyProduced) <= 0}
+            disabled={
+              isSubmitting ||
+              createProductionLoading ||
+              parseNum(qtyProduced) <= 0
+            }
             className="quy-btn-submit"
             loading={isSubmitting || createProductionLoading}
           >
-            {isSubmitting || createProductionLoading ? "Saqlanmoqda..." : "Saqlash"}
+            {isSubmitting || createProductionLoading
+              ? "Saqlanmoqda..."
+              : "Saqlash"}
           </Button>
         </section>
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
 
 // import React, { useMemo, useCallback, useEffect } from "react";
 // import { useGetAllMaterialsQuery } from "../../../context/materialApi";
